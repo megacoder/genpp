@@ -129,8 +129,8 @@ class GenericPrettyPrinter( object ):
 
 if __name__ == '__main__':
     import  __main__
-    gpp = GenericPrettyPrinter()
-    retval = gpp.main()
+    genpp = GenericPrettyPrinter()
+    retval = genpp.main()
     if retval:
         exit(1)
     exit(0)
