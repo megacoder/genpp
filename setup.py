@@ -6,7 +6,7 @@ from	setuptools	import	setup
 import	glob
 import	os
 
-NAME    = 'genpp'
+NAME	= 'genpp'
 VERSION = '1.0.0'
 
 with open(
@@ -25,11 +25,11 @@ setup(
 	url              =	'http://www.MegaCoder.com',
 	long_description =	open('README.md').read(),
 	packages         =	[ NAME ],
-    entry_points =	{
-        'console_scripts':	[
+	entry_points     =	{
+		'console_scripts':	[
 			'genpp = {0}.__init__:main'.format(
 				NAME
 			),
-        ],
-    }
+		],
+	}
 )
