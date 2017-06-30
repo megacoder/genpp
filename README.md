@@ -1,5 +1,5 @@
-generic_prettyprinter
-=====================
+genpp
+=====
 
 Displays a variety of files in a canonical form.
 Trivial prettyprinters for lots of kinds of files.
