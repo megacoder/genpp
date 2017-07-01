@@ -2,7 +2,19 @@
 # vim: et sw=4 ts=4
 
 import  argparse
-import  importlib
+try:
+    import  importlib
+except:
+    class FunkyBob():
+        def __init__( self ):
+            pass
+        def import_module( self, name ):
+            print 'I want {0}'.format( name )
+            module = __import__( name )
+            print 'Imported {0}'.format( name )
+            return module
+    importlib = FunkyBob()
+
 import  os
 import  sys
 import  version
