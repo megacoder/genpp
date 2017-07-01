@@ -3,4 +3,5 @@
 
 import	genpp
 
+genpp = genpp.GenericPrettyPrinter()
 genpp.main()
