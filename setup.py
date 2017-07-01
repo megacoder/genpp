@@ -25,11 +25,7 @@ setup(
 	url              =	'http://www.MegaCoder.com',
 	long_description =	open('README.md').read(),
 	packages         =	[ NAME ],
-	entry_points     =	{
-		'console_scripts':	[
-			'genpp = {0}.__init__:main'.format(
-				NAME
-			),
-		],
-	}
+	scripts			 =	{
+		"scripts/genpp",
+	},
 )
