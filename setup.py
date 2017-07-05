@@ -7,12 +7,9 @@ import	glob
 import	os
 
 NAME	= 'genpp'
-VERSION = '1.0.1'
+VERSION = '1.0.2'
 
-with open(
-	'{0}/version.py'.format( NAME ),
-	'w'
-) as f:
+with open( '{0}/version.py'.format( 'src' ), 'w') as f:
 	print >>f, 'Version="{0}"'.format( VERSION )
 
 setup(
@@ -24,7 +21,10 @@ setup(
 	license          =	'MIT',
 	url              =	'http://www.MegaCoder.com',
 	long_description =	open('README.md').read(),
-	packages         =	[ NAME ],
+	packages         =	[ 'genpp' ],
+	package_dir      =	{
+			'genpp': 'src'
+	},
 	scripts			 =	{
 		"scripts/genpp",
 	},
