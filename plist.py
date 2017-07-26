@@ -72,7 +72,7 @@ class	Plugger():
 if __name__ == '__main__':
 	p = Plugger()
 	if len(sys.argv) == 1:
-		p.process( 'genpp' )
+		p.process( 'src' )
 	else:
 		for dn in sys.argv[1:]:
 			p.process( dn )
