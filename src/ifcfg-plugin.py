@@ -6,166 +6,149 @@ import  superclass
 class   PrettyPrint( superclass.MetaPrettyPrinter ):
 
     NAME = 'ifcfg-pp'
-    DESCRIPTION="""Show ifcfg network files in canonical style."""
+    DESCRIPTION='''Show ifcfg network files in canonical style.'''
 
     def __init__( self ):
         super( PrettyPrint, self ).__init__()
-        self.ifcfgs = dict()    # Key is iface name
-        self.iface  = None
+        self.device    = None
+        self.nics      = dict()
         return
 
     def ignore( self, name ):
-        """ Ignore directory entries not ending with '.conf' """
+        ''' Ignore directory entries not ending with '.conf' '''
         return not name.endswith( '.conf' )
 
-    def moder( self, mode ):
-        """ Replace a numeric bonding mode with its alpha form. """
-        if mode.startswith( 'mode=' ):
-            spelling = {
-                '0': 'balance-rr',
-                '1': 'active-backup',
-                '2': 'balance-xor',
-                '3': 'broadcast',
-                '4': '802.3ad',
-                '5': 'balance-tlb',
-                '6': 'balance-alb',
-            }
-            code = mode[ len('mode=') ]
-            if code in spelling:
-                self.footnote(
-                    'The mode is actually given as "{0}" in the file.'.format(
-                        mode
-                    )
-                )
-                mode = 'mode={0}'.format(
-                    spelling[ code ]
-                )
-        return mode
-
-    def pre_begin_file( self, name = None ):
-        self.iface  = dict(
-            _seen = False
-        )
-        self.prolog = list()
+    def pre_begin_file( self, fn ):
+        self.nic = dict({
+            '_used'  : False,
+            '_id'    : None,
+            'NAME'   : None,
+            'DEVICE' : None,
+        })
         return
 
     def next_line( self, line ):
-        """ Called with each ifcfg-<*> file line, already rstrip()'ed. """
-        if line.startswith( '#' ):
-            self.prolog.append( line )
+        parts = map(
+            str.strip,
+            line.split( '#', 1 )[ 0 ].split( '=', 1 )
+        )
+        if len( parts ) == 2:
+            name  = parts[ 0 ]
+            value = parts[ 1 ]
+            if value.startswith( '"' ) or value.startswith( "'" ):
+                value          = value[1:-1]
+            self.nic[name] = value
+        return
+
+    def get_nic_id( self, nic ):
+        id = nic.get( '_id', None )
+        if not id: id = nic.get( 'NAME', None )
+        if not id: id = nic.get( 'DEVICE', None )
+        if not id: id = 'TBD'
+        return id
+
+    def end_file( self, fn ):
+        id = self.get_nic_id( self.nic )
+        self.nic[ '_id' ] = id
+        self.nics[ id ]   = self.nic
+        # Leave the 'self.nic' intact so we can display it later in
+        # self.report()
+        return
+
+    def screen( self, candidates, name, value, same = True ):
+        if not candidates:
+            candidates = self.nics.keys()
+        if same:
+            candidates = [
+                id for id in candidates if
+                    self.nics[id].get( name, '_dunno' ) == value
+            ]
         else:
-            # Isolate and strip left- and right-hand portions
-            parts = map(
-                str.strip,
-                line.split( '=', 1 )
-            )
-            if len(parts) != 2:
-                # Treat anything without an equal sign as prolog
-                self.prolog.append( line )
-            else:
-                name  = parts[0]
-                value = parts[1]
-                # Elide incoming quotes because we will unconditionally
-                # quote the value later.
-                if value.startswith( '"' ) or value.startswith( "'" ):
-                    value = value[1:-1]
-                self.iface[name] = value
+            candidates = [
+                id for id in candidates if
+                    self.nics[id].get( name, '_dunno' ) != value
+            ]
+        return candidates
+
+    def set_used( self, id ):
+        self.nics[ id ][ '_used' ] = True
         return
 
-    def _normalize( self, iface ):
-        """ The rules for creating an ifcfg-<*> file are very lax.
-            As a result, many defintions omit implied values.  In
-            the interest of clarity, try to intuit the companion
-            values if a related setting is used. """
-        #
-        # footnotes = []
-        if 'DEVICE' in iface and 'NAME' not in iface:
-            # footnotes.append( 'Intuited NAME from DEVICE' )
-            self.footnote( 'Intuited NAME from DEVICE' )
-            iface['NAME'] = iface['DEVICE']
-        if 'NAME' not in iface:
-            # footnotes.append( 'No name for ifcfg {0}'.format( iface ) )
-            self.footnote( 'No name for ifcfg {0}'.format( iface ) )
-            iface['NAME'] = '***'
-        #
-        if 'BONDING_OPTS' in iface and 'TYPE' not in iface:
-            iface[ 'TYPE' ] = 'Bond'
-        #
-        if 'NAME' in iface and 'DEVICE' not in iface:
-            # footnotes.append( 'Intuited DEVICE from NAME' )
-            self.footnote( 'Intuited DEVICE from NAME' )
-            iface['DEVICE'] = iface['NAME']
-        #
-        if 'MASTER' in iface and 'TYPE' not in iface:
-            # footnotes.append( 'Interpreted as bonded interface' )
-            self.footnote( 'Assuming this is a bonded interface' )
-            iface['TYPE'] = 'Bonding'
-        #
-        if not 'TYPE' in iface:
-            # footnotes.append( 'Assuming type is "Ethernet"' )
-            self.footnote( 'Assuming type is "Ethernet"' )
-            iface[ 'TYPE' ] = 'Ethernet'
-        #
-        if 'MTU' not in iface:
-            mtu = '1500'
-            # footnotes.append( 'MTU missing; assuming {0}'.format( mtu ) )
-            self.footnote( 'MTU missing; assuming {0}'.format( mtu ) )
-            iface['MTU'] = mtu
-        # print >>sys.stderr, iface
-        return iface
-
-    def post_end_file( self ):
-        """ Normalize and save the interface definition. """
-        self.iface        = self._normalize( self.iface )
-        name              = self.iface['NAME']
-        self.ifcfgs[name] = self.iface
-        super( PrettyPrint, self ).post_end_file()
-        return
-
-    def get_seen( self, iface ):
-        return iface.get( '_seen', False )
-
-    def set_seen( self, iface, value = True ):
-        iface['_seen'] = value
-        return
-
-    def _iface_is_vlan( self, iface ):
-        return '.' in iface['NAME']
-
-    def _iface_is_alias( self, iface ):
-        return ':' in iface['NAME']
-
-    def _filter_bridge_unclaimed( self, iface ):
-        accept  = not self.get_seen( iface )
-        accept &= (iface['TYPE'] == 'Bridge')
-        accept &= not self._iface_is_vlan( iface )
-        accept &= not self._iface_is_alias( iface )
-        return accept
-
-    def _filter_any_unclaimed( self, iface ):
-        accept = not self.get_seen( iface )
-        return accept
-
-    def _filter_ethernet_unclaimed( self, iface ):
-        accept = not self.get_seen( iface )
-        accept &= (iface['TYPE'] == 'Ethernet')
-        return accept
-
-    def find_all( self, filter = lambda iface: True ):
-        names = [
-            name for name in self.ifcfgs if filter( self.ifcfgs[name] )
-        ]
-        if len(names) == 0:
-            names = None
-        return names
-
-    def _indent_print( self, s, indents = [] ):
+    def indent_print( self, s, depth = 0 ):
         self.println(
             '{0}{1}'.format(
-                ''.join( indents ),
-                s
+                '    ' * depth,
+                s,
             )
         )
+        return
+
+    def vlans_for( self, id ):
+        leadin = '{0}.'.format( id )
+        candidates = list()
+        for candidate in self.screen( None, '_used', False ):
+            device = self.nics[ candidate ][ 'DEVICE' ]
+            if device.startswith( leadin ):
+                candidates.append( device )
+        return candidates
+
+    def _print_a_nic( self, nic, depth = 0 ):
+        # Output iface lines, sorted in order
+        keys = [
+            key for key in self.nic if key[0].isupper()
+        ]
+        width =  max(
+            map(
+                len,
+                keys
+            )
+        )
+        fmt = '{{0:>{0}}}={{1}}'.format( width )
+        for key in sorted( keys ):
+            value = self.nic[ key ]
+            # delim = "'" if '"' in value else '"'
+            delim = '"'
+            self.indent_print(
+                fmt.format(
+                    key,
+                    '{0}{1}{0}'.format( delim, value )
+                ),
+                depth
+            )
+        return
+
+    def _print_a_bridge( self, bridge, depth = 0 ):
+        self.indent_print( bridge, depth )
+        for vlan in self.vlans_for( bridge ):
+            self.indent_print( vlan, depth + 1 )
+            self.set_used( vlan )
+        candidates = self.screen( None, '_used', False )
+        candidates = self.screen( candidates, 'BRIDGE', bridge )
+        ethernets  = self.screen( candidates, 'Type', 'Ethernet' )
+        for ethernet in sorted( ethernets ):
+            self.indent_print( ethernet, depth + 1 )
+            self.set_used( ethernet )
+            del candidates[ ethernet ]
+        if len(candidates):
+            print >>sys.stderr, 'unused bridge components={0}'.format(
+                candidates
+            )
+        return
+
+    def _print_a_bond( self, bond, depth = 0 ):
+        self.indent_print( bond, depth )
+        for vlan in self.vlans_for( bond ):
+            self.indent_print( vlan, depth + 1 )
+            self.set_used( vlan )
+        candidates = self.screen( None, '_used', False )
+        candidates = self.screen( candidates, 'SLAVE', 'yes' )
+        candidates = self.screen( candidates, 'MASTER', bond )
+        for slave in sorted( candidates ):
+            self.indent_print( slave, depth + 1 )
+            for vlan in self.vlans_for( slave ):
+                self.indent_print( vlan, depth + 2 )
+                self.set_used( vlan )
+            self.set_used( slave )
         return
 
     def _final_report( self ):
@@ -173,76 +156,53 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         title = 'S U M M A R Y'
         self.println( title )
         self.println( '=' * len( title ) )
-        # Pass 1: construct bridged interfaces
-        indents = []
-        bridges = self.find_all(
-            self._filter_bridge_unclaimed
-        )
-        if bridges:
-            self.println()
-            title = 'Bridges'
-            self.println( title )
-            self.println( '-' * len( title ) )
-            last = len( indents ) - 1
-            for i,name in enumerate( sorted( bridges ) ):
-                iface = self.ifcfgs[ name ]
-                self._indent_print( iface['NAME'], indents )
-                self.set_seen( iface )
-        ethernets = self.find_all(
-            self._filter_ethernet_unclaimed
-        )
-        if ethernets:
-            self.println()
-            title = 'Ethernet'
-            self.println( title )
-            self.println( '-' * len(title) )
-            indents = []
-            for name in ethernets:
-                self._indent_print( name, indents )
-                self.set_seen( self.ifcfgs[name] )
-        resid = self.find_all( self._filter_any_unclaimed )
-        if resid:
-            self.println()
-            title = 'Unprocessed NICs'
-            self.println( title )
-            self.println( '-' * len( title ) )
-            for name in sorted( resid ):
-                self.println( name )
-                self.set_seen( self.ifcfgs[name] )
-        return
-
-    def _nic_report( self ):
-        # Dump any accumulated prolog
-        if len(self.prolog) > 0:
-            for line in self.prolog:
-                self.println( line )
-            self.println()
-        # Output iface lines, sorted in order
-        names = [
-            name for name in self.iface if name[0].isupper()
-        ]
-        max_name =  max(
-            map(
-                len,
-                names
-            )
-        )
-        fmt = '  {{0:>{0}}}={{1}}'.format( max_name )
-        for key in sorted( names ):
-            value = self.iface[ key ]
-            # delim = "'" if '"' in value else '"'
-            delim = '"'
-            self.println(
-                fmt.format(
-                    key,
-                    '{0}{1}{0}'.format( delim, value )
-                )
-            )
+        # Step 0: The network (tm)
+        self.println()
+        depth = 0
+        self.indent_print( 'network', depth )
+        # Step 1: construct bridged interfaces
+        bridges = self.screen( None, '_used', False )
+        bridges = self.screen( bridges, 'TYPE', 'Bridge' )
+        if len(bridges):
+            for bridge in sorted( bridges ):
+                self.set_used( bridge )
+                self._print_a_bridge( bridge, depth + 1 )
+        # Step 2: Bonded interfaces
+        bonds = self.screen( None, '_used', False )
+        bonds = self.screen( bonds, 'TYPE', 'Bond' )
+        if len( bonds ):
+            for bond in sorted( bonds ):
+                self.set_used( bond )
+                self._print_a_bond( bond, depth + 1 )
+        # Step 3: Plain Ethernets (Infiniband?)
+        ethernets = self.screen( None, '_used', False )
+        ethernets = self.screen( ethernets, 'TYPE', 'Ethernet' )
+        if len(ethernets):
+            for nic in ethernets:
+                self.set_used( nic )
+                if nic != 'lo':
+                    self.indent_print(
+                        nic,
+                        depth + 1
+                    )
+                    for vlan in self.vlans_for( nic ):
+                        self.indent_print( vlan, depth + 2 )
+                        self.set_used( vlan )
+        # Step 4: Show any left-overs
+        unclaimed = self.screen( None, '_used', False )
+        unclaimed = self.screen( unclaimed, 'DEVICE', 'lo', False )
+        if len(unclaimed):
+            for name in sorted( unclaimed ):
+                self.set_used( name )
+                self.indent_print( name, depth + 1 )
         return
 
     def report( self, final = False ):
         if final:
             self._final_report()
         else:
-            self._nic_report()
+            id = self.nic.get( 'NAME', None )
+            if not id:
+                id = self.nic.get( 'DEVICE', 'DUNNO' )
+            self._print_a_nic( id )
         return

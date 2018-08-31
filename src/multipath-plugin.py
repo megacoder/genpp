@@ -6,6 +6,7 @@ import	sys
 import	string
 import	superclass
 import	shlex
+import	bunch
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
@@ -16,74 +17,224 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def __init__( self ):
 		super( PrettyPrint, self ).__init__()
-		return
-
-	def	reset( self ):
-		super( PrettyPrint, self ).reset()
-		self.depth = 0
-		self.do_capture = False
-		self.captured = []
-		return
-
-	def _print_tokens( self, tokens, fmt = '{0} {1}'  ):
-		if len( tokens ) > 0:
-			leadin = PrettyPrint.INDENT_WITH * self.depth
-			content = fmt.format( tokens[0], ' '.join( tokens[1:] ) )
-			self.println( '{0}{1}'.format( leadin, content ) )
+		self.sections = bunch.Bunch()
+		self.sections.defaults = [
+			'polling_interval',
+			'max_polling_interval',
+			'multipath_dir',
+			'find_multipaths',
+			'verbosity',
+			'reassign_maps',
+			'path_selector',
+			'path_grouping_policy',
+			'uid_attribute',
+			'prio',
+			'prio_args',
+			'features',
+			'path_checker',
+			'failback',
+			'rr_min_io',
+			'rr_min_io_rq',
+			'rr_weight',
+			'no_path_retry',
+			'user_friendly_names',
+			'flush_on_last_del',
+			'max_fds',
+			'checker_timeout',
+			'fast_io_fail_tmo',
+			'dev_loss_tmo',
+			'queue_without_daemon',
+			'bindings_file',
+			'wwids_file',
+			'prkeys_file',
+			'log_checker_err',
+			'reservation_key',
+			'retain_attached_hw_handler',
+			'detect_prio',
+			'detect_checker',
+			'hw_str_match',
+			'force_sync',
+			'deferred_remove',
+			'config_dir',
+			'delay_watch_checks',
+			'delay_wait_checks',
+			'missing_uev_wait_timeout',
+			'skip_kpartx',
+			'ignore_new_boot_devs',
+			'retrigger_tries',
+			'retrigger_delay',
+			'new_bindings_in_boot',
+			'remove_retries',
+			'max_sectors_kb',
+			'unpriv_sgio',
+		]
+		self.sections.blacklist = [
+			'wwid',
+			'devnode',
+			'device',		# Yes, this is a section name!
+		]
+		self.sections.blacklist_exceptions = [
+			'wwid',
+			'devnode',
+			'device',			# Yes, this is a section name!
+		]
+		self.sections.multipaths = [
+			'wwid',
+			'alias',
+			'path_grouping_policy',
+			'path_selector',
+			'prio',
+			'prio_args',
+			'failback',
+			'rr_weight',
+			'flush_on_last_del',
+			'user_friendly_names',
+			'no_path_retry',
+			'rr_min_io',
+			'rr_min_io_q',
+			'features',
+			'reservation_key',
+			'deferred_remove',
+			'delay_watch_checks',
+			'delay_wait_checks',
+			'skip_kpartx',
+			'max_sectors_kb',
+			'unpriv_sgio',
+		]
+		self.sections.devices = [
+			'vendor',
+			'product',
+			'product_blacklist',
+			'alias_prefix',
+			'hardware_handler',
+			'path_grouping_policy',
+			'uid_attribute',
+			'path_selector',
+			'path_checker',
+			'prio',
+			'prio_args',
+			'features',
+			'failback',
+			'rr_weight',
+			'no_path_retry',
+			'user_friendly_names',
+			'rr_min_io',
+			'rr_min_io_rq',
+			'fast_io_fail_tmo',
+			'dev_loss_tmo',
+			'flush_on_last_del',
+			'retain_attached_hw_handler',
+			'detect_prio',
+			'deferred_remove',
+			'delay_watch_checks',
+			'delay_wait_checks',
+			'skip_kpartx',
+			'max_sectors_kb',
+			'unpriv_sgio',
+		]
+		self.lines = list()
 		return
 
 	def	ignore( self, name ):
-		ignore_it = False
+		boring = False
 		if os.path.isfile( name ) and not name.endswith( '.conf' ):
-			ignore_it = True
-		return
-
-	def	begin_file( self, name ):
-		super( PrettyPrint, self ).begin_file( name )
-		self.depth = 0
-		return
-
-	def	_dump_captured_content( self ):
-		fmt = '{0:<%ds} {1}' % self.width
-		for tokens in sorted( self.captured, key = lambda t: t[0].lower() ):
-			self._print_tokens( tokens, fmt = fmt )
-		self.captured = []
-		return
-
+			boring = True
+		return boring
 	def	next_line( self, line ):
-		tokens = [x for x in shlex.shlex( line )]
-		if len(tokens) > 0:
-			keyword = tokens[0]
-			final = tokens[-1]
-			if final == '{':
-				self._print_tokens( tokens )
-				self.depth += 1
-				if keyword in [
-					'blacklist',
-					'blacklist_exceptions',
-					'device',
-					'multipath',
-					'defaults'
-				]:
-					self.captured = []
-					self.do_capture = True
-					self.width = 7
-			elif final == '}':
-				self._dump_captured_content()
-				self.do_capture = False
-				self.depth -= 1
-				self._print_tokens( tokens )
-			elif tokens[1] == '=':
-				self._print_tokens( tokens )
-			elif self.do_capture:
-				self.width = max( self.width, len( keyword ) )
-				if keyword in [ 'udev_dir' ]:
-					args = ''.join( tokens[1:] )
-				else:
-					args = ' '.join( tokens[1:] )
-				self.captured.append( [ keyword, args ] )
+		tokens = [
+			t for t in shlex.split( line, posix = True, comments = True )
+		]
+		if len( tokens ):
+			self.lines.append(
+				(
+					self.get_filename(),
+					self.get_lineno(),
+					line,
+					tokens[0:1] + tokens[ 1: ],
+				)
+			)
+		return
+
+	def	new_node( self, name = None ):
+		return bunch.Bunch(
+			name     = name,
+			tokens   = list(),
+			attrs    = list(),
+			children = list()
+		)
+
+	def	parse_lines( self ):
+		stack = list()
+		root = self.new_node()
+		stack.append( root )
+		for (fn,lno,line,tokens) in self.lines:
+			node = stack[ -1 ]
+			# print 'tokens={0}'.format( tokens )
+			if tokens[ -1 ] == '{':
+				child = self.new_node( tokens[ 0 ] )
+				child.tokens = tokens
+				node.children.append( child )
+				stack.append( child )
+			elif tokens[ 0 ] == '}':
+				stack.pop()
 			else:
-				# Silently discard
-				print 'ignoring {0}'.format( tokens )
-				pass
+				node.attrs.append( tokens )
+		return	root
+
+	def	quote( self, s ):
+		return s if s.isalnum() else '"{0}"'.format( s )
+
+	def	print_node( self, node, indent = 0 ):
+		# print 'node={0}'.format( node )
+		gutter = '  '
+		if node.name:
+			self.println(
+				'{0}{1}'.format(
+					gutter * indent,
+					'\t'.join( node.tokens )
+				)
+			)
+			indent += 1
+		if len(node.attrs):
+			width = max(
+				map(
+					lambda t: len( t[ 0 ] ),
+					node.attrs
+				)
+			)
+			fmt = '{{0:{0}}} {{1}}'.format( width )
+			for attr in sorted(
+				node.attrs,
+				key = lambda t: t[ 0 ].lower()
+			):
+				self.println(
+					'{0}{1}'.format(
+						gutter * indent,
+						fmt.format(
+							attr[ 0 ],
+							self.quote( ' '.join( attr[ 1: ]  ))
+						)
+					)
+				)
+		#
+		for child in sorted(
+			node.children,
+			key = lambda b : b.name.lower()
+		):
+			self.print_node( child, indent )
+		if node.name:
+			indent -= 1
+			self.println(
+				'{0}}}'.format( gutter * indent )
+			)
+		return
+
+	def	print_tree( self, root ):
+		self.print_node( root )
+		return
+
+	def	report( self, final = False ):
+		if final: return
+		root = self.parse_lines()
+		self.print_tree( root )
 		return
