@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
-import  sys
+import  bunch
+import  pptree
 import  superclass
+import  sys
 
 class   PrettyPrint( superclass.MetaPrettyPrinter ):
 
@@ -10,21 +12,23 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
 
     def __init__( self ):
         super( PrettyPrint, self ).__init__()
-        self.device    = None
-        self.nics      = dict()
+        self.nic  = None
+        self.nics = Bunch()
         return
 
     def ignore( self, name ):
         ''' Ignore directory entries not ending with '.conf' '''
         return not name.endswith( '.conf' )
 
+    def node( self, DEVICE ):
+        return bunch.Bunch(
+            DEVICE   = DEVICE,
+            parent   = None,
+            children = list(),
+        )
+
     def pre_begin_file( self, fn ):
-        self.nic = dict({
-            '_used'  : False,
-            '_id'    : None,
-            'NAME'   : None,
-            'DEVICE' : None,
-        })
+        self.nic = self.node( 'TBD' )
         return
 
     def next_line( self, line ):
@@ -35,64 +39,65 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         if len( parts ) == 2:
             name  = parts[ 0 ]
             value = parts[ 1 ]
-            if value.startswith( '"' ) or value.startswith( "'" ):
-                value          = value[1:-1]
             self.nic[name] = value
         return
 
-    def get_nic_id( self, nic ):
-        id = nic.get( '_id', None )
-        if not id: id = nic.get( 'NAME', None )
-        if not id: id = nic.get( 'DEVICE', None )
-        if not id: id = 'TBD'
-        return id
-
     def end_file( self, fn ):
-        id = self.get_nic_id( self.nic )
-        self.nic[ '_id' ] = id
+        id = self.nic.DEVICE
         self.nics[ id ]   = self.nic
         # Leave the 'self.nic' intact so we can display it later in
         # self.report()
         return
 
-    def screen( self, candidates, name, value, same = True ):
+    def choose(
+        self,
+        candidates,
+        name = None,
+        value = None,
+        same = True,
+        filter = None,
+    ):
         if not candidates:
-            candidates = self.nics.keys()
-        if same:
             candidates = [
-                id for id in candidates if
-                    self.nics[id].get( name, '_dunno' ) == value
+                k for k in self.nics.keys() if not self.nics[k].parent
             ]
-        else:
+        if filter:
             candidates = [
-                id for id in candidates if
-                    self.nics[id].get( name, '_dunno' ) != value
+                c for c in candidates if filter( c )
             ]
+        if name:
+            if same:
+                candidates = [
+                    id for id in candidates if
+                        self.nics[id].get( name, '_dunno' ) == value
+                ]
+            else:
+                candidates = [
+                    id for id in candidates if
+                        self.nics[id].get( name, '_dunno' ) != value
+                ]
         return candidates
 
-    def set_used( self, id ):
-        self.nics[ id ][ '_used' ] = True
-        return
-
-    def indent_print( self, s, depth = 0 ):
-        self.println(
-            '{0}{1}'.format(
-                '    ' * depth,
-                s,
-            )
+    def add_siblings( self, leadin ):
+        candidates = self.choose(
+            None,
+            filter = lambda nic : self.nics[nic].DEVICE.startswith( leadin )
         )
+        for candidate in sorted( candidates ):
+            self.add_child( parent, candidate )
+        return 
+
+    def vlans_for( self, parent ):
+        leadin = '{0}.'.format( parent )
+        self.add_siblings( parent, leadin )
         return
 
-    def vlans_for( self, id ):
-        leadin = '{0}.'.format( id )
-        candidates = list()
-        for candidate in self.screen( None, '_used', False ):
-            device = self.nics[ candidate ][ 'DEVICE' ]
-            if device.startswith( leadin ):
-                candidates.append( device )
-        return candidates
+    def aliases_for( self, parent ):
+        leadin = '{0}:'.format( parent )
+        self.add_siblings( parent, leadin )
+        return
 
-    def _print_a_nic( self, nic, depth = 0 ):
+    def show_current_nic( self, nic, depth = 0 ):
         # Output iface lines, sorted in order
         keys = [
             key for key in self.nic if key[0].isupper()
@@ -106,103 +111,91 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         fmt = '{{0:>{0}}}={{1}}'.format( width )
         for key in sorted( keys ):
             value = self.nic[ key ]
-            # delim = "'" if '"' in value else '"'
-            delim = '"'
-            self.indent_print(
-                fmt.format(
-                    key,
-                    '{0}{1}{0}'.format( delim, value )
-                ),
-                depth
+            print fmt.format(
+                key,
+                value,
             )
         return
 
-    def _print_a_bridge( self, bridge, depth = 0 ):
-        self.indent_print( bridge, depth )
-        for vlan in self.vlans_for( bridge ):
-            self.indent_print( vlan, depth + 1 )
-            self.set_used( vlan )
-        candidates = self.screen( None, '_used', False )
-        candidates = self.screen( candidates, 'BRIDGE', bridge )
-        ethernets  = self.screen( candidates, 'Type', 'Ethernet' )
+    def add_child( self, parent, child ):
+        self.nics[ child  ].parent = parent
+        self.nics[ parent ].children.append( child )
+        return
+
+    def build_bond( self, parent, bond ):
+        self.add_child( parent, bond )
+        # Bonds are made out of NICs
+        candidates = self.choose( None, 'TYPE', 'Ethernet' )
+        paths = self.choose( candidates, 'MASTER', bond )
+        for path in sorted( paths ):
+            self.add_child( bond, path )
+        pass
+
+    def build_bridge( self, parent, bridge ):
+        self.add_child( parent, bridge )
+        # Bridges can be built from bonds
+        candidates = self.choose( None, 'TYPE', 'Bridge' )
+        bonds = self.choose( candidates, 'BRIDGE', bridge )
+        for bond in sorted( bonds ):
+            self.build_bond( bridge, bond )
+        # Bridges can be simple NIC's
+        candidates = self.choose( None, 'TYPE', 'Ethernet' )
+        ethernets = self.choose( candidates, 'MASTER', bond )
         for ethernet in sorted( ethernets ):
-            self.indent_print( ethernet, depth + 1 )
-            self.set_used( ethernet )
-            del candidates[ ethernet ]
-        if len(candidates):
-            print >>sys.stderr, 'unused bridge components={0}'.format(
-                candidates
+            self.add_child( bridge, ethernet )
+        return
+
+    def report( self, final = False ):
+        if final:
+            self.print_network()
+        else:
+            self.print_nic()
+        return
+
+    def print_nic( self, nic = None ):
+        if not nic:
+            nic = self.nic
+        width = max(
+            map(
+                len,
+                self.nic.keys()
+            )
+        )
+        fmt = '{{0:>{0}}}={{1}}'.format( width )
+        for key in sorted( self.nic.keys() ):
+            self.println(
+                fmt.format( key, self.nic[ key ] )
             )
         return
 
-    def _print_a_bond( self, bond, depth = 0 ):
-        self.indent_print( bond, depth )
-        for vlan in self.vlans_for( bond ):
-            self.indent_print( vlan, depth + 1 )
-            self.set_used( vlan )
-        candidates = self.screen( None, '_used', False )
-        candidates = self.screen( candidates, 'SLAVE', 'yes' )
-        candidates = self.screen( candidates, 'MASTER', bond )
-        for slave in sorted( candidates ):
-            self.indent_print( slave, depth + 1 )
-            for vlan in self.vlans_for( slave ):
-                self.indent_print( vlan, depth + 2 )
-                self.set_used( vlan )
-            self.set_used( slave )
-        return
-
-    def _final_report( self ):
+    def print_network( self ):
         self.println()
         title = 'S U M M A R Y'
         self.println( title )
         self.println( '=' * len( title ) )
         # Step 0: The network (tm)
         self.println()
-        depth = 0
-        self.indent_print( 'network', depth )
+        network = self.node( DEVICE = 'network', NAME = 'network' )
         # Step 1: construct bridged interfaces
-        bridges = self.screen( None, '_used', False )
-        bridges = self.screen( bridges, 'TYPE', 'Bridge' )
-        if len(bridges):
-            for bridge in sorted( bridges ):
-                self.set_used( bridge )
-                self._print_a_bridge( bridge, depth + 1 )
+        bridges = self.choose( None, 'TYPE', 'Bridge' )
+        for bridge in sorted( bridges ):
+            self.build_bridge( network, bridge )
         # Step 2: Bonded interfaces
-        bonds = self.screen( None, '_used', False )
-        bonds = self.screen( bonds, 'TYPE', 'Bond' )
-        if len( bonds ):
-            for bond in sorted( bonds ):
-                self.set_used( bond )
-                self._print_a_bond( bond, depth + 1 )
+        bonds = self.choose( None, 'TYPE', 'Bond' )
+        for bond in sorted( bonds ):
+            self.build_bond( network, bond )
         # Step 3: Plain Ethernets (Infiniband?)
-        ethernets = self.screen( None, '_used', False )
-        ethernets = self.screen( ethernets, 'TYPE', 'Ethernet' )
-        if len(ethernets):
-            for nic in ethernets:
-                self.set_used( nic )
-                if nic != 'lo':
-                    self.indent_print(
-                        nic,
-                        depth + 1
-                    )
-                    for vlan in self.vlans_for( nic ):
-                        self.indent_print( vlan, depth + 2 )
-                        self.set_used( vlan )
+        ethernets = self.choose( None, 'TYPE', 'Ethernet' )
+        for ethernet in sorted( ethernet ):
+            self.add_child( network, ethernet )
         # Step 4: Show any left-overs
-        unclaimed = self.screen( None, '_used', False )
-        unclaimed = self.screen( unclaimed, 'DEVICE', 'lo', False )
-        if len(unclaimed):
-            for name in sorted( unclaimed ):
-                self.set_used( name )
-                self.indent_print( name, depth + 1 )
-        return
-
-    def report( self, final = False ):
-        if final:
-            self._final_report()
-        else:
-            id = self.nic.get( 'NAME', None )
-            if not id:
-                id = self.nic.get( 'DEVICE', 'DUNNO' )
-            self._print_a_nic( id )
+        unclaimed = self.choose()
+        for solo in sorted( unclaimed ):
+            self.add_child( network, solo )
+        # Show what we have made
+        print_tree( 
+            network,
+            nameattr = 'DEVICE',
+            indent = 8,
+        )
         return
