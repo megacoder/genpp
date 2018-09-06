@@ -28,6 +28,12 @@ class	Bunch( object ):
 			del self.__dict__[name]
 		return
 
+	def	keys( self ):
+		for key in self.__dict__.keys():
+			if key.isupper():
+				yield key
+		return
+
 	def	__iter__( self ):
 		return iter( self.__dict__ )
 

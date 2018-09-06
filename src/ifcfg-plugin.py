@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from  	bunch		import	Bunch
+import	bunch
 import  pptree
 import  superclass
 import  sys
@@ -13,12 +13,14 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
     def __init__( self ):
         super( PrettyPrint, self ).__init__()
         self.nic  = None
-        self.nics = Bunch()
+        self.nics = bunch.Bunch()
         return
 
     def ignore( self, name ):
-        ''' Ignore directory entries not ending with '.conf' '''
-        return not name.endswith( '.conf' )
+        '''\
+            Ignore anything but ifcfg-* files.
+        '''
+        return not name.startswith( 'ifcfg-' )
 
     def node( self, DEVICE ):
         return bunch.Bunch(
@@ -27,7 +29,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             children = list(),
         )
 
-    def pre_begin_file( self, fn ):
+    def pre_begin_file( self, fn = None ):
         self.nic = self.node( 'TBD' )
         return
 
@@ -42,7 +44,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             self.nic[name] = value
         return
 
-    def end_file( self, fn ):
+    def end_file( self, fn = None ):
         id = self.nic.DEVICE
         self.nics[ id ]   = self.nic
         # Leave the 'self.nic' intact so we can display it later in
@@ -85,7 +87,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         )
         for candidate in sorted( candidates ):
             self.add_child( parent, candidate )
-        return 
+        return
 
     def vlans_for( self, parent ):
         leadin = '{0}.'.format( parent )
@@ -111,9 +113,11 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         fmt = '{{0:>{0}}}={{1}}'.format( width )
         for key in sorted( keys ):
             value = self.nic[ key ]
-            print fmt.format(
-                key,
-                value,
+            self.println(
+                fmt.format(
+                    key,
+                    value,
+                )
             )
         return
 
@@ -145,27 +149,21 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             self.add_child( bridge, ethernet )
         return
 
-    def report( self, final = False ):
-        if final:
-            self.print_network()
-        else:
-            self.print_nic()
-        return
-
     def print_nic( self, nic = None ):
         if not nic:
             nic = self.nic
-        width = max(
-            map(
-                len,
-                self.nic.keys()
+        if nic:
+            width = max(
+                map(
+                    len,
+                    nic
+                )
             )
-        )
-        fmt = '{{0:>{0}}}={{1}}'.format( width )
-        for key in sorted( self.nic.keys() ):
-            self.println(
-                fmt.format( key, self.nic[ key ] )
-            )
+            fmt = '{{0:>{0}}}={{1}}'.format( width )
+            for key in sorted( nic.keys() ):
+                self.println(
+                    fmt.format( key, nic[ key ] )
+                )
         return
 
     def print_network( self ):
@@ -175,7 +173,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         self.println( '=' * len( title ) )
         # Step 0: The network (tm)
         self.println()
-        network = self.node( DEVICE = 'network', NAME = 'network' )
+        network = self.node( DEVICE = 'network' )
         # Step 1: construct bridged interfaces
         bridges = self.choose( None, 'TYPE', 'Bridge' )
         for bridge in sorted( bridges ):
@@ -186,16 +184,23 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             self.build_bond( network, bond )
         # Step 3: Plain Ethernets (Infiniband?)
         ethernets = self.choose( None, 'TYPE', 'Ethernet' )
-        for ethernet in sorted( ethernet ):
+        for ethernet in sorted( ethernets ):
             self.add_child( network, ethernet )
         # Step 4: Show any left-overs
-        unclaimed = self.choose()
+        unclaimed = self.choose( None )
         for solo in sorted( unclaimed ):
             self.add_child( network, solo )
         # Show what we have made
-        print_tree( 
+        pptree.print_tree(
             network,
             nameattr = 'DEVICE',
             indent = 8,
         )
+        return
+
+    def report( self, final = False ):
+        if final:
+            self.print_network()
+        else:
+            self.print_nic()
         return
