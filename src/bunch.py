@@ -11,39 +11,45 @@ class	Bunch( object ):
 		return
 
 	def	__getattr__( self, name ):
-		if name in self.__dict__:
-			return self.__dict__[name]
-		else:
-			raise AttributeError( 'No such attribute: {0}'.format( name ) )
+		return self.__dict__.get( name, None )
 
 	def	__setattr__( self, name, value ):
 		self.__dict__[name] = value
 
+	def	__getitem__( self, key ):
+		return self.__dict__.get( key, None )
+
+	def	__setitem__( self, key, value ):
+		self.__dict__[ key ] = value
+		return
+
 	def	__delattr__( self, name ):
 		if name in self.__dict__:
 			del self.__dict__[name]
-		else:
-			raise AttributeError( 'No such attribute: {0}'.format( name ) )
 		return
 
 	def	__iter__( self ):
 		return iter( self.__dict__ )
 
 	def	__repr__( self ):
-		labels = [ l for l in dir(self) if l[0].islower() ]
-		values = [ '{0}:{1}'.format( l, self.__dict__[l] ) for l in labels ]
-		return '; '.join( values )
+		parts = [
+			"'{0}': '{1}'".format( l, self.__dict__[l] ) for l in self.__dict__ if l[0] != '_'
+		]
+		return '{{ {0} }}'.format(
+			'; '.join( parts )
+		)
 
 if __name__ == '__main__':
 	b = Bunch(
 		first = 'Tommy',
 		last = 'Reynolds'
 	)
-	print b
-	print 'Name: {0}, {1}'.format(
+	print 'Name: {0}, {1}, Should be none={2}'.format(
 		b.last,
-		b.first
+		b.first,
+		b.no_such_value
 	)
+	print 'b={0}'.format( b )
 	print 'iter={0}'.format(
 		[ x for x in b ]
 	)
