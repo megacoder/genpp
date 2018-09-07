@@ -38,7 +38,7 @@ class   MetaPrettyPrinter( object ):
         return self.sc_out
 
     def get_fileno( self ):
-        return self.fc_fileno
+        return self.sc_fileno
 
     def get_filename( self ):
         return self.filename

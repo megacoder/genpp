@@ -4,10 +4,11 @@
 import	sys
 import	os
 
-class	Bunch( object ):
+class	Bunch( dict ):
 
 	def	__init__( self, **kwds ):
-		self.__dict__.update( kwds )
+		super( Bunch, self ).__init__( **kwds )
+		self.__dict__.update( **kwds )
 		return
 
 	def	__getattr__( self, name ):
@@ -26,12 +27,6 @@ class	Bunch( object ):
 	def	__delattr__( self, name ):
 		if name in self.__dict__:
 			del self.__dict__[name]
-		return
-
-	def	keys( self ):
-		for key in self.__dict__.keys():
-			if key.isupper():
-				yield key
 		return
 
 	def	__iter__( self ):
@@ -56,7 +51,12 @@ if __name__ == '__main__':
 		b.no_such_value
 	)
 	print 'b={0}'.format( b )
+	print 'last={0}'.format( b.get( 'last','BOO!' ) )
+	print 'missing={0}'.format( b.get( ' *missing* ','BOO!' ) )
 	print 'iter={0}'.format(
 		[ x for x in b ]
 	)
+	print 'iter:'
+	for i,key in enumerate( b ):
+		print 'key[{0}]={1}'.format( i+1, key )
 	exit( 0 )
