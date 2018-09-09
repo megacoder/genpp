@@ -1,8 +1,11 @@
 * Sun Sep 9 2018 Tommy Reynolds
-- (9e5b45f) Removed depricated 'version=' keyword parameter (HEAD, tag: v1.1.2, master)
+- (cb57a51) Updated history (HEAD, origin/master, origin/HEAD, master)
+
+* Sun Sep 9 2018 Tommy Reynolds
+- (9e5b45f) Removed depricated 'version=' keyword parameter (tag: v1.1.2)
 
 * Fri Sep 7 2018 Tommy Reynolds
-- (db81a85) Bumped (tag: v1.1.1, origin/master, origin/HEAD)
+- (db81a85) Bumped (tag: v1.1.1)
 
 * Fri Sep 7 2018 Tommy Reynolds
 - (2f06c19) Ignore "tags"

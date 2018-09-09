@@ -2,6 +2,8 @@
 # vim: et sw=4 ts=4
 
 import  argparse
+import  traceback
+
 try:
     import  importlib
 except:
@@ -9,9 +11,13 @@ except:
         def __init__( self ):
             pass
         def import_module( self, name ):
-            print 'I want {0}'.format( name )
-            module = __import__( name )
-            print 'Imported {0}'.format( name )
+            try:
+                module = __import__( name )
+            except Exception, e:
+                traceback.print_exc()
+                raise ValueError(
+                    'Could not import "{0}"'.format( name )
+                )
             return module
     importlib = FunkyBob()
 
