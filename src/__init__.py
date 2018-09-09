@@ -17,7 +17,11 @@ except:
 
 import  os
 import  sys
-import  version
+
+try:
+    from  version   import  Version
+except:
+    Version = '?.?.?rc?'
 
 class GenericPrettyPrinter( object ):
 
@@ -56,6 +60,12 @@ class GenericPrettyPrinter( object ):
     def main( self ):
         # print 'Generic prettyprinter (gpp) Version {0}'.format( version.Version )
         sys.path.insert( 0, os.path.dirname( __file__ ) )
+        # Who are we?
+        prog = os.path.splitext(
+            os.path.basename( sys.argv[ 0 ] )
+        )[ 0 ]
+        if prog == '__init__':
+            prog = 'genpp'
         # Intuit the kind of prettyprinter we want to be
         kind = 'text'
         if sys.argv[0].endswith( '-pp' ):
@@ -63,9 +73,9 @@ class GenericPrettyPrinter( object ):
         p = argparse.ArgumentParser(
             description     = """A modular pretty printer that is easy to
             extend.""",
-            prog            = 'gpp',
+            prog            = prog,
 #           usage           = '%{prog} [-o ofile] [-t type] [file..]',
-            version         = version.Version,
+#           version         = version.Version,
             formatter_class = argparse.ArgumentDefaultsHelpFormatter,
             epilog = """Every attempt is made to provide a
             correctness-preserving tansformation.  The content may look
@@ -82,6 +92,15 @@ class GenericPrettyPrinter( object ):
             dest    = 'debug_level',
             default =  0,
             help    = 'Increase debug verbosity.'
+        )
+        p.add_argument(
+            '--version',
+            action = 'version',
+            version = version.Version,
+            help = '{0} Version {1}'.format(
+                prog,
+                version.Version,
+            )
         )
         p.add_argument(
             'files',
