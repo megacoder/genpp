@@ -1,192 +1,135 @@
-2017-07-03  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Sun Sep 9 2018 Tommy Reynolds
+- (9e5b45f) Removed depricated 'version=' keyword parameter (HEAD, tag: v1.1.2, master)
 
-	* setup.py: Bumped revision level.
+* Fri Sep 7 2018 Tommy Reynolds
+- (db81a85) Bumped (tag: v1.1.1, origin/master, origin/HEAD)
 
-2017-07-03  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Sep 7 2018 Tommy Reynolds
+- (2f06c19) Ignore "tags"
 
-	* plist.py: Moved to new 'src/' directory
+* Fri Sep 7 2018 Tommy Reynolds
+- (1eabbb4) Comes closer to a good network diagram.  Needs more test configurations.
 
-2017-07-03  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Sep 5 2018 Tommy Reynolds
+- (b6a0a10) Prints decoded ifcfg again.  Ready to debug network structure.
 
-	* src/ipsave-plugin.py: Process output of iptables-save(8)
+* Wed Sep 5 2018 Tommy Reynolds
+- (a7da66a) Cleaner bunch
 
-2017-07-02  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Sep 5 2018 Tommy Reynolds
+- (fec4ae2) Plainer put, we cannot.
 
-	* {genpp => src}/__init__.py, {genpp => src}/align.py, {genpp =>
-	src}/apache-plugin.py, {genpp => src}/arp-plugin.py, {genpp =>
-	src}/asm-plugin.py, {genpp => src}/bind-plugin.py, {genpp =>
-	src}/blkdev-plugin.py, {genpp => src}/blkid-plugin.py, {genpp =>
-	src}/chrony-plugin.py, {genpp => src}/codegen.py, {genpp =>
-	src}/crontab-plugin.py, {genpp => src}/csv-plugin.py, {genpp =>
-	src}/cups-plugin.py, {genpp => src}/df-plugin.py, {genpp =>
-	src}/exports-plugin.py, {genpp => src}/free-plugin.py, {genpp =>
-	src}/fstab-plugin.py, {genpp => src}/grub-plugin.py, {genpp =>
-	src}/help-plugin.py, {genpp => src}/hosts-plugin.py, {genpp =>
-	src}/ifcfg-plugin.py, {genpp => src}/ini-plugin.py, {genpp =>
-	src}/ins-plugin.py, {genpp => src}/ipneigh-plugin.py, {genpp =>
-	src}/iptables-plugin.py, {genpp => src}/iscsi-plugin.py, {genpp =>
-	src}/kdump-plugin.py, {genpp => src}/ldap-plugin.py, {genpp =>
-	src}/limits-plugin.py, {genpp => src}/lvm-plugin.py, {genpp =>
-	src}/main-plugin.py, {genpp => src}/mc-plugin.py, {genpp =>
-	src}/meminfo-plugin.py, {genpp => src}/misc.py, {genpp =>
-	src}/modinfo-plugin.py, {genpp => src}/modprobe-plugin.py, {genpp
-	=> src}/mount-plugin.py, {genpp => src}/mounted-plugin.py, {genpp
-	=> src}/multipath-ll-plugin.py, {genpp => src}/multipath-plugin.py,
-	{genpp => src}/network-plugin.py, {genpp =>
-	src}/nocomment-plugin.py, {genpp => src}/nsswitch-plugin.py, {genpp
-	=> src}/ntp-plugin.py, {genpp => src}/o2cb-plugin.py, {genpp =>
-	src}/ocfs2-plugin.py, {genpp => src}/oswbb-heartbeat-plugin.py,
-	{genpp => src}/oswtick-plugin.py, {genpp => src}/oswticker.py,
-	{genpp => src}/oswts-plugin.py, {genpp => src}/pam-plugin.py,
-	{genpp => src}/partitions-plugin.py, {genpp => src}/pna-plugin.py,
-	{genpp => src}/printcap-plugin.py, {genpp => src}/printk-plugin.py,
-	{genpp => src}/procsys-plugin.py, {genpp => src}/python.py, {genpp
-	=> src}/resolv-plugin.py, {genpp => src}/route-plugin.py, {genpp =>
-	src}/rpm-installed-plugin.py, {genpp => src}/rpm-va-plugin.py,
-	{genpp => src}/run-me.skel, {genpp => src}/sem-plugin.py, {genpp =>
-	src}/showexport-plugin.py, {genpp => src}/slabinfo-plugin.py,
-	{genpp => src}/smb-plugin.py, {genpp => src}/snmpd-plugin.py,
-	{genpp => src}/ssh-plugin.py, {genpp => src}/sssd-plugin.py, {genpp
-	=> src}/superclass.py, {genpp => src}/swapon-plugin.py, {genpp =>
-	src}/sysctl-plugin.py, {genpp => src}/tcpwrapper-plugin.py, {genpp
-	=> src}/text-plugin.py, {genpp => src}/udev-plugin.py, {genpp =>
-	src}/version.py, {genpp => src}/vmcfg-plugin.py, {genpp =>
-	src}/vmstat-plugin.py, {genpp => src}/yum-plugin.py: Old habits die
-	hard
+* Wed Sep 5 2018 Tommy Reynolds
+- (20cbc22) Merge branch 'master' of github.com:megacoder/genpp
 
-2017-07-02  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Sep 5 2018 Tommy Reynolds
+- (4d6c233) First slash at network graph printing. (tag: v1.1.0)
 
-	* samples/iptables: Trivial iptables ruleset
+* Wed Sep 5 2018 Tommy Reynolds
+- (5a7b7bd) Bunches of goodness
 
-2017-07-01  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Sep 5 2018 Tommy Reynolds
+- (d5bbab8) git@github.com:clemtoy/pptree.git
 
-	* setup.py: Dump stupid helper script glue and make my own.
+* Fri Aug 31 2018 Tommy Reynolds
+- (7165ea5) Extras
 
-2017-07-01  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Aug 31 2018 Tommy Reynolds
+- (a66c194) Bumped version
 
-	* bootstrap.sh: Build targets I am interested in.
+* Fri Aug 31 2018 Tommy Reynolds
+- (e929ced) Checkpoint
 
-2017-07-01  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Jul 26 2017 Tommy Reynolds
+- (6aeaf7c) Merge branch 'master' of github.com:megacoder/genpp
 
-	* scripts/genpp: Linkage
+* Fri Jul 14 2017 Tommy Reynolds
+- (3538f2d) SMB
 
-2017-07-01  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Wed Jul 5 2017 Tommy Reynolds
+- (d4239ee) Bumped version (tag: v1.0.2)
 
-	* genpp/__init__.py: Live without "importlib" if we must.
+* Wed Jul 5 2017 Tommy Reynolds
+- (d248bc7) Cope with new source layout.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Mon Jul 3 2017 Tommy Reynolds
+- (9820d66) How I spent my time. (tag: v1.0.1)
 
-	* scripts/{genpp.py => genpp}: Extents are for wimps.
+* Mon Jul 3 2017 Tommy Reynolds
+- (7432239) Bumped revision level.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Mon Jul 3 2017 Tommy Reynolds
+- (c34ddec) Moved to new 'src/' directory
 
-	* scripts/genpp.py: A pox on all this infrastructure!
+* Mon Jul 3 2017 Tommy Reynolds
+- (9cc12d4) Process output of iptables-save(8)
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Sun Jul 2 2017 Tommy Reynolds
+- (d994b6b) Old habits die hard
 
-	* setup.py: Conformal layout
+* Sun Jul 2 2017 Tommy Reynolds
+- (468d544) Trivial iptables ruleset
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Sat Jul 1 2017 Tommy Reynolds
+- (3fd8bf1) Dump stupid helper script glue and make my own.
 
-	* genpp/__init__.py: Reference resource
+* Sat Jul 1 2017 Tommy Reynolds
+- (4eb6291) Build targets I am interested in.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Sat Jul 1 2017 Tommy Reynolds
+- (d8c353e) Linkage
 
-	* .gitignore: Ignore VIM backup files
+* Sat Jul 1 2017 Tommy Reynolds
+- (f0dd7d2) Live without "importlib" if we must.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Sat Jul 1 2017 Tommy Reynolds
+- (4d58e08) Emulate "importlib" if you are on a server so-o-o stupid it's not provided.
 
-	* README.md: Say less.
+* Fri Jun 30 2017 Tommy Reynolds
+- (ef7b316) Extents are for wimps.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (a873154) A pox on all this infrastructure!
 
-	* genpp/version.py: We recomputed the version info last time
-	"./setup.py" was run.
+* Fri Jun 30 2017 Tommy Reynolds
+- (6907816) Conformal layout
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (884f059) Reference resource
 
-	* Docs/Events: Boilerplate
+* Fri Jun 30 2017 Tommy Reynolds
+- (664a471) Ignore VIM backup files
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (fa8895a) Say less.
 
-	* genpp/__init__.py, genpp/align.py, genpp/apache-plugin.py,
-	genpp/arp-plugin.py, genpp/asm-plugin.py, genpp/bind-plugin.py,
-	genpp/blkdev-plugin.py, genpp/blkid-plugin.py,
-	genpp/chrony-plugin.py, genpp/codegen.py, genpp/crontab-plugin.py,
-	genpp/csv-plugin.py, genpp/cups-plugin.py, genpp/df-plugin.py,
-	genpp/exports-plugin.py, genpp/free-plugin.py,
-	genpp/fstab-plugin.py, genpp/grub-plugin.py, genpp/help-plugin.py,
-	genpp/hosts-plugin.py, genpp/ifcfg-plugin.py, genpp/ini-plugin.py,
-	genpp/ins-plugin.py, genpp/ipneigh-plugin.py,
-	genpp/iptables-plugin.py, genpp/iscsi-plugin.py,
-	genpp/kdump-plugin.py, genpp/ldap-plugin.py,
-	genpp/limits-plugin.py, genpp/lvm-plugin.py, genpp/main-plugin.py,
-	genpp/mc-plugin.py, genpp/meminfo-plugin.py, genpp/misc.py,
-	genpp/modinfo-plugin.py, genpp/modprobe-plugin.py,
-	genpp/mount-plugin.py, genpp/mounted-plugin.py,
-	genpp/multipath-ll-plugin.py, genpp/multipath-plugin.py,
-	genpp/network-plugin.py, genpp/nocomment-plugin.py,
-	genpp/nsswitch-plugin.py, genpp/ntp-plugin.py,
-	genpp/o2cb-plugin.py, genpp/ocfs2-plugin.py,
-	genpp/oswbb-heartbeat-plugin.py, genpp/oswtick-plugin.py,
-	genpp/oswticker.py, genpp/oswts-plugin.py, genpp/pam-plugin.py,
-	genpp/partitions-plugin.py, genpp/pna-plugin.py,
-	genpp/printcap-plugin.py, genpp/printk-plugin.py,
-	genpp/procsys-plugin.py, genpp/python.py, genpp/resolv-plugin.py,
-	genpp/route-plugin.py, genpp/rpm-installed-plugin.py,
-	genpp/rpm-va-plugin.py, genpp/run-me.skel, genpp/sem-plugin.py,
-	genpp/showexport-plugin.py, genpp/slabinfo-plugin.py,
-	genpp/smb-plugin.py, genpp/snmpd-plugin.py, genpp/ssh-plugin.py,
-	genpp/sssd-plugin.py, genpp/superclass.py, genpp/swapon-plugin.py,
-	genpp/sysctl-plugin.py, genpp/tcpwrapper-plugin.py,
-	genpp/text-plugin.py, genpp/udev-plugin.py, genpp/version.py,
-	genpp/vmcfg-plugin.py, genpp/vmstat-plugin.py, genpp/yum-plugin.py: 
-	All the plugins so far.
+* Fri Jun 30 2017 Tommy Reynolds
+- (e9ef9a7) We recomputed the version info last time "./setup.py" was run.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (c213adc) Boilerplate
 
-	* AUTHORS, COPYING, NEWS, TODO: Boilerplate
+* Fri Jun 30 2017 Tommy Reynolds
+- (4945106) All the plugins so far.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (0a811c8) Boilerplate
 
-	* setup.py: Package construction script.
+* Fri Jun 30 2017 Tommy Reynolds
+- (cc8b7d6) Package construction script.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (d930b52) Various test case data and feature toys
 
-	* README.md, samples/20-nproc.conf, samples/asmlib, samples/df,
-	samples/dmidecode, samples/free, samples/fstab,
-	samples/ifcfg-examples/ifcfg-1028241dc6,
-	samples/ifcfg-examples/ifcfg-bond0,
-	samples/ifcfg-examples/ifcfg-bond1,
-	samples/ifcfg-examples/ifcfg-eth0,
-	samples/ifcfg-examples/ifcfg-eth1,
-	samples/ifcfg-examples/ifcfg-eth2,
-	samples/ifcfg-examples/ifcfg-eth3,
-	samples/ifcfg-examples/ifcfg-eth4,
-	samples/ifcfg-examples/ifcfg-eth5, samples/ifcfg-examples/ifcfg-lo,
-	samples/ini.conf, samples/ip-neigh, samples/limits.conf,
-	samples/lvm.conf, samples/multipath.conf,
-	samples/network/ifcfg-br0, samples/network/ifcfg-br1,
-	samples/network/ifcfg-lo, samples/network/ifcfg-p10p1,
-	samples/network/ifcfg-p7p1, samples/network/network,
-	samples/ntp.conf, samples/o2cb, samples/oswbb-ifcfg, samples/oswts,
-	samples/resolv.conf, samples/showexport-e, samples/sssd.conf,
-	samples/swapon, samples/vm.cfg, toys/shlex: Various test case data
-	and feature toys
+* Fri Jun 30 2017 Tommy Reynolds
+- (4be64f9) Helper script to make sure the plugins compile.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
+* Fri Jun 30 2017 Tommy Reynolds
+- (86764b9) Helper script to build various distribution formats.
 
-	* plist.py: Helper script to make sure the plugins compile.
+* Fri Jun 30 2017 Tommy Reynolds
+- (2c2789b) Gotta start somewhere.
 
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
-
-	* bootstrap.sh: Helper script to build various distribution formats.
-
-2017-06-30  Tommy Reynolds <Oldest.Software.Guy@gmail.com>
-
-	* ChangeLog: Gotta start somewhere.
-
-2017-06-30  Tommy Reynolds <oldest.software.guy@gmail.com>
-
-	* Initial commit
+* Fri Jun 30 2017 Tommy Reynolds
+- (3014eba) Initial commit
 
