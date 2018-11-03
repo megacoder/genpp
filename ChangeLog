@@ -1,5 +1,11 @@
+* Sat Nov 3 2018 Tommy Reynolds
+- (fa4efb7) 1) Print all column-1 comments; 2) Group udev output per file. (HEAD, master, devel)
+
 * Sun Sep 9 2018 Tommy Reynolds
-- (cb57a51) Updated history (HEAD, origin/master, origin/HEAD, master)
+- (508c011) self.get_filename() aborted. (tag: v1.1.3, origin/master, origin/HEAD)
+
+* Sun Sep 9 2018 Tommy Reynolds
+- (cb57a51) Updated history
 
 * Sun Sep 9 2018 Tommy Reynolds
 - (9e5b45f) Removed depricated 'version=' keyword parameter (tag: v1.1.2)
