@@ -24,6 +24,8 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         return
 
     def next_line( self, line ):
+        if line.startswith( '#' ):
+            self.println( line )
         clauses        = dict()
         needs_more     = False
         was_relational = True
@@ -60,7 +62,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         return
 
     def report( self, final = False ):
-        if final:
+        if not final:
             self.println()
             title = 'R U L E S'
             self.println( title )
