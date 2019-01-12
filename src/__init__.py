@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # vim: et sw=4 ts=4
 
 import  argparse
@@ -27,7 +27,7 @@ import  sys
 try:
     from  version   import  Version
 except:
-    Version = '?.?.?rc?'
+    Version = '0.0.0-bis'
 
 class GenericPrettyPrinter( object ):
 
@@ -102,10 +102,10 @@ class GenericPrettyPrinter( object ):
         p.add_argument(
             '--version',
             action = 'version',
-            version = version.Version,
+            version = Version,
             help = '{0} Version {1}'.format(
                 prog,
-                version.Version,
+                Version,
             )
         )
         p.add_argument(

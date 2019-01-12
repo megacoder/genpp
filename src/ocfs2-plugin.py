@@ -16,71 +16,56 @@ class	PrettyPrint( MetaPrettyPrinter ):
 		super( PrettyPrint, self ).__init__()
 		return
 
-	def	reset( self ):
-		super( PrettyPrint, self ).reset()
-		self._reset_stanza()
-		self.stanzas = []
-		return
-
-	def	_reset_stanza( self ):
-		self.name     = None
-		self.maxfield = 15
-		self.content  = []
-		return
-
-	def	_new_stanza( self, name ):
-		self._reset_stanza()
-		self.name   = name
-		self.number = -1
-		return
-
-	def	_end_stanza( self ):
-		if self.name:
-			self.content.sort( key = lambda (f,v) : f.lower() )
-			self.stanzas.append( (self.name, self.number, self.maxfield, self.content) )
-		self._reset_stanza()
-		return
-
-	def	_add_def( self, field, value ):
-		self.maxfield = max( self.maxfield, len(field) )
-		if field.lower() == 'number':
-			self.number = value
-		self.content.append( (field, value) )
-		return
-
-	def	next_file( self, name ):
-		super( PrettyPrint, self ).next_file( name )
-		return
-
-	def	end_file( self, name ):
-		self._end_stanza()
-		self.stanzas.sort( key = lambda (t,n,m,c) : '%s\1%s' % (
-				t.lower(),
-				n
-			)
-		)
-		others = None
-		for (title, number, maxfield, content) in self.stanzas:
-			if others:
-				print
-			others = True
-			print '%s:' % title
-			if len(content) > 0:
-				print
-			fmt = '%%%ds = %%s' % maxfield
-			for (field, value) in content:
-				print fmt % (field, value)
-		self.content = []
-		super( PrettyPrint, self ).end_file( name )
+	def	pre_begin_file( self, fn = None ):
+		self.stanzas = dict()
+		self.key     = None
+		self.stanza  = dict()
 		return
 
 	def	next_line( self, line ):
 		line = line.split( '#', 1 )[0].strip()
 		if line.endswith( ':' ):
-			self._end_stanza()
-			self._new_stanza( line[:-1] )
+			if self.stanza:
+				self.stanzas.append( self.stanza )
+				self.stanzas[ self.key ] = self.stanza
+			self.key    = line[:-1]
+			self.stanza = dict()
 		else:
-			tokens = line.split( '=', 1 )
+			tokens = map(
+				str.strip,
+				line.split( '=', 1 )
+			)
 			if len(tokens) == 2:
-				self._add_def( tokens[0].strip(), tokens[1].strip() )
+				self.stanza[ tokens[ 0 ], tokens[ 1 ] ]
+		return
+
+	def	post_end_file( self, fn = None ):
+		if len( self.stanza.keys() ):
+			self.stanzas[ self.key] = self.stanza
+		self.report()
+		return
+
+	def	report( self, final = False ):
+		if not final:
+			for i,key in enumerate( sorted( self.stanzas.keys() ) ):
+				if i:
+					self.println()
+				self.title(
+					'{0}:'.formt( key )
+				)
+				stanza = self.stanzas[ key ]
+				N = max(
+					map(
+						len,
+						stanza.keys()
+					)
+				)
+				fmt = '{{0:<{0}}} {{1}}'
+				for name in sorted( stanza.keys() ):
+					self.println(
+						fmt.format(
+							name,
+							stanza[ name ]
+						)
+					)
 		return
