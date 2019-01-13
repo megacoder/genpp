@@ -262,6 +262,12 @@ class   MetaPrettyPrinter( object ):
         self.sc_footnotes.append( s )
         return N
 
+    def title( self, text = '', bar = '-', spread = False ):
+        self.println( ' '.join( split( text ) ) if spread else text )
+        if bar:
+            self.println( bar * len( text ) )
+        return
+
     def show_footnotes( self, title = 'Footnotes' ):
         if self.sc_footnotes:
             self.println()
