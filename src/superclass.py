@@ -263,7 +263,9 @@ class   MetaPrettyPrinter( object ):
         return N
 
     def title( self, text = '', bar = '-', spread = False ):
-        self.println( ' '.join( split( text ) ) if spread else text )
+        if spread:
+            text = ' '.join( [ c for c in text ] )
+        self.println( text )
         if bar:
             self.println( bar * len( text ) )
         return
