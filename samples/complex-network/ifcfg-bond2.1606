@@ -1,0 +1,6 @@
+#This file was dynamically created by OVM manager. Please Do not edit
+DEVICE=bond2.1606
+BOOTPROTO=none
+ONBOOT=yes
+VLAN=yes
+MTU=9000

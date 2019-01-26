@@ -1,0 +1,7 @@
+#This file was dynamically created by OVM manager.           Please Do not edit
+DEVICE=eth2
+BOOTPROTO=none
+HWADDR=00:90:FA:6A:9D:B2
+ONBOOT=yes
+MASTER=bond4
+SLAVE=yes

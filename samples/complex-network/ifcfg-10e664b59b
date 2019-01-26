@@ -1,0 +1,7 @@
+#This file was dynamically created by Oracle VM Manager. Please do not edit
+DEVICE=10e664b59b
+TYPE=Bridge
+BOOTPROTO=none
+HWADDR=00:90:FA:3D:03:3C
+ONBOOT=yes
+DELAY=0
