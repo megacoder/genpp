@@ -17,9 +17,9 @@ setup(
 	version          =	VERSION,
 	description      =	'Generic Pretty Printer, using plugins',
 	author           =	'Tommy Reynolds',
-	author_email     =	'Tommy.Reynolds@MegaCoder.com',
+	author_email     =	'Tommy.Reynolds@codemonkey-black-ops.com',
 	license          =	'MIT',
-	url              =	'http://www.MegaCoder.com',
+	url              =	'http://codemonkey-black-ops.com',
 	long_description =	open('README.md').read(),
 	packages         =	[ 'genpp' ],
 	package_dir      =	{
