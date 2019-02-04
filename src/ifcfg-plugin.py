@@ -243,6 +243,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	build_ethernets( self, parent, candidates = None ):
+		root = None
+		branches = None
 		if not candidates:
 			candidates = self.choose(
 				None,
@@ -250,14 +252,16 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				'Ethernet',
 			)
 		if len( candidates ):
-			ethers = self.node( '<ethers>', parent )
-			map(
-				lambda n : self.node( n, ethers ),
+			root = self.node( '<ethers>', parent )
+			branches = map(
+				lambda n : self.node( n, root ),
 				candidates
 			)
-		return candidates
+		return root, branches
 
 	def	build_bonds( self, parent, candidates = None ):
+		root = None
+		branches = None
 		if not candidates:
 			candidates = self.choose(
 				None,
@@ -265,14 +269,16 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				'Bond',
 			)
 		if len( candidates ):
-			bonode = self.node( '<bonds>', parent )
-			map(
-				lambda n : self.node( n, bonode ),
+			root = self.node( '<bonds>', parent )
+			branches = map(
+				lambda n : self.node( n, root ),
 				candidates
 			)
-		return candidates
+		return root, branches
 
 	def	build_bridges( self, parent, candidates = None ):
+		root = None
+		branches = None
 		if not candidates:
 			candidates = self.choose(
 				None,
@@ -280,44 +286,53 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				'Bridge',
 			)
 		if len( candidates ):
-			brnode = self.node( '<bridges>', parent )
-			map(
-				lambda n : self.node( n, brnode ),
+			root = self.node( '<bridges>', parent )
+			branches = map(
+				lambda n : self.node( n, root ),
 				candidates
 			)
-		return candidates
+		return root, branches
 
 	def	claim_loopback( self, parent, candidates = None ):
+		root = None
+		branches = None
 		if not candidates:
 			candidates = self.choose(
 				None,
 				'DEVICE',
 				'lo',
 			)
-		map(
-			lambda n : self.node( n, parent ),
-			candidates
-		)
-		return candidates
+		if len( candidates ):
+			root = self.node( '<loopback>', parent )
+			branches = map(
+				lambda n : self.node( n, root ),
+				candidates
+			)
+		return root
 
 	def	resolve_unspecified( self ):
 		# BONDING_OPTS implies NIC is a bond
 		for n in self.nics:
 			if 'BONDING_OPTS' in dir( self.nics[n] ):
 				self.nics[n].TYPE = 'Bond'
+		# Slaves are marked by 'MASTER=<name>'
+		for n in self.nics:
+			if self.nics[n].SLAVE == 'YES':
+				master = self.nics[n].MASTER
+				self.nics[ master ].TYPE = 'Bond'
 		return
 
 	def	build_orphans( self, parent ):
 		orphans = self.choose( None, used = False )
+		root = None
+		branches = None
 		if len( orphans ):
-			orphanage = self.node( '<orphans>', parent )
-			map(
-				lambda n : self.node( n, orphanage ),
+			root = self.node( '<orphans>', parent )
+			branches = map(
+				lambda n : self.node( n, root ),
 				orphans
 			)
-		else:
-			self.title( 'No orphans' )
-		return parent
+		return root, branches
 
 	def print_network( self ):
 		self.title( 'S U M M A R Y', bar = '=' )
