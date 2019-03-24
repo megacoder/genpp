@@ -64,7 +64,7 @@ class GenericPrettyPrinter( object ):
         return
 
     def main( self ):
-        # print 'Generic prettyprinter (gpp) Version {0}'.format( version.Version )
+        # print 'Generic prettyprinter (gpp) Version {0}'.format( Version )
         sys.path.insert( 0, os.path.dirname( __file__ ) )
         # Who are we?
         prog = os.path.splitext(
@@ -81,7 +81,7 @@ class GenericPrettyPrinter( object ):
             extend.""",
             prog            = prog,
 #           usage           = '%{prog} [-o ofile] [-t type] [file..]',
-#           version         = version.Version,
+#           version         = Version,
             formatter_class = argparse.ArgumentDefaultsHelpFormatter,
             epilog = """Every attempt is made to provide a
             correctness-preserving tansformation.  The content may look
