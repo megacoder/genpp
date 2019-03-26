@@ -7,7 +7,7 @@ import	os
 class	Bunch( dict ):
 
 	def	__init__( self, **kwds ):
-		super( Bunch, self ).__init__( **kwds )
+		super( Bunch, self ).__init__()
 		self.__dict__.update( **kwds )
 		return
 

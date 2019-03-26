@@ -208,6 +208,13 @@ class   MetaPrettyPrinter( object ):
             )
         return
 
+    def title( self, t = '', bar = '-' ):
+        self.println( t )
+        if bar:
+            self.println( bar * len( t ) )
+        self.println()
+        return
+
     def println( self, s = '' ):
         print >>self.sc_out, s
         return

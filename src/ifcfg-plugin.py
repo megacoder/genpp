@@ -2,7 +2,7 @@
 # vim: ai sm noet ts=4 sw=4
 
 import	bunch
-import	pptree
+from	pptree		import	Node, print_tree
 import	superclass
 import	sys
 import	traceback
@@ -15,8 +15,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def __init__( self ):
 		super( PrettyPrint, self ).__init__()
-		self.nic  = None
-		self.nics = dict()
+		self.ifcfg  = None
+		self.ifcfgs = dict()
 		return
 
 	def ignore( self, name ):
@@ -25,10 +25,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		'''
 		return not name.startswith( 'ifcfg-' )
 
-	def add_nic( self, DEVICE ):
+	def new_ifcfg( self, DEVICE ):
 		'''\
-			Takes a DEVICE name, returns a Bunch() node to
-			be populated later.
+			Takes a DEVICE name, returns a bunch.Bunch()
+			node to be populated later.
 		'''
 		return bunch.Bunch(
 			DEVICE = DEVICE,
@@ -39,11 +39,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	def pre_begin_file( self, fn = None ):
 		'''\
 			Before beginning to process a new file,
-			allocate a fresh Bunch() node to hold
-			its attributes.
+			allocate a fresh bunch.Bunch() node to
+			hold its attributes.
 		'''
 		try:
-			self.nic = self.add_nic( 'TBD' )
+			self.ifcfg = self.new_ifcfg( 'TBD' )
 		except Exception, e:
 			traceback.print_exc()
 			raise e
@@ -78,7 +78,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				value = parts[ 1 ]
 				if len(value) and value[0] in [ '"', "'"] and value[0] == value[-1]:
 					value = value[1:-1]
-				self.nic[ name ] = value
+				self.ifcfg[ name ] = value
 		except Exception, e:
 			traceback.print_exc()
 			raise e
@@ -93,10 +93,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			a jiffy.'
 		'''
 		try:
-			if 'TYPE' not in self.nic:
-				self.nic.TYPE = 'Dunno'
-			self.nics[ self.nic.DEVICE ] = self.nic
-			# Leave the 'self.nic' intact so we can display it later in
+			self.ifcfgs[ self.ifcfg.DEVICE ] = self.ifcfg
+			# Leave the 'self.ifcfg' intact so we can display it later in
 			# self.report()
 		except Exception, e:
 			traceback.print_exc()
@@ -108,24 +106,24 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			Given a NIC device name, set
 			(or clear) the usage flag.
 		'''
-		if name not in self.nics:
+		if name not in self.ifcfgs:
 			self.println( 'name: {0}'.format( name ) )
-			for nic in sorted( self.nics ):
-				self.println( '-- {0}'.format( nic ) )
+			for n in sorted( self.ifcfgs ):
+				self.println( '-- {0}'.format( n ) )
 			raise ValueError(
 				'set_used: name {0} not in known nics'.format( name )
 			)
-		self.nics[ name ]._used = value
+		self.ifcfgs[ name ]._used = value
 		return
 
 	def choose(
 		self,
 		candidates,			# List of names, required but 'None' is OK
-		attr   = None,		# Filter on this, if present
-		value  = None,		# Value that 'attr' must have
-		same   = True,		# Match if true, non-match if false
-		used   = False,		# Entry must/must-not be used
-		claim  = True,		# Set usage flag if chosen
+		attr  = None,		# Filter on this, if present
+		value = None,		# Value that 'attr' must have
+		same  = True,		# Match if true, non-match if false
+		used  = False,		# Entry must/must-not be used
+		func  = None,		# Filter func( name )
 	):
 		'''\
 			Collect a set of NIC device names
@@ -136,77 +134,82 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			given, its value must match the supplied
 			value to remain a candidate.  We can also
 			consider only used or unused NICs.
-			Set "claim" to True to mark the NIC
-			as having been consumed.
 		'''
 		if not candidates:
-			candidates = self.nics.keys()
+			candidates = self.ifcfgs.keys()
 		if False:
 			s = 'candidates={0}'.format( candidates )
 			s += '; name="{0}"'.format( name )
 			s += '; value="{0}"'.format( value )
 			s += '; same={0}'.format( same )
 			s += '; used={0}'.format( used )
-			s += '; claim={0}'.format( claim )
 			self.println( 'constraints={0}'.format( s ) )
 		if isinstance( used, bool ):
 			candidates = [
-				name for name in candidates if self.nics[name]._used == used
+				name for name in candidates if self.ifcfgs[name]._used == used
 			]
 		if isinstance( attr, str ):
 			if same:
 				candidates = [
 					name for name in candidates if
-						self.nics[name][attr] == value
+						self.ifcfgs[name][attr] == value
 				]
 			else:
 				candidates = [
 					name for name in candidates if
-						self.nics[name][attr] != value
+						self.ifcfgs[name][attr] != value
 				]
-		if isinstance( claim, bool ):
-			map(
-				lambda n : self.set_used( n, claim ),
-				candidates
-			)
+		if func:
+			candidates = [
+				n for n in candidates if func( n ) == True
+			]
 		return sorted( candidates )
 
+	def	assert_is_node( self, x ):
+		assert(
+			x is None or isinstance( x, Node )
+		)
+		return
+
 	def node( self, name, pnode = None ):
-		if name in self.nics:
+		self.assert_is_node( pnode )
+		if name in self.ifcfgs:
 			self.set_used( name )
-		return pptree.Node(
+		self.assert_is_node( pnode )
+		return Node(
 			name,
 			pnode,
 		)
 
-	def add_siblings( self, sibling, leadin ):
+	def add_cousins( self, root, leadin ):
+		self.assert_is_node( root )
+		# FIXME
 		candidates = self.choose(
 			None,
-			claim = False
+			func = lambda name : self.ifcfgs[ name ].DEVICE.startswith( leadin )
 		)
-		candidates = [
-			k for k in candidates if self.nics[k].DEVICE.startswith( leadin )
-		]
-		map(
-			lambda n : self.node( sibling, n ),
-			candidates
-		)
-		return candidates
+		for name in candidates:
+			_ = self.node( name, root )
+		return
 
-	def vlans_for( self, sibling, name ):
-		leadin = '{0}.'.format( name )
-		return	self.add_siblings( sibling, leadin )
+	def vlans_for( self, root ):
+		self.assert_is_node( root )
+		leadin = '{0}.'.format( root.name )
+		self.add_cousins( root, leadin )
+		return
 
-	def aliases_for( self, sibling, name ):
-		leadin = '{0}:'.format( name )
-		return self.add_siblings( sibling, leadin )
+	def aliases_for( self, root ):
+		self.assert_is_node( root )
+		leadin = '{0}:'.format( root.name )
+		self.add_cousins( root, leadin )
+		return
 
-	def print_nic( self, nic = None ):
-		if not nic:
-			nic = self.nic
-		if nic:
+	def show_ifcfg( self, ifcfg = None ):
+		if not ifcfg:
+			ifcfg = self.ifcfg
+		if ifcfg:
 			attrs = [
-				a for a in self.nic if a.isupper()
+				a for a in self.ifcfg if a.isupper()
 			]
 			width = max(
 				map(
@@ -216,7 +219,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			)
 			fmt = '{{0:>{0}}}={{1}}{{2}}{{1}}'.format( width )
 			for attr in sorted( attrs ):
-				value = self.nic[ attr ]
+				value = self.ifcfg[ attr ]
 				if value.isdigit():
 					delim = ''
 				elif ' ' in value or '\t' in value:
@@ -229,12 +232,16 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	show_inventory( self ):
-		for i,name in enumerate( sorted( self.nics ) ):
-			nic = self.nics[ name ]
+		'''\
+			List all the ifcfg definitions we have, before
+			we start making any changes to what we have been given.
+		'''
+		for i,name in enumerate( sorted( self.ifcfgs ) ):
+			ifcfg = self.ifcfgs[ name ]
 			attrs = ';'.join([
 				'{0}={1}'.format(
-					k, nic[k]
-				) for k in sorted( nic )
+					k, ifcfg[k]
+				) for k in sorted( ifcfg )
 			])
 			self.println()
 			self.println(
@@ -242,58 +249,51 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			)
 		return
 
-	def	build_ethernets( self, parent, candidates = None ):
-		root = None
-		branches = None
-		if not candidates:
-			candidates = self.choose(
-				None,
-				'TYPE',
-				'Ethernet',
-			)
-		if len( candidates ):
-			root = self.node( '<ethers>', parent )
-			branches = map(
-				lambda n : self.node( n, root ),
-				candidates
-			)
+	def	build_ethernet( self, name, parent ):
+		assert( isinstance( name, str ) )
+		self.assert_is_node( parent )
+		root = self.node( name, parent )
+		branches = []
 		return root, branches
 
-	def	build_bonds( self, parent, candidates = None ):
-		root = None
-		branches = None
-		if not candidates:
-			candidates = self.choose(
-				None,
-				'TYPE',
-				'Bond',
-			)
-		if len( candidates ):
-			root = self.node( '<bonds>', parent )
-			branches = map(
-				lambda n : self.node( n, root ),
-				candidates
-			)
+	def	build_bond( self, name, parent ):
+		root = self.node( name, parent )
+		# Attach any Ethernet slaves
+		children = self.choose(
+			None,
+			'MASTER',
+			name
+		)
+		branches = []
+		for moniker in children:
+			node = self.node( moniker, root )
+			branches.append( node )
 		return root, branches
 
-	def	build_bridges( self, parent, candidates = None ):
-		root = None
-		branches = None
-		if not candidates:
-			candidates = self.choose(
-				None,
-				'TYPE',
-				'Bridge',
+	def	build_bridge( self, name, parent ):
+		root = self.node( name, parent )
+		branches = []
+		# Attach any Alias, Bond, Ethernet, or VLAN
+		children = self.choose(
+			None,
+			'BRIGDE',
+			name
+		)
+		for moniker in children:
+			self.println(
+				'# {0}: new child {1}'.format(
+					name,
+					moniker
+				)
 			)
-		if len( candidates ):
-			root = self.node( '<bridges>', parent )
-			branches = map(
-				lambda n : self.node( n, root ),
-				candidates
-			)
+			node = self.node( moniker, root )
+			branches.append( node )
+			nic = self.ifcfgs[ moniker ]
+			if nic[moniker].TYPE == 'Bond':
+				tree, _ = self.build_bond( moniker, node )
 		return root, branches
 
-	def	claim_loopback( self, parent, candidates = None ):
+	def	build_loopbacks( self, parent, candidates = None ):
 		root = None
 		branches = None
 		if not candidates:
@@ -305,51 +305,87 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		if len( candidates ):
 			root = self.node( '<loopback>', parent )
 			branches = map(
-				lambda n : self.node( n, root ),
+				lambda name : self.node( name, root ),
 				candidates
 			)
-		return root
-
-	def	resolve_unspecified( self ):
-		# BONDING_OPTS implies NIC is a bond
-		for n in self.nics:
-			if 'BONDING_OPTS' in dir( self.nics[n] ):
-				self.nics[n].TYPE = 'Bond'
-		# Slaves are marked by 'MASTER=<name>'
-		for n in self.nics:
-			if self.nics[n].SLAVE == 'YES':
-				master = self.nics[n].MASTER
-				self.nics[ master ].TYPE = 'Bond'
-		return
+		return root, branches
 
 	def	build_orphans( self, parent ):
+		self.assert_is_node( parent )
 		orphans = self.choose( None, used = False )
 		root = None
 		branches = None
 		if len( orphans ):
 			root = self.node( '<orphans>', parent )
 			branches = map(
-				lambda n : self.node( n, root ),
+				lambda name : self.node( name, root ),
 				orphans
 			)
 		return root, branches
+
+	def	resolve_unspecified( self ):
+		# BONDING_OPTS implies NIC is a bond
+		bond_type = 'Bond'
+		for name in self.ifcfgs:
+			if 'BONDING_OPTS' in dir( self.ifcfgs[name] ):
+				if self.ifcfgs[ name ].TYPE != bond_type:
+					self.println(
+						'# {0}: retype {1}-->{2}'.format(
+							name,
+							self.ifcfgs[ name ].TYPE,
+							bond_type
+						)
+					)
+					self.ifcfgs[name].TYPE = bond_type
+			if self.ifcfgs[name].SLAVE == 'YES':
+				master = self.ifcfgs[name].MASTER
+				if self.ifcfgs[ master ].TYPE != bond_type:
+					self.println(
+						'# {0}.{1}: forcing master type {2}-->{3}'.format(
+							master,
+							name,
+							self.ifcfgs[ master ].TYPE,
+							bond_type
+						)
+					)
+				self.ifcfgs[ master ].TYPE = bond_type
+		return
 
 	def print_network( self ):
 		self.title( 'S U M M A R Y', bar = '=' )
 		self.title( 'Raw Inventory')
 		self.show_inventory()
 		# Step 0: The network (tm); it's own parent, not it's own child
-		# network = pptree.Node( 'network' )
+		# network = Node( 'network' )
 		self.resolve_unspecified()
 		network = self.node( '<network>', None )
-		self.claim_loopback( network )
-		self.build_bridges( network )
-		self.build_bonds( network )
-		self.build_ethernets( network )
-		self.build_orphans( network )
+		#
+		root, branches = self.build_loopbacks( network )
+		# BRIDGES
+		candidates = self.choose( None, 'TYPE', 'Bridge' )
+		if len( candidates ):
+			root = self.node( '<bridges>', network )
+			for candidate in candidates:
+				_, _ = self.build_bridge( candidate, root )
+		# BONDS
+		candidates = self.choose( None, 'Type', 'BOND' )
+		if len( candidates ):
+			root = self.node( '<bonds>', network )
+			for name in candidates:
+				_, _ = self.build_bond( name, root )
+		#
+		candidates = self.choose( None, 'TYPE', 'Ethernet' )
+		if len( candidates ):
+			root = self.node( '<ethernets>', network )
+			for name in candidates:
+				_, _ = self.build_ethernet( name, root )
+		#
+		#
+		_, _ = self.build_orphans( network )
+		#
 		self.title( 'NETWORK DIAGRAM' )
 		self.println()
-		pptree.print_tree(
+		print_tree(
 			network,
 		)
 		return
@@ -359,7 +395,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			if final:
 				self.print_network()
 			else:
-				self.print_nic()
+				self.show_ifcfg()
 		except Exception, e:
 			traceback.print_exc()
 			raise e
