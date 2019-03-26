@@ -5,8 +5,8 @@ Clement Michard (c) 2015
 
 class Node:
     def __init__(self, name, parent=None):
-        self.name = name
-        self.parent = parent
+        self.name     = name
+        self.parent   = parent
         self.children = []
 
         if parent:
@@ -31,7 +31,7 @@ def print_tree(current_node, childattr='children', nameattr='name', indent='', l
         down.append(up.pop())
 
     """ Printing of "up" branch. """
-    for child in up:     
+    for child in up:
         next_last = 'up' if up.index(child) is 0 else ''
         next_indent = '{0}{1}{2}'.format(indent, ' ' if 'up' in last else '│', ' ' * len(name(current_node)))
         print_tree(child, childattr, nameattr, next_indent, next_last)
