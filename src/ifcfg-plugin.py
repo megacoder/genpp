@@ -84,7 +84,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			raise e
 		return
 
-	def end_file( self, fn = None ):
+	def post_end_file( self, fn = None ):
 		'''\
 			Called after all lines from current file
 			have been processed by next_line().  Add
@@ -94,11 +94,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		'''
 		try:
 			self.ifcfgs[ self.ifcfg.DEVICE ] = self.ifcfg
-			# Leave the 'self.ifcfg' intact so we can display it later in
-			# self.report()
 		except Exception, e:
 			traceback.print_exc()
 			raise e
+		self.report()
 		return
 
 	def	set_used( self, name, value = True ):
@@ -207,28 +206,27 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	def show_ifcfg( self, ifcfg = None ):
 		if not ifcfg:
 			ifcfg = self.ifcfg
-		if ifcfg:
-			attrs = [
-				a for a in self.ifcfg if a.isupper()
-			]
-			width = max(
-				map(
-					len,
-					attrs
-				)
+		attrs = [
+			a for a in ifcfg if a.isupper()
+		]
+		width = max(
+			map(
+				len,
+				attrs
 			)
-			fmt = '{{0:>{0}}}={{1}}{{2}}{{1}}'.format( width )
-			for attr in sorted( attrs ):
-				value = self.ifcfg[ attr ]
-				if value.isdigit():
-					delim = ''
-				elif ' ' in value or '\t' in value:
-					delim = "'" if '"' in value else '"'
-				else:
-					delim = ''
-				self.println(
-					fmt.format( attr, delim, value )
-				)
+		)
+		fmt = '{{0:>{0}}}={{1}}{{2}}{{1}}'.format( width )
+		for attr in sorted( attrs ):
+			value = ifcfg[ attr ]
+			if value.isdigit():
+				delim = ''
+			elif ' ' in value or '\t' in value:
+				delim = "'" if '"' in value else '"'
+			else:
+				delim = ''
+			self.println(
+				fmt.format( attr, delim, value )
+			)
 		return
 
 	def	show_inventory( self ):
@@ -261,8 +259,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		# Attach any Ethernet slaves
 		children = self.choose(
 			None,
-			'MASTER',
-			name
+			attr = 'MASTER',
+			value = name
 		)
 		branches = []
 		for moniker in children:
@@ -276,8 +274,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		# Attach any Alias, Bond, Ethernet, or VLAN
 		children = self.choose(
 			None,
-			'BRIGDE',
-			name
+			attr = 'BRIGDE',
+			value = name
 		)
 		for moniker in children:
 			self.println(
@@ -299,8 +297,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		if not candidates:
 			candidates = self.choose(
 				None,
-				'DEVICE',
-				'lo',
+				attr = 'DEVICE',
+				value = 'lo',
 			)
 		if len( candidates ):
 			root = self.node( '<loopback>', parent )
@@ -362,19 +360,19 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		#
 		root, branches = self.build_loopbacks( network )
 		# BRIDGES
-		candidates = self.choose( None, 'TYPE', 'Bridge' )
+		candidates = self.choose( None, attr = 'TYPE', value = 'Bridge' )
 		if len( candidates ):
 			root = self.node( '<bridges>', network )
 			for candidate in candidates:
 				_, _ = self.build_bridge( candidate, root )
 		# BONDS
-		candidates = self.choose( None, 'Type', 'BOND' )
+		candidates = self.choose( None, attr = 'Type', value = 'BOND' )
 		if len( candidates ):
 			root = self.node( '<bonds>', network )
 			for name in candidates:
 				_, _ = self.build_bond( name, root )
 		#
-		candidates = self.choose( None, 'TYPE', 'Ethernet' )
+		candidates = self.choose( None, attr = 'TYPE', value = 'Ethernet' )
 		if len( candidates ):
 			root = self.node( '<ethernets>', network )
 			for name in candidates:
@@ -391,12 +389,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def report( self, final = False ):
-		try:
-			if final:
-				self.print_network()
-			else:
-				self.show_ifcfg()
-		except Exception, e:
-			traceback.print_exc()
-			raise e
+		if final:
+			self.print_network()
+		else:
+			self.show_ifcfg()
 		return
