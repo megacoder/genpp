@@ -34,7 +34,13 @@ class	NatSort( object ):
 		if len( sys.argv ) == 1:
 			# stdin
 			import	readline
-			prompt = '{0}> '.format( sys.argv[0]) if os.isatty( sys.stdin.fileno() ) else None
+			prompt = '{0}> '.format(
+				os.path.splitext(
+					os.path.basename(
+						sys.argv[0]
+					)
+				)[ 0 ]
+			) if os.isatty( sys.stdin.fileno()) else None
 			while True:
 				try:
 					s = raw_input( prompt )
