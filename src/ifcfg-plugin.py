@@ -2,7 +2,9 @@
 # vim: ai sm noet ts=4 sw=4
 
 import	bunch
+import	natsort
 from	pptree		import	Node, print_tree
+import	natsort
 import	superclass
 import	sys
 import	traceback
@@ -170,9 +172,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		)
 		return
 
-	def node( self, name, pnode = None ):
+	def node( self, name, pnode = None, claim = True ):
 		self.assert_is_node( pnode )
-		if name in self.ifcfgs:
+		if claim and name in self.ifcfgs:
 			self.set_used( name )
 		self.assert_is_node( pnode )
 		return Node(
@@ -180,27 +182,28 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			pnode,
 		)
 
-	def add_cousins( self, root, leadin ):
-		self.assert_is_node( root )
-		# FIXME
+	def add_cousins( self, parent, leadin, flavor ):
+		self.assert_is_node( parent )
 		candidates = self.choose(
 			None,
 			func = lambda name : self.ifcfgs[ name ].DEVICE.startswith( leadin )
 		)
-		for name in candidates:
-			_ = self.node( name, root )
+		if len( candidates ):
+			root = self.node( '<{0}>'.format( flavor ), parent )
+		for candidate in candidates:
+			_ = self.node( candidate, root )
 		return
 
 	def vlans_for( self, root ):
 		self.assert_is_node( root )
 		leadin = '{0}.'.format( root.name )
-		self.add_cousins( root, leadin )
+		self.add_cousins( root, leadin, 'vlan' )
 		return
 
 	def aliases_for( self, root ):
 		self.assert_is_node( root )
 		leadin = '{0}:'.format( root.name )
-		self.add_cousins( root, leadin )
+		self.add_cousins( root, leadin, 'alias' )
 		return
 
 	def show_ifcfg( self, ifcfg = None ):
@@ -256,6 +259,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	build_bond( self, name, parent ):
 		root = self.node( name, parent )
+		self.vlans_for( root )
+		self.aliases_for( root )
 		# Attach any Ethernet slaves
 		children = self.choose(
 			None,
@@ -274,21 +279,15 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		# Attach any Alias, Bond, Ethernet, or VLAN
 		children = self.choose(
 			None,
-			attr = 'BRIGDE',
+			attr  = 'BRIDGE',
 			value = name
 		)
 		for moniker in children:
-			self.println(
-				'# {0}: new child {1}'.format(
-					name,
-					moniker
-				)
-			)
 			node = self.node( moniker, root )
 			branches.append( node )
-			nic = self.ifcfgs[ moniker ]
-			if nic[moniker].TYPE == 'Bond':
-				tree, _ = self.build_bond( moniker, node )
+			ifcfg = self.ifcfgs[ moniker ]
+			if ifcfg.TYPE == 'Bond':
+				_, _ = self.build_bond( moniker, node )
 		return root, branches
 
 	def	build_loopbacks( self, parent, candidates = None ):
@@ -347,12 +346,15 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 						)
 					)
 				self.ifcfgs[ master ].TYPE = bond_type
+			if name.startswith( 'eth' ):
+				self.ifcfgs[ name ].TYPE = 'Ethernet'
 		return
 
 	def print_network( self ):
 		self.title( 'S U M M A R Y', bar = '=' )
 		self.title( 'Raw Inventory')
-		self.show_inventory()
+		if False:
+			self.show_inventory()
 		# Step 0: The network (tm); it's own parent, not it's own child
 		# network = Node( 'network' )
 		self.resolve_unspecified()
@@ -366,17 +368,17 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			for candidate in candidates:
 				_, _ = self.build_bridge( candidate, root )
 		# BONDS
-		candidates = self.choose( None, attr = 'Type', value = 'BOND' )
+		candidates = self.choose( None, attr = 'TYPE', value = 'Bond' )
 		if len( candidates ):
 			root = self.node( '<bonds>', network )
-			for name in candidates:
-				_, _ = self.build_bond( name, root )
+			for candidate in candidates:
+				_, _ = self.build_bond( candidate, root )
 		#
 		candidates = self.choose( None, attr = 'TYPE', value = 'Ethernet' )
 		if len( candidates ):
 			root = self.node( '<ethernets>', network )
-			for name in candidates:
-				_, _ = self.build_ethernet( name, root )
+			for candidate in candidates:
+				_, _ = self.build_ethernet( candidate, root )
 		#
 		#
 		_, _ = self.build_orphans( network )
