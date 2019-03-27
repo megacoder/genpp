@@ -1,11 +1,47 @@
+* Wed Mar 27 2019 Tommy Reynolds
+- (b9bdc58) Bumped rev (HEAD, master)
+
+* Wed Mar 27 2019 Tommy Reynolds
+- (91aeef7) Don't announce a section that will not be shown (origin/master, origin/HEAD)
+
+* Wed Mar 27 2019 Tommy Reynolds
+- (227402d) More network configurations.
+
+* Wed Mar 27 2019 Tommy Reynolds
+- (3bcb265) More real-world networks.
+
+* Wed Mar 27 2019 Tommy Reynolds
+- (59085f9) Use my version
+
+* Wed Mar 27 2019 Tommy Reynolds
+- (2024872) Merge branch 'master' of github.com:megacoder/genpp
+
 * Tue Mar 26 2019 Tommy Reynolds
-- (c4cd6c9) First working version for "iptables -nvL" (HEAD, master, devel)
+- (d15576e) Checkpoint
+
+* Tue Mar 26 2019 Tommy Reynolds
+- (28d0555) Bumped (tag: v1.1.8)
+
+* Tue Mar 26 2019 Tommy Reynolds
+- (2b7bedb) Bumped version
+
+* Mon Mar 25 2019 Tommy Reynolds
+- (5139e36) Bumped version (tag: v1.1.6)
+
+* Mon Mar 25 2019 Tommy Reynolds
+- (57ff63d) History
+
+* Mon Mar 25 2019 Tommy Reynolds
+- (c4cd6c9) First working version for "iptables -nvL"
 
 * Mon Mar 25 2019 Tommy Reynolds
 - (104647e) Sample 'iptables -n -v -L' output.
 
 * Sun Mar 24 2019 Tommy Reynolds
-- (09a6225) Try to handle iptables -nvL (origin/master, origin/HEAD)
+- (6f7bf00) Bumped version
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (09a6225) Try to handle iptables -nvL
 
 * Sun Mar 24 2019 Tommy Reynolds
 - (157c3ac) Mark not executable.
@@ -19,7 +55,7 @@
 * Sun Mar 24 2019 Tommy Reynolds
 - (d21136a) Merge branch 'master' of github.com:megacoder/genpp
 
-* Mon Jan 14 2019 Tommy Reynolds
+* Sun Jan 13 2019 Tommy Reynolds
 - (23f6c2e) Better parsing of UDEV rules. (tag: v1.1.5)
 
 * Sun Jan 13 2019 Tommy Reynolds
@@ -28,13 +64,13 @@
 * Sun Jan 13 2019 Tommy Reynolds
 - (e41fd7b) Added options for prettier title lines.
 
-* Sun Jan 13 2019 Tommy Reynolds
+* Sat Jan 12 2019 Tommy Reynolds
 - (f1abaff) Bumped
 
-* Sun Jan 13 2019 Tommy Reynolds
+* Sat Jan 12 2019 Tommy Reynolds
 - (5736e50) Avoid accumulations when parsing /etc/ocfs2/cluster.conf
 
-* Sun Jan 13 2019 Tommy Reynolds
+* Sat Jan 12 2019 Tommy Reynolds
 - (d5ba97d) OCFS2 configuration sample.
 
 * Sat Nov 3 2018 Tommy Reynolds
@@ -52,22 +88,22 @@
 * Sun Sep 9 2018 Tommy Reynolds
 - (9e5b45f) Removed depricated 'version=' keyword parameter (tag: v1.1.2)
 
-* Sat Sep 8 2018 Tommy Reynolds
+* Fri Sep 7 2018 Tommy Reynolds
 - (db81a85) Bumped (tag: v1.1.1)
 
-* Sat Sep 8 2018 Tommy Reynolds
+* Fri Sep 7 2018 Tommy Reynolds
 - (2f06c19) Ignore "tags"
 
-* Sat Sep 8 2018 Tommy Reynolds
+* Fri Sep 7 2018 Tommy Reynolds
 - (1eabbb4) Comes closer to a good network diagram.  Needs more test configurations.
 
-* Thu Sep 6 2018 Tommy Reynolds
+* Wed Sep 5 2018 Tommy Reynolds
 - (b6a0a10) Prints decoded ifcfg again.  Ready to debug network structure.
 
-* Thu Sep 6 2018 Tommy Reynolds
+* Wed Sep 5 2018 Tommy Reynolds
 - (a7da66a) Cleaner bunch
 
-* Thu Sep 6 2018 Tommy Reynolds
+* Wed Sep 5 2018 Tommy Reynolds
 - (fec4ae2) Plainer put, we cannot.
 
 * Wed Sep 5 2018 Tommy Reynolds
@@ -94,7 +130,7 @@
 * Wed Jul 26 2017 Tommy Reynolds
 - (6aeaf7c) Merge branch 'master' of github.com:megacoder/genpp
 
-* Sat Jul 15 2017 Tommy Reynolds
+* Fri Jul 14 2017 Tommy Reynolds
 - (3538f2d) SMB
 
 * Wed Jul 5 2017 Tommy Reynolds
@@ -103,16 +139,16 @@
 * Wed Jul 5 2017 Tommy Reynolds
 - (d248bc7) Cope with new source layout.
 
-* Tue Jul 4 2017 Tommy Reynolds
+* Mon Jul 3 2017 Tommy Reynolds
 - (9820d66) How I spent my time. (tag: v1.0.1)
 
-* Tue Jul 4 2017 Tommy Reynolds
+* Mon Jul 3 2017 Tommy Reynolds
 - (7432239) Bumped revision level.
 
-* Tue Jul 4 2017 Tommy Reynolds
+* Mon Jul 3 2017 Tommy Reynolds
 - (c34ddec) Moved to new 'src/' directory
 
-* Tue Jul 4 2017 Tommy Reynolds
+* Mon Jul 3 2017 Tommy Reynolds
 - (9cc12d4) Process output of iptables-save(8)
 
 * Sun Jul 2 2017 Tommy Reynolds
@@ -136,10 +172,10 @@
 * Sat Jul 1 2017 Tommy Reynolds
 - (4d58e08) Emulate "importlib" if you are on a server so-o-o stupid it's not provided.
 
-* Sat Jul 1 2017 Tommy Reynolds
+* Fri Jun 30 2017 Tommy Reynolds
 - (ef7b316) Extents are for wimps.
 
-* Sat Jul 1 2017 Tommy Reynolds
+* Fri Jun 30 2017 Tommy Reynolds
 - (a873154) A pox on all this infrastructure!
 
 * Fri Jun 30 2017 Tommy Reynolds
