@@ -1,0 +1,8 @@
+#This file was dynamically created by Oracle VM Manager. Please do not edit
+DEVICE=bond4.3001
+BOOTPROTO=none
+ONBOOT=yes
+VLAN=yes
+ETHTOOL_OPTS="-K bond4.3001 gro off"
+BRIDGE=1021cc93e7
+NM_CONTROLLED=no

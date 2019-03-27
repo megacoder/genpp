@@ -1,0 +1,7 @@
+#This file was dynamically created by Oracle VM Manager. Please do not edit
+DEVICE=bond3.304
+BOOTPROTO=none
+ONBOOT=yes
+VLAN=yes
+BRIDGE=1075229038
+NM_CONTROLLED=no

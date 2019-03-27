@@ -1,0 +1,7 @@
+#This file was dynamically created by Oracle VM Manager.           Please do not edit
+DEVICE=eth3
+BOOTPROTO=none
+HWADDR=E0:4F:43:07:9A:53
+ONBOOT=yes
+MASTER=bond1
+SLAVE=yes

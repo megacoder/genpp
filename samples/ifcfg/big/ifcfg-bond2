@@ -1,0 +1,6 @@
+#This file was dynamically created by Oracle VM Manager.            Please do not edit
+DEVICE=bond2
+BOOTPROTO=none
+ONBOOT=yes
+BONDING_OPTS="mode=1 miimon=250 use_carrier=1 updelay=500 downdelay=500 primary_reselect=2 primary=eth11"
+MTU=9000

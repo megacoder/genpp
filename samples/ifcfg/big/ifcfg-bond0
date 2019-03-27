@@ -1,0 +1,5 @@
+DEVICE=bond0
+BONDING_OPTS="mode=1 miimon=250 use_carrier=1 updelay=500 downdelay=500 primary_reselect=2 primary=eth0"
+BOOTPROTO=none
+ONBOOT=yes
+MTU=9000

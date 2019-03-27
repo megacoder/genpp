@@ -1,0 +1,8 @@
+#This file was dynamically created by Oracle VM Manager. Please do not edit
+DEVICE=10e3b96b18
+TYPE=Bridge
+BOOTPROTO=none
+MACADDR=E0:4F:43:07:9A:51
+ONBOOT=yes
+DELAY=0
+BRIDGING_OPTS="multicast_snooping=0"
