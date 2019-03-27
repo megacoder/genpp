@@ -352,8 +352,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def print_network( self ):
 		self.title( 'S U M M A R Y', bar = '=' )
-		self.title( 'Raw Inventory')
 		if False:
+			self.title( 'Raw Inventory')
 			self.show_inventory()
 		# Step 0: The network (tm); it's own parent, not it's own child
 		# network = Node( 'network' )
