@@ -50,6 +50,12 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		)
 		return
 
+	def	_end_chain( self, name = None ):
+		if not name:
+			name = self.chain.name
+		self.chains[ name ] = self.chain
+
+
 	def	next_line( self, line ):
 		tokens = line.split()
 		N = len( tokens )
