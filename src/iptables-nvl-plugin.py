@@ -9,62 +9,73 @@ from	bunch		import	Bunch
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-	NAME = 'iptables-nvl-pp'
+	NAME = 'iptables-nvL-pp'
 	DESCRIPTION = """Display 'iptables -nvL' output in canonical style."""
 
 	def	__init__( self ):
 		super( PrettyPrint, self ).__init__()
 		self.chains  = dict()
-		self.titles  = list()
-		self.widths  = list()
+		self.titles  = None
+		self.widths  = []
 		return
 
 	def	pre_begin_file( self, name = None ):
-		self._add_chain()
+		self.chain = self._new_chain()
 		return
 
-	def	own_glob( self ):
-		return '-'
+	def	_new_chain( self, name = None, info = None, rules = list() ):
+		return Bunch(
+			name  = name,
+			info  = info,
+			rules = rules,
+		)
 
-	def	_add_chain( self ):
-		if self.chain and self.chain.name:
+	def	_end_chain( self ):
+		if self.chain.name:
 			self.chains[ self.chain.name ] = self.chain
-		self.chain        = Bunch()
-		self.chain.name   = None
-		self.chain.info   = list()
-		self.chain.rules  = list()
+		self.chain = self._new_chain()
+		return
+
+	def	check_widths( self, d ):
+		nD          = len( d )
+		nWidths     = len( self.widths )
+		need        = nD - nWidths
+		self.widths += [ 0 ] * need
+		self.widths = map(
+			lambda i: max(
+				self.widths[ i ],
+				len( d[ i ] )
+			),
+			range( nD )
+		)
 		return
 
 	def	next_line( self, line ):
 		tokens = line.split()
 		N = len( tokens )
-		if N:
+		if N == 0:
+			# Blank line ends ruleset
+			self._end_chain()
+		else:
 			key = tokens[0]
 			if key == 'Chain':
 				# New chain
 				name = tokens[ 1 ]
-				self._add_chain( name )
-				self.chain.info = tokens
+				self.chain = self._new_chain(
+					name = name,
+					info = tokens,
+				)
 			elif key == 'pkts':
-				# Column headers
-				if not self.titles:
-					self.titles = tokens
-					self.widths = map(
-						len,
-						self.titles
-					)
+				self.titles = tokens
+				self.check_widths( tokens )
 			else:
 				# Everything else
 				self.chain.rules.append( tokens )
-				for i in range( N ):
-					self.widths[ i ] = max(
-						self.widths[ i ],
-						len( tokens[ i ] )
-					)
+				self.check_widths( tokens )
 		return
 
-	def	post_close_file( self, name = None ):
-		self._add_chain()
+	def	post_end_file( self, name = None ):
+		self._end_chain()
 		self.report()
 		return
 
@@ -78,27 +89,30 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			N = len( self.widths )
 			# For every defined chain:
 			for k,name in enumerate( sorted( self.chains ) ):
-				if k:
-					# Separator
-					self.println()
-				self.println( ' '.join( self.info ) )
+				if k == 0:
+					self.println( '# Defined iptables(8) chains.')
+				# Separator
+				self.println()
+				title = ' '.join( self.chains[ name ].info )
+				self.println( '## {0}'.format( title ) )
+				self.println()
 				# Column headers
-				N = len( self.titles )
 				self.println(
 					' '.join(
 						map(
-							lambda i : fmts[i].format( self.titles[ i] ),
+							lambda i : fmts[i].format( self.titles[ i ] ),
 							range( N )
 						)
 					)
 				)
 				# Each rule on a separate line
-				for rule in self.chain[ name ].rules:
+				for rule in self.chains[ name ].rules:
 					self.println(
 						' '.join(
-							lambda i : fmts[ i ].format( rule[ i ] ),
-							range( N )
+							map(
+								lambda i : fmts[ i ].format( rule[ i ] ),
+								range( N )
+							)
 						)
 					)
-			)
 		return

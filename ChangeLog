@@ -1,8 +1,50 @@
+* Tue Mar 26 2019 Tommy Reynolds
+- (c4cd6c9) First working version for "iptables -nvL" (HEAD, master, devel)
+
+* Mon Mar 25 2019 Tommy Reynolds
+- (104647e) Sample 'iptables -n -v -L' output.
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (09a6225) Try to handle iptables -nvL (origin/master, origin/HEAD)
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (157c3ac) Mark not executable.
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (ecadb01) Don't archive generated files.
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (beca39e) Basket of Ignorables
+
+* Sun Mar 24 2019 Tommy Reynolds
+- (d21136a) Merge branch 'master' of github.com:megacoder/genpp
+
+* Mon Jan 14 2019 Tommy Reynolds
+- (23f6c2e) Better parsing of UDEV rules. (tag: v1.1.5)
+
+* Sun Jan 13 2019 Tommy Reynolds
+- (7af1043) Use portable idiom for locating python executable.
+
+* Sun Jan 13 2019 Tommy Reynolds
+- (e41fd7b) Added options for prettier title lines.
+
+* Sun Jan 13 2019 Tommy Reynolds
+- (f1abaff) Bumped
+
+* Sun Jan 13 2019 Tommy Reynolds
+- (5736e50) Avoid accumulations when parsing /etc/ocfs2/cluster.conf
+
+* Sun Jan 13 2019 Tommy Reynolds
+- (d5ba97d) OCFS2 configuration sample.
+
 * Sat Nov 3 2018 Tommy Reynolds
-- (fa4efb7) 1) Print all column-1 comments; 2) Group udev output per file. (HEAD, master, devel)
+- (2a59c58) Changes (tag: v1.1.4)
+
+* Sat Nov 3 2018 Tommy Reynolds
+- (fa4efb7) 1) Print all column-1 comments; 2) Group udev output per file.
 
 * Sun Sep 9 2018 Tommy Reynolds
-- (508c011) self.get_filename() aborted. (tag: v1.1.3, origin/master, origin/HEAD)
+- (508c011) self.get_filename() aborted. (tag: v1.1.3)
 
 * Sun Sep 9 2018 Tommy Reynolds
 - (cb57a51) Updated history
@@ -10,22 +52,22 @@
 * Sun Sep 9 2018 Tommy Reynolds
 - (9e5b45f) Removed depricated 'version=' keyword parameter (tag: v1.1.2)
 
-* Fri Sep 7 2018 Tommy Reynolds
+* Sat Sep 8 2018 Tommy Reynolds
 - (db81a85) Bumped (tag: v1.1.1)
 
-* Fri Sep 7 2018 Tommy Reynolds
+* Sat Sep 8 2018 Tommy Reynolds
 - (2f06c19) Ignore "tags"
 
-* Fri Sep 7 2018 Tommy Reynolds
+* Sat Sep 8 2018 Tommy Reynolds
 - (1eabbb4) Comes closer to a good network diagram.  Needs more test configurations.
 
-* Wed Sep 5 2018 Tommy Reynolds
+* Thu Sep 6 2018 Tommy Reynolds
 - (b6a0a10) Prints decoded ifcfg again.  Ready to debug network structure.
 
-* Wed Sep 5 2018 Tommy Reynolds
+* Thu Sep 6 2018 Tommy Reynolds
 - (a7da66a) Cleaner bunch
 
-* Wed Sep 5 2018 Tommy Reynolds
+* Thu Sep 6 2018 Tommy Reynolds
 - (fec4ae2) Plainer put, we cannot.
 
 * Wed Sep 5 2018 Tommy Reynolds
@@ -52,7 +94,7 @@
 * Wed Jul 26 2017 Tommy Reynolds
 - (6aeaf7c) Merge branch 'master' of github.com:megacoder/genpp
 
-* Fri Jul 14 2017 Tommy Reynolds
+* Sat Jul 15 2017 Tommy Reynolds
 - (3538f2d) SMB
 
 * Wed Jul 5 2017 Tommy Reynolds
@@ -61,16 +103,16 @@
 * Wed Jul 5 2017 Tommy Reynolds
 - (d248bc7) Cope with new source layout.
 
-* Mon Jul 3 2017 Tommy Reynolds
+* Tue Jul 4 2017 Tommy Reynolds
 - (9820d66) How I spent my time. (tag: v1.0.1)
 
-* Mon Jul 3 2017 Tommy Reynolds
+* Tue Jul 4 2017 Tommy Reynolds
 - (7432239) Bumped revision level.
 
-* Mon Jul 3 2017 Tommy Reynolds
+* Tue Jul 4 2017 Tommy Reynolds
 - (c34ddec) Moved to new 'src/' directory
 
-* Mon Jul 3 2017 Tommy Reynolds
+* Tue Jul 4 2017 Tommy Reynolds
 - (9cc12d4) Process output of iptables-save(8)
 
 * Sun Jul 2 2017 Tommy Reynolds
@@ -94,10 +136,10 @@
 * Sat Jul 1 2017 Tommy Reynolds
 - (4d58e08) Emulate "importlib" if you are on a server so-o-o stupid it's not provided.
 
-* Fri Jun 30 2017 Tommy Reynolds
+* Sat Jul 1 2017 Tommy Reynolds
 - (ef7b316) Extents are for wimps.
 
-* Fri Jun 30 2017 Tommy Reynolds
+* Sat Jul 1 2017 Tommy Reynolds
 - (a873154) A pox on all this infrastructure!
 
 * Fri Jun 30 2017 Tommy Reynolds
