@@ -1,0 +1,5 @@
+# Emulex Corporation OneConnect 10Gb NIC (be3)
+DEVICE=eth5
+HWADDR=00:90:FA:8D:D9:F2
+ONBOOT=no
+HOTPLUG=no

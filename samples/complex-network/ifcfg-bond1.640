@@ -1,0 +1,8 @@
+#This file was dynamically created by Oracle VM Manager. Please do not edit
+DEVICE=bond1.640
+HWADDR=00:E0:EC:28:69:2E
+BOOTPROTO=none
+ONBOOT=yes
+VLAN=yes
+BRIDGE=103bf77c45
+NM_CONTROLLED=no

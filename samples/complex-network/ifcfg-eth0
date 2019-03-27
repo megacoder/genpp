@@ -1,0 +1,8 @@
+# Broadcom Corporation NetXtreme II BCM5709 Gigabit Ethernet
+DEVICE=eth0
+BOOTPROTO=none
+DHCPCLASS=
+HWADDR=00:E0:EC:28:69:2C
+ONBOOT=yes
+MASTER=bond0
+SLAVE=yes

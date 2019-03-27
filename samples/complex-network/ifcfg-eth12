@@ -1,0 +1,5 @@
+# Intel Corporation Device 1521
+DEVICE=eth12
+HWADDR=A0:36:9F:56:F1:C6
+ONBOOT=no
+HOTPLUG=no
