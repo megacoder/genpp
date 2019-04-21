@@ -1,5 +1,14 @@
 * Sun Apr 21 2019 Tommy Reynolds
-- (ffee291) Do not accumulate entries across files. (HEAD, tag: v1.1.10, origin/master, origin/HEAD, master)
+- (8ebdb76) Versioned (HEAD, master)
+
+* Sun Apr 21 2019 Tommy Reynolds
+- (be3dc4f) Added spelling for ORACLEASM_CONFIG_DIR directive.
+
+* Sun Apr 21 2019 Tommy Reynolds
+- (f34922b) History (origin/master, origin/HEAD)
+
+* Sun Apr 21 2019 Tommy Reynolds
+- (ffee291) Do not accumulate entries across files. (tag: v1.1.10)
 
 * Sun Apr 21 2019 Tommy Reynolds
 - (00e5983) Sample /etc/sysctl.conf file.
