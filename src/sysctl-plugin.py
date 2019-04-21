@@ -1,55 +1,57 @@
 #!/usr/bin/python
+# vim: ai sm noet sw=4 ts=4
 
-import  os
-import  sys
-import  math
-import  superclass
+import	os
+import	sys
+import	math
+import	superclass
 
-class   PrettyPrint( superclass.MetaPrettyPrinter ):
+class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-    NAME = 'sysctl-pp'
-    DESCRIPTION="""Output /etc/sysctl.conf in canonical form."""
+	NAME = 'sysctl-pp'
+	DESCRIPTION="""Output /etc/sysctl.conf in canonical form."""
 
-    def __init__( self ):
-        super( PrettyPrint, self ).__init__()
-        return
+	def __init__( self ):
+		super( PrettyPrint, self ).__init__()
+		return
 
-    def reset( self ):
-        super( PrettyPrint, self ).reset()
-        self.out    = sys.stdout
-        self.fmt    = "%31s\t%s"
-        self._prepare()
-        return
+	def reset( self ):
+		super( PrettyPrint, self ).reset()
+		return
 
-    def _prepare( self ):
-        self.maxlen = 0
-        self.lines  = []
-        return
+	def	pre_begin_file( self, name = None ):
+		self.maxlen = 0
+		self.lines  = list()
+		return
 
-    def ignore( self, name ):
-        return not name.endswith( '.conf' )
+	def ignore( self, name ):
+		return not name.endswith( '.conf' )
 
-    def begin_file( self, name ):
-        super( PrettyPrint, self ).begin_file( name )
-        self._prepare()
-        return
+	def next_line( self, line ):
+		tokens = map(
+			str.strip,
+			# Drop comments, split by '=', trim whitespace
+			line.split( '#', 1 )[ 0 ].split( '=', 1 )
+		)
+		if len( tokens ) == 2:
+			key   = tokens[ 0 ]
+			value = tokens[ 1 ]
+			self.maxlen = max(
+				self.maxlen,
+				len( key ),
+			)
+			self.lines.append( [ key, value ] )
+		return
 
-    def next_line( self, line ):
-        n = line.find( '#' )
-        if n > -1: line = line[:n]
-        try:
-            key, value = line.split( '=', 1 )
-        except Exception, e:
-            return
-        k = key.strip()
-        self.maxlen = max( self.maxlen, len(k) )
-        self.lines.append( (k, value.strip()) )
-        return
-
-    def report( self, final = False ):
-        self.fmt = "%%%ds = %%s" % self.maxlen
-        self.lines.sort( key = lambda (key,value): key.lower() )
-        for key,value in self.lines:
-            print self.fmt % (key, value)
-        self._prepare()
-        return
+	def report( self, final = False ):
+		if not final:
+			if len( self.lines ) == 0:
+				self.println(  '# Empty' )
+			else:
+				fmt = '{{0:>{0}}} = {{1}}'.format( self.maxlen )
+				for key,value in sorted(
+					self.lines,
+					key = lambda a : a[0].lower()
+				):
+					self.println( fmt.format( key, value ) )
+		return
