@@ -18,7 +18,7 @@ ORACLEASM_GID=asmadmin
 ORACLEASM_SCANBOOT=true
 
 # ORACLEASM_SCANORDER: Matching patterns to order disk scanning
-ORACLEASM_SCANORDER=""
+ORACLEASM_SCANORDER="dm"
 
 # ORACLEASM_SCANEXCLUDE: Matching patterns to exclude disks from scan
 ORACLEASM_SCANEXCLUDE=""
