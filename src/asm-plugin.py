@@ -12,6 +12,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	NAME = 'asm'
 	DESCRIPTION = """Display /etc/sysconfig/oracleasm files in canonical style."""
 	NAMES = dict(
+		ORACLEASM_CONFIG_DIR             = None,
 		ORACLEASM_ENABLED                = None,
 		ORACLEASM_GID                    = None,
 		ORACLEASM_SCANBOOT               = None,
