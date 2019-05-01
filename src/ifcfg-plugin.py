@@ -348,6 +348,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				self.ifcfgs[ master ].TYPE = bond_type
 			if name.startswith( 'eth' ):
 				self.ifcfgs[ name ].TYPE = 'Ethernet'
+			if name == 'lo' and self.ifcfgs[name].TYPE != 'Ethernet':
+				self.println(
+					'# Forcing loopback device to be Ethernet'
+				)
+				self.ifcfgs[name].TYPE = 'Ethernet'
 		return
 
 	def print_network( self ):
