@@ -290,6 +290,20 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				_, _ = self.build_bond( moniker, node )
 		return root, branches
 
+	def	build_team( self, name, parent ):
+		root = self.node( name, parent )
+		branches = []
+		children = self.choose(
+			None,
+			attr  = 'TEAM_MASTER',
+			value = name
+		)
+		for moniker in children:
+			node = self.node( moniker, root )
+			branches.append( node )
+			ifcfg = self.ifcfgs[ moniker ]
+		return root, branches
+
 	def	build_loopbacks( self, parent, candidates = None ):
 		root = None
 		branches = None
@@ -372,6 +386,12 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			root = self.node( '<bridges>', network )
 			for candidate in candidates:
 				_, _ = self.build_bridge( candidate, root )
+		# TEAMS
+		candidates = self.choose( None, attr = 'DEVICETYPE', value = 'Team' )
+		if len( candidates ):
+			root = self.node( '<teams>', root )
+			for candidate in candidates:
+				_, _ = self.build_team( candidate, root )
 		# BONDS
 		candidates = self.choose( None, attr = 'TYPE', value = 'Bond' )
 		if len( candidates ):
