@@ -19,6 +19,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         self.re = re.compile(
             r'^([^<>=]*[<>=]+)(.*)$'
         )
+        self.allow_continuation()
         return
 
     def enquote( self, clause ):
@@ -55,4 +56,5 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             self.println()
             for tokens in self.lines:
                 self.println( ' '.join( tokens ) )
+            self.lines = list()
         return
