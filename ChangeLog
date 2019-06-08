@@ -1,11 +1,29 @@
+* Sat Jun 8 2019 Tommy Reynolds
+- (49b7861) 1) Allow continuation.  2) Discard self.lines after making the report. (HEAD, v1.1.13)
+
+* Fri May 31 2019 Tommy Reynolds
+- (b53eb69) Added network teaming support. (tag: v1.1.12, tag: v1.1.11, origin/master, origin/HEAD, master)
+
+* Wed May 1 2019 Tommy Reynolds
+- (40e19f2) Make indivitual scripts executable, so they can be standalone-tested.
+
+* Wed May 1 2019 Tommy Reynolds
+- (06258d8) Force 'lo' device type to be 'Ethernet'
+
 * Sun Apr 21 2019 Tommy Reynolds
-- (8ebdb76) Versioned (HEAD, master)
+- (a48ed57) A bit more realism with oracleasm-_dev_oracleasm
+
+* Sun Apr 21 2019 Tommy Reynolds
+- (c6310fc) History
+
+* Sun Apr 21 2019 Tommy Reynolds
+- (8ebdb76) Versioned
 
 * Sun Apr 21 2019 Tommy Reynolds
 - (be3dc4f) Added spelling for ORACLEASM_CONFIG_DIR directive.
 
 * Sun Apr 21 2019 Tommy Reynolds
-- (f34922b) History (origin/master, origin/HEAD)
+- (f34922b) History
 
 * Sun Apr 21 2019 Tommy Reynolds
 - (ffee291) Do not accumulate entries across files. (tag: v1.1.10)
