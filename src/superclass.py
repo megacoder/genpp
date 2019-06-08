@@ -175,7 +175,7 @@ class   MetaPrettyPrinter( object ):
             for segment in f:
                 self.sc_lineno += 1
                 line += segment.rstrip()
-                if self.sc_do_backslash and line[-1] == self.sc_do_backslash:
+                if self.sc_do_backslash and len( line ) and line[-1] == self.sc_do_backslash:
                     line[-1] = ' '
                     continue
                 self.next_line( line )
