@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # Print /etc/fstab getting the fields as close to their intended columns as may
 # be.  Long fields push the remainder of the line over as little as is possible
 # so that the columns come nearer to alignment.

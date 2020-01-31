@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # vim: sw=4 ts=4 noet
 
 import	os

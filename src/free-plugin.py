@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # vi: noet sw=4 ts=4
 # Print free(1) output in canonical form
 

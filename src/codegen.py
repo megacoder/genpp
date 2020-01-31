@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 # https://pypi.python.org/pypi/codegen/1.0
 """
