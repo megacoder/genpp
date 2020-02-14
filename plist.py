@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 # vim: noet ts=4 sw=4
 
 import	os
@@ -55,7 +55,7 @@ class	Plugger():
 		for key in sorted( self.plugins ):
 			fn = self.plugins[ key ]
 			cmd = [
-				'/bin/python',
+				'/bin/python2',
 				'-B',
 				'-OO',
 				'-u',
