@@ -215,8 +215,8 @@ class   MetaPrettyPrinter( object ):
         self.println()
         return
 
-    def println( self, s = '' ):
-        print >>self.sc_out, s
+    def println( self, s = '', out = None ):
+        print >>out if out else self.sc_out, s
         return
 
     def report( self, final = False ):
