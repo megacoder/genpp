@@ -74,15 +74,22 @@ class	Align( object ):
 		return
 
 	def	show_alignment( self, out = sys.stdout ):
-		print 'Column Alignment'
+		self.println(
+			'Column Alignment'
+		)
 		for key in sorted( self.align_column ):
-			print >>out, '{0}\t{1}'.format( key, self.align_column[key] )
+			self.println(
+				'{0}\t{1}'.format( key, self.align_column[key] )
+			)
 		return
 
 	def	show_title_alignment( self, out = sys.stdout ):
-		print 'Title Alignment'
+		self.println( 'Title Alignment' )
 		for key in sorted( self.align_title ):
-			print >>out, '{0}\t{1}'.format( key, self.align_title[key] )
+			self.println(
+				'{0}\t{1}'.format( key, self.align_title[key] ),
+				out  = out
+			)
 		return
 
 	def	get_columns( self ):
@@ -151,20 +158,22 @@ if __name__ == '__main__':
 	a.add( [ 1,22,333, 'aSTRo' ] )
 	a.add( [ -44,5,6, 'rubble' ] )
 	a.add( [ 321,'abc','def', 123 ] )
-	print 'Plain:'
+	self.println(
+		'Plain:'
+	)
 	a.set_title_alignment( 'rlca' )
 	a.set_alignment( 'cccc' )
 	for i,items in a.get_items():
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
-	print 'Sorted'
+		self.println( 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) ) )
+	self.println( 'Sorted' )
 	a.set_title_alignment( 'llll' )
 	a.set_alignment( 'aaaa' )
 	for i,items in a.get_items( sort = True):
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
-	print 'Weird'
+		self.println( 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) ) )
+	self.println( 'Weird' )
 	a.set_title_alignment( 'a' )
 	a.set_alignment( 'a' )
 	import random
 	how = lambda x : random.random()
 	for i,items in a.get_items( sort = how ):
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
+		self.println( 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) ) )

@@ -36,9 +36,15 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                     options
                 )
                 self.entries.add( items )
-        except Exception, e:
-            print >>sys.stderr, 'Error handling "{0}"'.format( line )
-            print >>sys.stderr, e
+        except Exception as e:
+            self.println(
+                'Error handling "{0}"'.format( line ),
+                out = sys.stderr
+            )
+            self.println(
+                e,
+                out = sys.stderr
+            )
         return
 
     def report( self, final = False ):

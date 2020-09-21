@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # vim: et sw=4 ts=4
 
 import  argparse
@@ -13,7 +13,7 @@ except:
         def import_module( self, name ):
             try:
                 module = __import__( name )
-            except Exception, e:
+            except Exception as e:
                 traceback.print_exc()
                 raise ValueError(
                     'Could not import "{0}"'.format( name )
@@ -147,19 +147,31 @@ class GenericPrettyPrinter( object ):
         module_name = '{0}-plugin'.format( opts.kind )
         try:
             if opts.debug_level > 0:
-                print >>sys.stderr, 'Loading module {0}'.format(
-                    module_name
+                self.println(
+                    'Loading module {0}'.format(
+                        module_name
+                    ),
+                    out = sys.stderr
                 )
             module = importlib.import_module( module_name )
-        except Exception, e:
-            print >>sys.stderr, 'No prettyprinter for "%s".' % opts.kind
-            print >>sys.stderr, e
+        except Exception as e:
+            self.println(
+                'No prettyprinter for "%s".'.format( opts.kind ),
+                out = sys.stderr
+            )
+            self.println(
+                e,
+                out = sys.stderr
+            )
             return True
         if opts.ofile:
             try:
                 sys.stdout = open( opts.ofile, 'wt' )
-            except Exception, e:
-                print >>sys.stderr, 'Cannot open "%s" for writing.' % opts.ofile
+            except Exception as e:
+                self.println(
+                    'Cannot open "%s" for writing.'.format( opts.ofile ),
+                    out = sys.stderr,
+                )
                 return True
         retval = self._session( module.PrettyPrint, opts.files )
         return retval

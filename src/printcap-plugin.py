@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
+# vim: ai sm noet ff=unix norelativenumber nu ts=4 sw=4
 
 import	os
 import	sys
@@ -12,59 +13,59 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	GLOB = '-'
 
 	def	__init__( self ):
-	    super( PrettyPrint, self ).__init__()
-	    return
+		super( PrettyPrint, self ).__init__()
+		return
 
 	def	start( self ):
-	    self.lines  = []
-	    self.widths = []
-	    return
+		self.lines	= []
+		self.widths = []
+		return
 
 	def begin_file( self, name ):
-	    # Avoid printing per-file headers
-	    return
+		# Avoid printing per-file headers
+		return
 
 	def next_line( self, line ):
-	    tokens = [
+		tokens = [
 		s for s in map(
-		    str.strip,
-		    line.split( '#', 1 )[0].split( ':' )
+			str.strip,
+			line.split( '#', 1 )[0].split( ':' )
 		) if len(s) != 0
-	    ]
-	    N = len( tokens )
-	    if N > 0:
-		names = ' | '.join( [
-			s for s in map(
-			    str.strip,
-			    tokens[0].split('|')
-			) if len(s) > 0
-		] )
-		attrs       = tokens[1:]
-		attrs.sort()
-		tokens      = [ names ] + attrs
-		self.lines.append( tokens )
-		widths      = map( len, tokens )
-		padding     = [1] * (N - len( self.widths ))
-		self.widths = map(
-		    max,
-		    zip( self.widths + padding, widths )
-		) + self.widths[N:]
-		# print 'N={0}, widths={1}'.format( N, widths )
-		# print '  self.widths={0}'.format( self.widths )
-	    return
+		]
+		N = len( tokens )
+		if N > 0:
+			names = ' | '.join( [
+				s for s in map(
+					str.strip,
+					tokens[0].split('|')
+				) if len(s) > 0
+			] )
+			attrs		= tokens[1:]
+			attrs.sort()
+			tokens		= [ names ] + attrs
+			self.lines.append( tokens )
+			widths		= map( len, tokens )
+			padding		= [1] * (N - len( self.widths ))
+			self.widths = map(
+				max,
+				zip( self.widths + padding, widths )
+			) + self.widths[N:]
+			# print 'N={0}, widths={1}'.format( N, widths )
+			# print '  self.widths={0}'.format( self.widths )
+		return
 
 	def report( self, final = False ):
-	    if final:
-		fmts = map(
-		    '{{0:{0}.{0}}}'.format,
-		    self.widths
-		)
-		for tokens in sorted( self.lines ):
-		    N = len( tokens )
-		    self.println( ' : '.join(
-			fmts[i].format( tokens[i] ) for i in range( N )
-		    ) )
-	    return
+		if final:
+			fmts = map(
+				'{{0:{0}.{0}}}'.format,
+				self.widths
+			)
+			for tokens in sorted( self.lines ):
+				N = len( tokens )
+				self.println( ' : '.join(
+					fmts[i].format( tokens[i] ) for i in range( N )
+				) )
+		return
 
 if __name__ == '__main__':
 	pcp = PrettyPrint()

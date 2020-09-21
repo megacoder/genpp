@@ -40,7 +40,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
 
     def report( self, final = False ):
         # Order the lines
-        self.tokens.sort( key = lambda (t) : t[0].lower() )
+        self.tokens.sort( key = lambda t : t[0].lower() )
         # Space groups of similar lines similarly
         last_kind = None
         lines = []

@@ -39,7 +39,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		self.items.set_title_alignment( 'laaaaa' )
 		self.items.set_alignment( 'lccccc' )
 		for _,items in self.items.get_items():
-			print ' '.join( items )
+			self.println(
+				' '.join( items )
+			)
 		return
 
 if __name__ == '__main__':

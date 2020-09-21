@@ -56,7 +56,7 @@ class   MetaPrettyPrinter( object ):
                 retval = '-'
             else:
                 retval = glob.glob( pattern )
-        except Exception, e:
+        except Exception as e:
             retval = [ '-' ]
         return retval
 
@@ -76,19 +76,19 @@ class   MetaPrettyPrinter( object ):
         if name == '-':
             try:
                 self.do_open_file( sys.stdin )
-            except Exception, e:
+            except Exception as e:
                 self.error( 'error handling {stdin}' )
                 raise e
         elif os.path.isfile( name ):
             try:
                 self._do_file( name )
-            except Exception, e:
+            except Exception as e:
                 self.error( 'processing "{0}"'.format( name ) )
                 raise e
         elif os.path.isdir( name ):
             try:
                 names = sorted( os.listdir( name ) )
-            except Exception, e:
+            except Exception as e:
                 self.error(
                     'could not read directory "{0}"'.format( name )
                 )
@@ -103,7 +103,7 @@ class   MetaPrettyPrinter( object ):
                                 entry
                             )
                         )
-                    except Exception, e:
+                    except Exception as e:
                         self.error(
                             'could not process derived file "{0}"'.format(
                                 name
@@ -151,7 +151,7 @@ class   MetaPrettyPrinter( object ):
         if fn == '-':
             try:
                 self.do_open_file( sys.stdin )
-            except Exception, e:
+            except Exception as e:
                 self.error( 'could not process "{stdin}"' )
                 raise e
         else:
@@ -159,10 +159,10 @@ class   MetaPrettyPrinter( object ):
                 with open( fn, 'rt' ) as f:
                     try:
                         self.do_open_file( f )
-                    except Exception, e:
+                    except Exception as e:
                         self.error( 'processing "{0}" failed.'.format( fn ) )
                         raise e
-            except Exception, e:
+            except Exception as e:
                 self.error( 'could not open "{0}"'.format( fn ) )
                 raise e
         self.end_file( fn )
@@ -180,7 +180,7 @@ class   MetaPrettyPrinter( object ):
                     continue
                 self.next_line( line )
                 line = ''
-        except Exception, e:
+        except Exception as e:
             self.error( 'error processing file "{0}"'.format( name ) )
             raise e
         return
@@ -215,8 +215,12 @@ class   MetaPrettyPrinter( object ):
         self.println()
         return
 
-    def println( self, s = '', out = None ):
-        print >>out if out else self.sc_out, s
+    def println( self, s = '', out = None, end = '\n' ):
+        print(
+            s,
+            file = out if out else self.sc_out,
+            end  = end,
+        )
         return
 
     def report( self, final = False ):

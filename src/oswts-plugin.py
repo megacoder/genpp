@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# vim: noet sw=4 ts=4
+# vim: noet sw=4 ts=4 ff=unix ai sm norelativenumber nu
 #
 # FYI: Currently, the OSWbb heartbeat file is generated like this:
 #	zzz ***Wed Oct 22 19:00:00 EEST 2014
@@ -35,7 +35,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		timestamp = line[len(PrettyPrint.MARK):]
 		self.maxlen = max( self.maxlen, len( timestamp ) )
 		parts = timestamp.split()
-		reftime = '%s %s %s %s %s' % (
+		reftime = '%s %s %s %s %s'.format(
 			parts[0],
 			parts[1],
 			parts[2],
@@ -48,9 +48,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				PrettyPrint.FMT
 			)
 			self.timestamps.append( ( now, timestamp ) )
-		except Exception, e:
-			self.println( 'Fmat: %s' % PrettyPrint.FMT )
-			self.println( 'Time: %s' % refimt )
+		except Exception as e:
+			self.println( 'Fmat: %s'.format( PrettyPrint.FMT ) )
+			self.println( 'Time: %s'.format( refimt ) )
 			self.println( e )
 		return
 
@@ -75,7 +75,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		):
 			if first:
 				self.println(
-					fmt % (
+					fmt.format(
 						self._center(
 							timestamp_title,
 							self.maxlen
@@ -86,10 +86,12 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 						)
 					)
 				)
-				self.println( fmt % (
-					'-' * self.maxlen,
-					'-' * len( delta_title )
-				) )
+				self.println(
+					fmt.format(
+						'-' * self.maxlen,
+						'-' * len( delta_title )
+					)
+				)
 				old_time = now
 			delta = now - old_time
 			show = first
@@ -101,7 +103,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				show = True
 			if show:
 				self.println(
-					fmt % (
+					fmt.format(
 						timestamp,
 						str( int( delta.total_seconds() + 0.5 ) )
 					)

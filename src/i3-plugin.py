@@ -23,41 +23,61 @@ class	PrettyPrint( MetaPrettyPrinter ):
 		return
 
 	def	next_line( self, line ):
-		line = line.expandtabs()
+		cleaned = line.expandtabs().strip()
 		try:
-			tokens = [
-				x for x in shlex.split( line, comments = False, posix = False )
-			]
 			info = Bunch(
-				action    = None,
-				hotkey    = None,
-				args      = list(),
-				comment   = None,
-				col0      = ( len( line ) and line[ 0 ] == '#' ),
-				lineno    = self.get_lineno(),
-				cleaned   = line.rstrip(),
+				action   = None,
+				hotkey   = None,
+				args     = list(),
+				comment  = None,
+				lineno   = self.get_lineno(),
+				cleaned  = cleaned,
+				Ncleaned = len( cleaned ),
+				tokens   = [
+					x for x in shlex.split(
+						cleaned, comments = False, posix = False
+					)
+				],
 			)
-			for info.indent in range( len( info.cleaned ) ):
-				if not info.cleaned[ info.indent ].isspace():
-					break
-			for i in range( len( tokens ) ):
+			info.Ntokens = len( info.tokens )
+			for i in range( info.Ntokens ):
 				if tokens[ i ] == '#':
-					info.comment = ' '.join( tokens[ i: ] )
+					# Eat this and all remaining tokens
+					info.comment = ' '.join( info.tokens[ i: ] )
 					break
 				if i == 0:
-					info.action = tokens[ i ]
+					info.action = info.tokens[ i ]
 				elif i == 1:
-					info.hotkey = tokens[ i ]
+					info.hotkey = info.tokens[ i ]
 				else:
-					info.args.append( tokens[ i ] )
+					info.args.append( info.tokens[ i ] )
 			self.infos.append( info )
-		except Exception, e:
-			print '{0} injestion error:\n{1}'.format(
-				line,
-				e
+			pass
+		except Exception as e:
+			self.println(
+				'{0} injestion error:\n{1}'.format(
+					line,
+					e
+				)
 			)
 			raise e
 		return
+
+	def	fmt_info( self, info ):
+		required =  self.fmt.format(
+			info.action if info.action else '',
+			info.hotkey if info.hotkey else '',
+			' '.join( info.args ) if info.args else '',
+		).strip()
+		if info.comment:
+			output = '{0:<44}  {1}'.format(
+				required,
+				info.comment
+			).strip()
+		else:
+			output = required.strip()
+		N = len( output )
+		return output, N
 
 	def	report( self, final = False ):
 		if not final:
@@ -65,42 +85,45 @@ class	PrettyPrint( MetaPrettyPrinter ):
 				max_action = max(
 					[ 7 ] +
 					[ len( info.action ) for info in self.infos if
-   info.action and not info.col0 ]
+   info.action and not info.empty ]
 				)
 				max_hotkey = max(
 					[ 7 ] +
 					[ len( info.hotkey ) for info in self.infos if info.hotkey
-	  and not info.col0 ]
+	  and not info.empty ]
 				)
-				fmt = '{{0}}{{1:<{0}}} {{2:<{1}}}  {{2}}'.format(
+				self.fmt = '{{0:<{0}}} {{1:<{1}}}  {{2}}'.format(
 					max_action,
 					max_hotkey
 				)
+				indent    = 0
+				lineno    = -1
+				was_blank = False
 				for info in self.infos:
-					if len( info.cleaned ) == 0:
-						self.println()
-						continue
-					if info.col0:
-						self.println( info.cleaned )
-						continue
-					required =  fmt.format(
-						' ' * info.indent,
-						info.action if info.action else '',
-						info.hotkey if info.hotkey else '',
-						' '.join( info.args ) if info.args else '',
-					)
-					if info.comment:
-						output = '{0:<44} {1}'.format(
-							required,
-							info.comment
+					lineno += 1
+					output, N = self.fmt_info( info )
+					if N == 0 or output[ 0 ] == '#':
+						if not was_blank and lineno:
+							self.println()
+						self.println(
+							( ' ' * indent ) + output
 						)
+						was_blank = True
 					else:
-						output = required
-					self.println( output )
-			except Exception, e:
-				print 'Report Error,\nLine: {0}, {1}'.format(
-					info.lineno,
-					e
+						if was_blank:
+							self.println()
+						if info.Ntokens and info.tokens[ -1 ] == '}':
+							indent -= 1
+						self.println( output )
+						if info.Ntokens and info.tokens[ -1 ] == '{':
+							indent += 1
+						was_blank = False
+			except Exception as e:
+				self.println(
+					'Report Error,\nLine: {0}, {1}'.format(
+						info.lineno,
+						e
+					)
 				)
 				raise( e )
 			pass

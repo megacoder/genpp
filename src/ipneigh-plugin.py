@@ -40,7 +40,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			for _,tokens in self.items.get_items(
 				sort = lambda t : map( int, t[0].split('.') )
 			):
-				print ' '.join( tokens )
+				println(
+					' '.join( tokens )
+				)
 		return
 
 if __name__ == '__main__':
