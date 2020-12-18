@@ -10,10 +10,14 @@ def	peel( iterable, qty ):
 
 if __name__ == '__main__':
 	t5 = range( 1, 6 )
-	print 't5={0}'.format( t5 )
+	print(
+		't5={0}'.format( t5 )
+	)
 	a, b, c = peel( t5, 2 )
-	print 'a={0}, b={1}, c={2}'.format(
-		a,
-		b,
-		list(c)
+	print(
+		'a={0}, b={1}, c={2}'.format(
+			a,
+			b,
+			list(c)
+		)
 	)

@@ -47,7 +47,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		width = max( max(
 			map(
 				lambda l : map(
-					lambda (n,v) : len(n),
+					lambda nv : len(nl[0]),
 					l
 				),
 				[ self.repos[key] for key in self.repos.keys() ]
@@ -63,7 +63,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			self.println()
 			for (n,v) in sorted(
 				self.repos[channel],
-				key = lambda (n,v) : n.lower()
+				key = lambda nv : nv[0].lower()
 			):
 				self.println(
 					fmt.format( n, v )

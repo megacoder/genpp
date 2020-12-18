@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim: noet sw=4 ts=4
 
 from	setuptools	import	setup
@@ -10,7 +10,7 @@ NAME	= 'genpp'
 VERSION = '1.1.14'
 
 with open( '{0}/version.py'.format( 'src' ), 'w') as f:
-	print >>f, 'Version="{0}"'.format( VERSION )
+	print( 'Version="{0}"'.format( VERSION ), file = f )
 
 setup(
 	name             =	NAME,

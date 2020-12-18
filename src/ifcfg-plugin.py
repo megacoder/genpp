@@ -46,7 +46,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		'''
 		try:
 			self.ifcfg = self.new_ifcfg( 'TBD' )
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		return
@@ -81,7 +81,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				if len(value) and value[0] in [ '"', "'"] and value[0] == value[-1]:
 					value = value[1:-1]
 				self.ifcfg[ name ] = value
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		return
@@ -96,7 +96,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		'''
 		try:
 			self.ifcfgs[ self.ifcfg.DEVICE ] = self.ifcfg
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		self.report()

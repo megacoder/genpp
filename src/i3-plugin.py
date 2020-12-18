@@ -53,10 +53,12 @@ class	PrettyPrint( MetaPrettyPrinter ):
 					info.args.append( info.tokens[ i ] )
 			self.infos.append( info )
 			pass
-		except Exception, e:
-			print '{0} injestion error:\n{1}'.format(
-				line,
-				e
+		except Exception as e:
+			self.println(
+				'{0} injestion error:\n{1}'.format(
+					line,
+					e
+				)
 			)
 			raise e
 		return
@@ -116,10 +118,12 @@ class	PrettyPrint( MetaPrettyPrinter ):
 						if info.Ntokens and info.tokens[ -1 ] == '{':
 							indent += 1
 						was_blank = False
-			except Exception, e:
-				print 'Report Error,\nLine: {0}, {1}'.format(
-					info.lineno,
-					e
+			except Exception as e:
+				self.println(
+					'Report Error,\nLine: {0}, {1}'.format(
+						info.lineno,
+						e
+					)
 				)
 				raise( e )
 			pass

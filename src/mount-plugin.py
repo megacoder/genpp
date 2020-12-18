@@ -84,7 +84,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			record += [
 				'** See footnote {0}'.format( k )
 			]
-			print '*** collision "{0}"'.format( key )
+			self.println(
+				'*** collision "{0}"'.format( key )
+			)
 			self._print_mounts()
 		self.mounts[ key ] = record
 		self.set_widest( record )
@@ -92,9 +94,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	_print_mounts( self ):
 		for key in sorted( self.mounts ):
-			print '{0:31}  {1}'.format(
-				key,
-				'|'.join( self.mounts[ key ] )
+			self.println(
+				'{0:31}  {1}'.format(
+					key,
+					'|'.join( self.mounts[ key ] )
+				)
 			)
 		return
 
