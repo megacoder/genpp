@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim: noet ts=4 sw=4
 
 import	os
@@ -27,10 +27,10 @@ class	Plugger():
 				output = [ 'OK' ]
 			else:
 				output = [ '** Exit code {0}'.format( rc ) ]
-		except subprocess.CalledProcessError, e:
+		except subprocess.CalledProcessError as e:
 			output = [ 'Compilation failed' ]
-		except Exception, e:
-			print >>sys.stderr, cli
+		except Exception as e:
+			print( cli, file = sys.stderr )
 			raise e
 		return output
 
@@ -55,7 +55,7 @@ class	Plugger():
 		for key in sorted( self.plugins ):
 			fn = self.plugins[ key ]
 			cmd = [
-				'/bin/python2',
+				'/bin/python',
 				'-B',
 				'-OO',
 				'-u',
@@ -65,7 +65,7 @@ class	Plugger():
 			]
 			output = self.run( cmd )
 			for line in output:
-				print fmt.format( key, line )
+				print( fmt.format( key, line ) )
 				key = ''
 		return
 
