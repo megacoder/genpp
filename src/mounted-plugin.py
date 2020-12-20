@@ -81,11 +81,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				L = len(tokens[i])
 				self.widths[i] = L
 			fmt = '%%s%%-%ds' % self.widths[i]
-			self.println(
-				fmt % (sep, tokens[i] ),
+			self.print(
+				fmt.format(sep, tokens[i] ),
 			)
 			sep = ' '
-		print
+		self.println()
 		return
 
 	def	_report( self ):
@@ -95,7 +95,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		for i in xrange( 0, len(self.title) ):
 			bars[i] = '-' * self.widths[i]
 		self._print_set( bars )
-		print
+		self.println()
 		for tokens in self.content:
 			self._print_set( tokens )
 		self._prepare()

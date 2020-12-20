@@ -83,7 +83,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 					' '.join( obj[1:] )
 				)
 				self.println(
-					'%s%s' % ( leadin, line )
+				'%s%s'.format( leadin, line )
 				)
 		# The second pass gets any children
 		for obj in sorted_content:
@@ -97,7 +97,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 						' '.join( header[1:] )
 					)
 					self.println(
-						'%s%s' % ( leadin, line )
+						'%s%s'.format( leadin, line )
 					)
 				self._show_node(
 					focus = obj,
@@ -105,9 +105,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				)
 				if self.nodes[obj]['footer']:
 					self.println(
-						'%s%s' % (
+						'%s%s'.format(
 							leadin,
-							' '.join( self.nodes[ obj ]['footer']) )
+							' '.join( self.nodes[ obj ]['footer'])
+						)
 					)
 		return
 

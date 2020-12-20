@@ -60,8 +60,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			self.components.append( line )
 		return
 
-	def	_key( self, ((name,uuid,dev,san),attr,parts) ):
-		return dev.lower()
+	def	_key( self, a ):
+		# a = ((name,uuid,dev,san),attr,parts)
+		# return dev.lower()
+		return a[0][2].lower()
 
 	def	_dump_paths( self ):
 		if len(self.paths) > 0:
@@ -73,15 +75,13 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			)
 			for ((name,uuid,dev,san),attr,parts) in self.paths:
 				self.println(
-					tfmt % (name, uuid, dev, san)
+					tfmt.format(name, uuid, dev, san)
 				)
 				self.println(
-					'%s' % attr
+					'%s'.format( attr )
 				)
 				for part in parts:
-					self.println(
-						'%s' % part
-					)
+					self.println( '%s'.format( part ) )
 		self.reset()
 		return
 

@@ -28,11 +28,13 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		except Exception as e:
 			return
 		if self.others:
-			print
+			self.println()
 		self.others = True
 		title = 'Settings for %s' % dn
 		self.println( title )
-		self.println( '-' * len(title) )
+		self.println(
+			'-' * len(title)
+		)
 		self.println()
 		names.sort()
 		max_name = 0
@@ -47,7 +49,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 					value = f.readline().strip()
 					f.close()
 					self.println(
-						fmt % (name, value)
+						fmt.format( name, value )
 					)
 				except Exception as e:
 					pass

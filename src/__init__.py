@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # vim: et sw=4 ts=4
 
 import  argparse
@@ -147,25 +147,30 @@ class GenericPrettyPrinter( object ):
         module_name = '{0}-plugin'.format( opts.kind )
         try:
             if opts.debug_level > 0:
-                print(
-                    'Loading module {0}'.format( module_name ),
-                    file = sys.stderr
+                self.println(
+                    'Loading module {0}'.format(
+                        module_name
+                    ),
+                    out = sys.stderr
                 )
             module = importlib.import_module( module_name )
         except Exception as e:
-            print(
-                'No prettyprinter for "%s".' % opts.kind,
-                file = sys.stderr
+            self.println(
+                'No prettyprinter for "%s".'.format( opts.kind ),
+                out = sys.stderr
             )
-            print( e, file = sys.stderr )
+            self.println(
+                e,
+                out = sys.stderr
+            )
             return True
         if opts.ofile:
             try:
                 sys.stdout = open( opts.ofile, 'wt' )
             except Exception as e:
-                print(
-                    'Cannot open "%s" for writing.' % opts.ofile,
-                    file = sys.stderr
+                self.println(
+                    'Cannot open "%s" for writing.'.format( opts.ofile ),
+                    out = sys.stderr,
                 )
                 return True
         retval = self._session( module.PrettyPrint, opts.files )

@@ -52,11 +52,13 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			for line in subprocess.check_output( cmd ).split( '\n' ):
 				self.lines.append( l.strip() )
 		except Exception as e:
-			self.error(
-				'cannot invoke "${0}"'.format( cmd ),
-				e
+			self.println(
+				'Cannot invoke "%s".'.format(
+					cmd,
+					file = sys.stderr
+				)
 			)
-			raise ValueError
+			raise e
 		return
 
 	def	report( self, final = False ):
@@ -66,7 +68,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				fmt = '{0}  {1:<%d}  {2}' % self.max_name
 			for (when, name, rest) in sorted(
 				self.lines,
-				key = lambda (when,name,rest): when
+				key = lambda wns : wns[ 1 ] # when
 			):
 				# stim = time.gmtime( int(when) )
 				s = datetime.datetime.fromtimestamp( int(when) )

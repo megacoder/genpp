@@ -77,14 +77,14 @@ class   MetaPrettyPrinter( object ):
             try:
                 self.do_open_file( sys.stdin )
             except Exception as e:
-                self.error( 'error handling {stdin}', e )
-                raise ValueError
+                self.error( 'error handling {stdin}' )
+                raise e
         elif os.path.isfile( name ):
             try:
                 self._do_file( name )
             except Exception as e:
-                self.error( 'processing "{0}"'.format( name ), e )
-                raise ValueError
+                self.error( 'processing "{0}"'.format( name ) )
+                raise e
         elif os.path.isdir( name ):
             try:
                 names = sorted( os.listdir( name ) )
@@ -223,17 +223,11 @@ class   MetaPrettyPrinter( object ):
         self.println()
         return
 
-    def println( self, s = '', file = None ):
+    def println( self, s = '', out = None, end = '\n' ):
         print(
             s,
-            file = file if file else self.sc_out
-        )
-        return
-
-    def errorln( self, s = '', file = None ):
-        print(
-            s,
-            file = file if file else sys.stderr
+            file = out if out else self.sc_out,
+            end  = end,
         )
         return
 

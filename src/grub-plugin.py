@@ -94,10 +94,10 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                     for i in xrange( 0, n ):
                         fmt = '%%s%%-%-ds' % self.widths[i]
                         self.println(
-                            fmt % (sep, tokens[i]),
+                            fmt.format(sep, tokens[i])
                         )
                         sep = ' '
-                    print
+                    self.println()
             else:
                 line = entry[0]
                 if line.startswith( 'title' ):
@@ -107,18 +107,19 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                         extra = ''
                     else:
                         extra = mo.group(1)
-                    self.println(
-                        '#'
-                    )
+                    self.println( '#' )
                     if self.default == title_no:
                         self.println(
-                            '# Stanza %d: (N/A) %s' % (title_no, extra)
+                            '# Stanza %d: (DEFAULT) %s'.format(
+                                title_no,
+                                extra
+                            )
                         )
                     else:
                         self.println(
-                            '# Stanza %d: %s' % (title_no, extra)
+                            '# Stanza %d: %s'.format(title_no, extra)
                         )
-                    self.println(
-                        '#'
-                    )
-                self.println( line )
+                    self.println( '#' )
+                self.println(
+                    line
+                )

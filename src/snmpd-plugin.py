@@ -46,23 +46,31 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 						n = len(tokens[i])
 						try:
 							widths[i] = max( widths[i], n )
-						except Exception, e:
+						except Exception as e:
 							widths[i] = n
 		for tokens in self.entries:
 			name = tokens[0]
 			fmt = '%%-%ds' % widths[0]
-			line = fmt % tokens[0]
+			self.println(
+				fmt.format( tokens[ 0 ] )
+			)
 			if name in PrettyPrint.PLAIN:
-				line += ' '.join(tokens[1:])
+				self.println(
+					' '.join(tokens[1:]),
+				)
 			else:
 				n = len(tokens)
 				cutoff = min( PrettyPrint.CUTOFF, n )
 				for i in xrange( 1, cutoff ):
 					fmt = '%%-%ds' % widths[i]
-					line += fmt % tokens[i]
+					self.println(
+						fmt.format( tokens[ i ] )
+					)
 				if cutoff < n:
-					line += ' '.join(tokens[cutoff:])
-			self.println( line )
+					self.println(
+						' '.join(tokens[cutoff:]),
+					)
+			self.println()
 		return
 
 	def	end_file( self, fname ):

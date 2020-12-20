@@ -45,19 +45,19 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		self.println(
 			'\t'.join(header)
 		)
-		if len(body) > 0: print
+		if len(body) > 0: self.println()
 		for tokens in body:
 			self.println(
-				fmt % ( tokens[0], ' '.join( tokens[1:] ) )
+				fmt.format( tokens[0], ' '.join( tokens[1:] ) )
 			)
-		print
+		self.println()
 		self.println(
 			'\t'.join(footer)
 		)
 		return
 
 	def	expand( self, line ):
-		# self.println( '|%s|-->' % line, )
+		# print( '|%s|-->'.format( line ) )
 		for (f,t) in [
 			('{', ' { '),
 			('}', ' } '),
@@ -66,7 +66,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			( ']', ' ] ')
 		]:
 			line = line.replace( f, t )
-		# self.println( '|%s|' % line )
+		# print( '|%s|'.format( line ) )
 		return line
 
 	def	next_line( self, line ):
@@ -95,7 +95,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		others = False
 		for (header,body,footer) in self.stanzas:
 			if others:
-				print
+				print()
 			self.dump_stanza( header, body, footer )
 			others = True
 		super( PrettyPrint, self ).end_file( fn )

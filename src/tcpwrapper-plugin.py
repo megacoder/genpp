@@ -41,9 +41,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			prefix = ''
 			for i in xrange( 0, n ):
 				fmt = '%%s%%-d%s' % self.widths[i]
-				line += fmt % (prefix, tokens[i])
+				self.printnl(
+					fmt.format( prefix,tokens[i] )
+				)
 				prefix = ' : '
-			self.prinln( line )
+			self.printnl()
 		return
 
 	def	next_line( self, line ):
@@ -53,11 +55,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		)
 		n = len(tokens)
 		if n > 0:
-			for i in range( n ):
-				self.widths[ i ] = max(
-					self.widths.get( i, 1 ),
-					len( tokens[ i ] )
-				)
+			for i in xrange( 0, n ):
+				try:
+					self.widths[i] = max(self.widths[i], len(tokens[i]))
+				except Exception as e:
+					self.widths[i] = len(tokens[i])
 			self.content.append( (n, tokens) )
 		return
 

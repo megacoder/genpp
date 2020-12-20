@@ -39,11 +39,11 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         except Exception as e:
             self.println(
                 'Error handling "{0}"'.format( line ),
-                file = sys.stderr
+                out = sys.stderr
             )
             self.println(
                 e,
-                file = sys.stderr
+                out = sys.stderr
             )
         return
 

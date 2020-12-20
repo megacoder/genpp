@@ -35,11 +35,9 @@ class   PrettyPrint( MetaPrettyPrinter ):
         try:
             eval( self.code, globals, self.locals )
         except Exception as e:
-            self.error(
-                'could not evaluate code',
-                e
-            )
-            raise ValueError
+            self.println( 'Could not evaluate code' )
+            self.println( ' %s'.format( e ) )
+            return
         self.keys =  self.locals.keys()
         return
 
@@ -57,7 +55,9 @@ class   PrettyPrint( MetaPrettyPrinter ):
             self._prepare()
             if self.lineno > 1:
                 self.println()
-            self.println( '# --> %s' % line[1:] )
+            self.println(
+                '# --> %s'.format( line[ 1: ] )
+            )
             self.println()
         elif len(line) > 0:
             self.script += '%s\n' % line
@@ -78,13 +78,14 @@ class   PrettyPrint( MetaPrettyPrinter ):
         else:
             pp = pprint.PrettyPrinter()
             for key in sorted( self.keys ):
-                leadin = '%13s = ' % key
-                blanks = ' ' * len( leadin )
+                self.println(
+                    '%13s - '.format( key ),
+                )
                 s = pp.pformat( self.locals[key] )
                 lines = s.split( '\n' )
                 for line in lines:
-                    print(
-                        '%s%s' % (leadin, line)
+                    self.println(
+                        '%s%s'.format( leadin, line )
                     )
-                    leadin = blanks
+                    leadin = ' ' * (16+2)
         return

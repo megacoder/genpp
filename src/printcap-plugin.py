@@ -33,37 +33,37 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		]
 		N = len( tokens )
 		if N > 0:
-		names = ' | '.join( [
-			s for s in map(
-				str.strip,
-				tokens[0].split('|')
-			) if len(s) > 0
-		] )
-		attrs		= tokens[1:]
-		attrs.sort()
-		tokens		= [ names ] + attrs
-		self.lines.append( tokens )
-		widths		= map( len, tokens )
-		padding		= [1] * (N - len( self.widths ))
-		self.widths = map(
-			max,
-			zip( self.widths + padding, widths )
-		) + self.widths[N:]
-		# self.println( 'N={0}, widths={1}'.format( N, widths ) )
-		# self.println( '  self.widths={0}'.format( self.widths ) )
+			names = ' | '.join( [
+				s for s in map(
+					str.strip,
+					tokens[0].split('|')
+				) if len(s) > 0
+			] )
+			attrs		= tokens[1:]
+			attrs.sort()
+			tokens		= [ names ] + attrs
+			self.lines.append( tokens )
+			widths		= map( len, tokens )
+			padding		= [1] * (N - len( self.widths ))
+			self.widths = map(
+				max,
+				zip( self.widths + padding, widths )
+			) + self.widths[N:]
+			# print 'N={0}, widths={1}'.format( N, widths )
+			# print '  self.widths={0}'.format( self.widths )
 		return
 
 	def report( self, final = False ):
 		if final:
-		fmts = map(
-			'{{0:{0}.{0}}}'.format,
-			self.widths
-		)
-		for tokens in sorted( self.lines ):
-			N = len( tokens )
-			self.println( ' : '.join(
-			fmts[i].format( tokens[i] ) for i in range( N )
-			) )
+			fmts = map(
+				'{{0:{0}.{0}}}'.format,
+				self.widths
+			)
+			for tokens in sorted( self.lines ):
+				N = len( tokens )
+				self.println( ' : '.join(
+					fmts[i].format( tokens[i] ) for i in range( N )
+				) )
 		return
 
 if __name__ == '__main__':

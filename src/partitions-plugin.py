@@ -41,18 +41,18 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	def	report( self, final = False ):
 		if len( self.content ) > 0:
 			self.content.sort(
-				key = lambda (maj,mnr,nbloc,name) : name.lower()
+				key = lambda mmnn : mmnn[3].lower()
 			)
 			self.println(
-				'%7s\t%7s\t%15s\t%s' % (
+				'%7s\t%7s\t%15s\t%s'.format(
 					'Major',
 					'Minor',
 					'# Blocks',
-					'Name'
+					'Name',
 				)
 			)
 			self.println(
-				'%7s\t%7s\t%15s\t%s' % (
+				'%7s\t%7s\t%15s\t%s'.format(
 					'-------',
 					'-------',
 					'---------------',
@@ -61,7 +61,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			)
 			for (major, minor, nbloc, name) in self.content:
 				self.println(
-					'%7d\t%7d\t%15d\t%s' % (
+					'%7d\t%7d\t%15d\t%s'.format(
 						major, minor, nbloc, name
 					)
 				)

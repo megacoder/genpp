@@ -49,10 +49,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	_show_content( self ):
 		if len(self.terms) > 0:
-			self.terms.sort( key = lambda (n,v): n.lower() )
+			self.terms.sort( key = lambda nv: nv[0].lower() )
 			tfmt = '%%-%ds %%s' % self.maxname
 			for (name,value) in self.terms:
 				self.println(
-					tfmt % (name, value)
+					tfmt.format( name, value )
 				)
 		return

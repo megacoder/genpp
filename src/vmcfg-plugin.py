@@ -21,7 +21,7 @@ class	PythonPrettyPrint( object ):
 	def validate( self, s ):
 		try:
 			compiler.compile( s, s, 'exec' )
-		except Exception, e:
+		except Exception as e:
 			raise e
 		return
 
@@ -39,9 +39,9 @@ class	PythonPrettyPrint( object ):
 			elif action == 'p':
 				yield '{0}'.format( spelling )
 			else:
-				self.error(
-					'Internal error: action %s' % action,
-					file = sys.stdout
+				print(
+				'Internal error: action %s' % action,
+					file = self.stdout
 				)
 		return
 
@@ -106,12 +106,9 @@ class	PrettyPrint( MetaPrettyPrinter ):
 				value = tokens[1]
 				# print( '|%s|%s|' % (name,value) )
 				self.pp.validate( value )
-				# print( 'Looks good' )
+				# print 'Looks good'
 			except Exception as e:
-				self.error(
-					'syntax error: %s' % line,
-					e
-				)
+				self.error( 'syntax error: %s' % line )
 				return
 			self.width = max( self.width, len( name ) )
 			self.lines.append(

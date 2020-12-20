@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# vim: noet sw=4 ts=4
+# vim: noet sw=4 ts=4 ff=unix norelativenumber nu
 
 import	sys
 import	re
@@ -55,7 +55,9 @@ class	NatSort( object ):
 						f.readlines()
 					)
 		for item in self.sorted( things ):
-			self.println( item )
+			print(
+				item
+			)
 		return 0
 
 if __name__ == '__main__':

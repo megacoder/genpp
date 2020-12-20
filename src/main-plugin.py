@@ -15,5 +15,7 @@ class PrettyPrint( superclass.MetaPrettyPrinter ):
         super( PrettyPrint, self ).__init__()
         return
     def next_line( self, line ):
-        self.println( line.rstrip() )
+        self.println(
+            line
+        )
         return

@@ -27,14 +27,14 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         return
 
     def _flush( self ):
-        self.settings.sort( key = lambda (n,v): n )
+        self.settings.sort( key = lambda nv: nv[0] )
         max_name = 0
         for (n,v) in self.settings:
             max_name = max( max_name, len(n) )
-        fmt = ' %%%ds  %%s' % max_name
+        fmt = ' %%%ds  %%s'.format( max_name )
         for (n,v) in self.settings:
-            self.println(
-                fmt % (n, v)
+            print(
+                fmt.format(n, v)
             )
         self.reset()
         return

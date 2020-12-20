@@ -51,11 +51,11 @@ class PrettyPrint( superclass.MetaPrettyPrinter ):
                 module_name = '{0}-plugin'.format( name )
                 module = importlib.import_module( module_name )
             except Exception as e:
-                self.error(
+                print(
                     'Cannot import module "{0}"'.format( module_name ),
-                    e
+                    file = sys.stderr
                 )
-                raise ValueError
+                raise e
             pp = module.PrettyPrint()
             self.println(
                 fmt.format(
