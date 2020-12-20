@@ -67,7 +67,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                                 self.widths[i],
                                 len(tokens[i])
                             )
-                        except Exception, e:
+                        except Exception as e:
                             self.widths[i] = len(tokens[i])
                     self.in_stanza = True
                     self.stanza.append( tokens )
@@ -93,7 +93,9 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                     sep = '\t'
                     for i in xrange( 0, n ):
                         fmt = '%%s%%-%-ds' % self.widths[i]
-                        print fmt % (sep, tokens[i]),
+                        self.println(
+                            fmt % (sep, tokens[i]),
+                        )
                         sep = ' '
                     print
             else:
@@ -105,10 +107,18 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                         extra = ''
                     else:
                         extra = mo.group(1)
-                    print '#'
+                    self.println(
+                        '#'
+                    )
                     if self.default == title_no:
-                        print '# Stanza %d: (DEFAULT) %s' % (title_no, extra)
+                        self.println(
+                            '# Stanza %d: (N/A) %s' % (title_no, extra)
+                        )
                     else:
-                        print '# Stanza %d: %s' % (title_no, extra)
-                    print '#'
-                print line
+                        self.println(
+                            '# Stanza %d: %s' % (title_no, extra)
+                        )
+                    self.println(
+                        '#'
+                    )
+                self.println( line )

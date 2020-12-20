@@ -43,21 +43,27 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			self.content.sort(
 				key = lambda (maj,mnr,nbloc,name) : name.lower()
 			)
-			print '%7s\t%7s\t%15s\t%s' % (
-				'Major',
-				'Minor',
-				'# Blocks',
-				'Name'
+			self.println(
+				'%7s\t%7s\t%15s\t%s' % (
+					'Major',
+					'Minor',
+					'# Blocks',
+					'Name'
+				)
 			)
-			print '%7s\t%7s\t%15s\t%s' % (
-				'-------',
-				'-------',
-				'---------------',
-				'----'
+			self.println(
+				'%7s\t%7s\t%15s\t%s' % (
+					'-------',
+					'-------',
+					'---------------',
+					'----'
+				)
 			)
 			for (major, minor, nbloc, name) in self.content:
-				print '%7d\t%7d\t%15d\t%s' % (
-					major, minor, nbloc, name
+				self.println(
+					'%7d\t%7d\t%15d\t%s' % (
+						major, minor, nbloc, name
+					)
 				)
 		self._prepare()
 		return

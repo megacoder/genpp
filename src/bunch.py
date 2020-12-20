@@ -45,18 +45,20 @@ if __name__ == '__main__':
 		first = 'Tommy',
 		last = 'Reynolds'
 	)
-	print 'Name: {0}, {1}, Should be none={2}'.format(
-		b.last,
-		b.first,
-		b.no_such_value
+	self.println(
+		'Name: {0}, {1}, Should be none={2}'.format(
+			b.last,
+			b.first,
+			b.no_such_value
+		)
 	)
-	print 'b={0}'.format( b )
-	print 'last={0}'.format( b.get( 'last','BOO!' ) )
-	print 'missing={0}'.format( b.get( ' *missing* ','BOO!' ) )
-	print 'iter={0}'.format(
-		[ x for x in b ]
+	self.println( 'b={0}'.format( b ) )
+	self.println( 'last={0}'.format( b.get( 'last','BOO!' ) ) )
+	self.println( 'missing={0}'.format( b.get( ' *missing* ','BOO!' ) ) )
+	self.println(
+		'iter={0}'.format( [ x for x in b ] )
 	)
-	print 'iter:'
+	self.println( 'iter:' )
 	for i,key in enumerate( b ):
-		print 'key[{0}]={1}'.format( i+1, key )
+		self.println( 'key[{0}]={1}'.format( i+1, key ) )
 	exit( 0 )

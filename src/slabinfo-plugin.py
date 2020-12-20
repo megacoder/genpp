@@ -30,7 +30,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	next_line( self, line ):
-		# print 'line=[%s]' % line
+		# self.println( 'line=[%s]' % line )
 		if line.startswith( 'slabinfo' ):
 			# Ignore version line
 			pass

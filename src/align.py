@@ -33,19 +33,19 @@ class	Align( object ):
 	def	__init__( self, lj = False, titles = 0 ):
 		self.align_column = dict()
 		self.align_title  = dict()
-		self.items        = []
-		self.nItems       = 0
-		self.numeric      = dict()
-		self.titles       = titles
-		self.want_lj      = lj
-		self.widths       = dict()
+		self.items		  = []
+		self.nItems		  = 0
+		self.numeric	  = dict()
+		self.titles		  = titles
+		self.want_lj	  = lj
+		self.widths		  = dict()
 		self.align_map = dict(
 			a = self._auto,
 			c = self._center,
 			l = self._left,
 			r = self._right
 		)
-		self.re           = re.compile(
+		self.re			  = re.compile(
 			# Signed/unsigned integer|floating|scientific
 			r'(^[-+]?[0-9]{1,}([.][0-9]{1,})?([Ee][-+]?[0-9]{1,})?)$'
 		)
@@ -74,15 +74,25 @@ class	Align( object ):
 		return
 
 	def	show_alignment( self, out = sys.stdout ):
-		print 'Column Alignment'
+		self.println(
+			'Column Alignment'
+		)
 		for key in sorted( self.align_column ):
-			print >>out, '{0}\t{1}'.format( key, self.align_column[key] )
+			self.println(
+				'{0}\t{1}'.format( key, self.align_column[key] ),
+				out = out
+			)
 		return
 
 	def	show_title_alignment( self, out = sys.stdout ):
-		print 'Title Alignment'
+		self.println(
+			'Title Alignment'
+		)
 		for key in sorted( self.align_title ):
-			print >>out, '{0}\t{1}'.format( key, self.align_title[key] )
+			self.println(
+				'{0}\t{1}'.format( key, self.align_title[key] ),
+				out = out
+			)
 		return
 
 	def	get_columns( self ):
@@ -151,20 +161,24 @@ if __name__ == '__main__':
 	a.add( [ 1,22,333, 'aSTRo' ] )
 	a.add( [ -44,5,6, 'rubble' ] )
 	a.add( [ 321,'abc','def', 123 ] )
-	print 'Plain:'
+	self.println( 'Plain:' )
 	a.set_title_alignment( 'rlca' )
 	a.set_alignment( 'cccc' )
 	for i,items in a.get_items():
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
-	print 'Sorted'
+		self.println( 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) ) )
+	self.println( 'Sorted' )
 	a.set_title_alignment( 'llll' )
 	a.set_alignment( 'aaaa' )
 	for i,items in a.get_items( sort = True):
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
-	print 'Weird'
+		self.println(
+			'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
+		)
+	self.println( 'Weird' )
 	a.set_title_alignment( 'a' )
 	a.set_alignment( 'a' )
 	import random
 	how = lambda x : random.random()
 	for i,items in a.get_items( sort = how ):
-		print 'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
+		self.println(
+			'Line {0}->|{1}|'.format( i+1, '|'.join( items ) )
+		)

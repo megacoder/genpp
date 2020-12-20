@@ -13,7 +13,7 @@ except:
         def import_module( self, name ):
             try:
                 module = __import__( name )
-            except Exception, e:
+            except Exception as e:
                 traceback.print_exc()
                 raise ValueError(
                     'Could not import "{0}"'.format( name )
@@ -64,7 +64,7 @@ class GenericPrettyPrinter( object ):
         return
 
     def main( self ):
-        # print 'Generic prettyprinter (gpp) Version {0}'.format( Version )
+        # print( 'Generic prettyprinter (gpp) Version {0}'.format( Version ) )
         sys.path.insert( 0, os.path.dirname( __file__ ) )
         # Who are we?
         prog = os.path.splitext(
@@ -147,19 +147,26 @@ class GenericPrettyPrinter( object ):
         module_name = '{0}-plugin'.format( opts.kind )
         try:
             if opts.debug_level > 0:
-                print >>sys.stderr, 'Loading module {0}'.format(
-                    module_name
+                print(
+                    'Loading module {0}'.format( module_name ),
+                    file = sys.stderr
                 )
             module = importlib.import_module( module_name )
-        except Exception, e:
-            print >>sys.stderr, 'No prettyprinter for "%s".' % opts.kind
-            print >>sys.stderr, e
+        except Exception as e:
+            print(
+                'No prettyprinter for "%s".' % opts.kind,
+                file = sys.stderr
+            )
+            print( e, file = sys.stderr )
             return True
         if opts.ofile:
             try:
                 sys.stdout = open( opts.ofile, 'wt' )
-            except Exception, e:
-                print >>sys.stderr, 'Cannot open "%s" for writing.' % opts.ofile
+            except Exception as e:
+                print(
+                    'Cannot open "%s" for writing.' % opts.ofile,
+                    file = sys.stderr
+                )
                 return True
         retval = self._session( module.PrettyPrint, opts.files )
         return retval

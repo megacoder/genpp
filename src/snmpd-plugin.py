@@ -51,18 +51,18 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		for tokens in self.entries:
 			name = tokens[0]
 			fmt = '%%-%ds' % widths[0]
-			print fmt % tokens[0],
+			line = fmt % tokens[0]
 			if name in PrettyPrint.PLAIN:
-				print ' '.join(tokens[1:]),
+				line += ' '.join(tokens[1:])
 			else:
 				n = len(tokens)
 				cutoff = min( PrettyPrint.CUTOFF, n )
 				for i in xrange( 1, cutoff ):
 					fmt = '%%-%ds' % widths[i]
-					print fmt % tokens[i],
+					line += fmt % tokens[i]
 				if cutoff < n:
-					print ' '.join(tokens[cutoff:]),
-			print
+					line += ' '.join(tokens[cutoff:])
+			self.println( line )
 		return
 
 	def	end_file( self, fname ):

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import  pprint
 import  sys
@@ -34,10 +34,12 @@ class   PrettyPrint( MetaPrettyPrinter ):
         globals = dict()
         try:
             eval( self.code, globals, self.locals )
-        except Exception, e:
-            self.println( 'Could not evaluate code' )
-            self.println( ' %s' % e )
-            return
+        except Exception as e:
+            self.error(
+                'could not evaluate code',
+                e
+            )
+            raise ValueError
         self.keys =  self.locals.keys()
         return
 
@@ -76,11 +78,13 @@ class   PrettyPrint( MetaPrettyPrinter ):
         else:
             pp = pprint.PrettyPrinter()
             for key in sorted( self.keys ):
-                print '%13s = ' % key,
+                leadin = '%13s = ' % key
+                blanks = ' ' * len( leadin )
                 s = pp.pformat( self.locals[key] )
                 lines = s.split( '\n' )
-                leadin = ''
                 for line in lines:
-                    print '%s%s' % (leadin, line)
-                    leadin = ' '*(16+2)
+                    print(
+                        '%s%s' % (leadin, line)
+                    )
+                    leadin = blanks
         return

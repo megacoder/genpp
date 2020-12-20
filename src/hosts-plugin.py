@@ -48,6 +48,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		self.lines.sort( key = lambda (ip,addr,name,aliases): ip )
 		fmt = '%%-15s %%-%ds %%s' % self.max_canonical_name
 		for ip, addr, name, aliases in self.lines:
-			print fmt % (addr, name, ' '.join(aliases) )
+			self.println(
+				fmt % (addr, name, ' '.join(aliases) )
+			)
 		self._prepare()
 		return

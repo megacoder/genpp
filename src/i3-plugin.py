@@ -51,12 +51,12 @@ class	PrettyPrint( MetaPrettyPrinter ):
 				else:
 					info.args.append( tokens[ i ] )
 			self.infos.append( info )
-		except Exception, e:
-			print '{0} injestion error:\n{1}'.format(
-				line,
+		except Exception as e:
+			self.error(
+				'{0} injestion error.'.format( line ),
 				e
 			)
-			raise e
+			raise ValueError
 		return
 
 	def	report( self, final = False ):
@@ -97,11 +97,8 @@ class	PrettyPrint( MetaPrettyPrinter ):
 					else:
 						output = required
 					self.println( output )
-			except Exception, e:
-				print 'Report Error,\nLine: {0}, {1}'.format(
-					info.lineno,
-					e
-				)
-				raise( e )
+			except Exception as e:
+				self.error( 'Report Error', e )
+				raise ValueError
 			pass
 		return

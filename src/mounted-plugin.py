@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # vim: noet sw=4 ts=4
 
 import	sys
@@ -81,7 +81,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				L = len(tokens[i])
 				self.widths[i] = L
 			fmt = '%%s%%-%ds' % self.widths[i]
-			print fmt % (sep, tokens[i] ),
+			self.println(
+				fmt % (sep, tokens[i] ),
+			)
 			sep = ' '
 		print
 		return

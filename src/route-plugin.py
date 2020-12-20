@@ -65,6 +65,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	_print_set( self, tokens ):
+		line = ''
 		sep = ''
 		for i in xrange( 0, len(tokens) ):
 			try:
@@ -73,9 +74,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				L = len(tokens[i])
 				self.widths[i] = L
 			fmt = '%%s%%-%ds' % self.widths[i]
-			print fmt % (sep, tokens[i] ),
+			line += fmt % (sep, tokens[i] )
 			sep = ' '
-		print
+		self.prinln( line )
 		return
 
 	def	_report( self ):

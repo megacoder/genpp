@@ -56,6 +56,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		)
 		fmt = '%%-15s  %%-%ds  %%s' % (self.maxvia)
 		for (key,ip,mac,via) in self.content:
-			print fmt % (ip, via, mac)
+			self.println(
+				fmt % (ip, via, mac)
+			)
 		super( PrettyPrint, self ).end_file( name )
 		return

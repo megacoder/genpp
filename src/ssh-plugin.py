@@ -52,5 +52,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			self.terms.sort( key = lambda (n,v): n.lower() )
 			tfmt = '%%-%ds %%s' % self.maxname
 			for (name,value) in self.terms:
-				print tfmt % (name, value)
+				self.println(
+					tfmt % (name, value)
+				)
 		return

@@ -42,16 +42,22 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			maxname = max( maxname, len(f) )
 		fmt = '%%%ds = %%s' % (maxname+2)
 		body.sort()
-		print '\t'.join(header)
+		self.println(
+			'\t'.join(header)
+		)
 		if len(body) > 0: print
 		for tokens in body:
-			print fmt % ( tokens[0], ' '.join( tokens[1:] ) )
+			self.println(
+				fmt % ( tokens[0], ' '.join( tokens[1:] ) )
+			)
 		print
-		print '\t'.join(footer)
+		self.println(
+			'\t'.join(footer)
+		)
 		return
 
 	def	expand( self, line ):
-		# print '|%s|-->' % line,
+		# self.println( '|%s|-->' % line, )
 		for (f,t) in [
 			('{', ' { '),
 			('}', ' } '),
@@ -60,7 +66,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			( ']', ' ] ')
 		]:
 			line = line.replace( f, t )
-		# print '|%s|' % line
+		# self.println( '|%s|' % line )
 		return line
 
 	def	next_line( self, line ):

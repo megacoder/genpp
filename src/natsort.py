@@ -55,7 +55,7 @@ class	NatSort( object ):
 						f.readlines()
 					)
 		for item in self.sorted( things ):
-			print item
+			self.println( item )
 		return 0
 
 if __name__ == '__main__':

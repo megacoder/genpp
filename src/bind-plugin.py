@@ -75,11 +75,13 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			focus = self.focus
 		for node in self.nodes[ focus ]:
 			for key in sorted( node ):
-				print key
+				self.println( key )
 		return
-		print '%s%s' % (
-			' ' * indent,
-			'X'.join( self.nodes[ focus ]['content'] )
+		self.println(
+			'%s%s' % (
+				' ' * indent,
+				'X'.join( self.nodes[ focus ]['content'] )
+			)
 		)
 		if self.nodes[ focus ]['child']:
 			self._report( self.nodes[ focus ]['child'], indent = indent + 8 )

@@ -72,10 +72,16 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				self.maxdev
 			)
 			for ((name,uuid,dev,san),attr,parts) in self.paths:
-				print tfmt % (name, uuid, dev, san)
-				print '%s' % attr
+				self.println(
+					tfmt % (name, uuid, dev, san)
+				)
+				self.println(
+					'%s' % attr
+				)
 				for part in parts:
-					print '%s' % part
+					self.println(
+						'%s' % part
+					)
 		self.reset()
 		return
 

@@ -33,7 +33,9 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
             max_name = max( max_name, len(n) )
         fmt = ' %%%ds  %%s' % max_name
         for (n,v) in self.settings:
-            print fmt % (n, v)
+            self.println(
+                fmt % (n, v)
+            )
         self.reset()
         return
 
