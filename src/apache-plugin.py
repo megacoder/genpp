@@ -24,7 +24,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			t for t in shlex.split( line, posix = True, comments = True )
 		]
 		if len(tokens):
-			# print 'tokens={0}'.format( tokens )
+			# self.println( 'tokens={0}'.format( tokens ) )
 			self.lines.append(
 				(
 					# self.get_filename(),

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # vim: noet sw=4 ts=4
 
 import	datetime
@@ -56,20 +56,35 @@ class	OswTicker( object ):
 	def	report( self, out = sys.stdout ):
 		if out:
 			header = 'Jitter Statistics'
-			print >>out
-			print >>out, '{0}'.format( header )
-			print >>out, '{0}'.format( '-' * len(header) )
+			self.println( '', file = out )
+			self.println(
+				'{0}'.format( header ),
+				file = out
+			)
+			self.println(
+				'{0}'.format( '-' * len(header) ),
+				file = out
+			)
 			fmt = '{0:5} {1}'
-			print >>out, fmt.format(
-				'Good',
-				self.stats['good']
+			self.println(
+				fmt.format(
+					'Good',
+					self.stats['good']
+				),
+				file = out
 			)
-			print >>out, fmt.format(
-				'Early',
-				self.stats['early']
+			self.println(
+				fmt.format(
+					'Early',
+					self.stats['early']
+				),
+				file = out
 			)
-			print >>out, fmt.format(
-				'Late',
-				self.stats['late']
+			self.println(
+				fmt.format(
+					'Late',
+					self.stats['late']
+				),
+				file = out
 			)
 		return

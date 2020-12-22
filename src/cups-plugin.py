@@ -66,7 +66,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	_show_node( self, focus = 0, indent = 0 ):
-		# print 'show node %d\n%s' % ( focus, self.nodes[focus] )
+		# self.printLn( 'show node %d\n%s' % ( focus, self.nodes[focus] ) )
 		width = PrettyPrint.WIDTH - 1
 		for obj in self.nodes[focus]['content']:
 			if type(obj) == list:

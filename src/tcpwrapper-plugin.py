@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# vim: noet sw=4 ts=4
+# vim: noet sw=4 ts=4 nu
 
 import	os
 import	sys
@@ -21,8 +21,8 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	_setup( self ):
-		self.widths  = {}
-		self.content = []
+		self.widths  = dict()
+		self.content = list()
 		return
 
 	def	next_file( self, name ):
@@ -37,6 +37,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	_show( self ):
 		for (n,tokens) in self.content:
+			line = ''
 			prefix = ''
 			for i in xrange( 0, n ):
 				fmt = '%%s%%-d%s' % self.widths[i]
@@ -48,12 +49,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	next_line( self, line ):
-		line = line.strip()
-		octothorpe = line.find( '#' )
-		if octothorpe > -1:
-			line = line[:octothorpe]
-		line = line.strip()
-		tokens = line.split( ':' )
+		tokens = map(
+			str.strip,
+			line.split( '#', 1 )[ 0 ].split( ':' )
+		)
 		n = len(tokens)
 		if n > 0:
 			for i in xrange( 0, n ):

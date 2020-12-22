@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# vim: ai sm noet ff=unix norelativenumber nu ts=4 sw=4
+#!/usr/bin/env python
 
 import	os
 import	sys

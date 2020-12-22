@@ -33,19 +33,19 @@ class	Align( object ):
 	def	__init__( self, lj = False, titles = 0 ):
 		self.align_column = dict()
 		self.align_title  = dict()
-		self.items        = []
-		self.nItems       = 0
-		self.numeric      = dict()
-		self.titles       = titles
-		self.want_lj      = lj
-		self.widths       = dict()
+		self.items		  = []
+		self.nItems		  = 0
+		self.numeric	  = dict()
+		self.titles		  = titles
+		self.want_lj	  = lj
+		self.widths		  = dict()
 		self.align_map = dict(
 			a = self._auto,
 			c = self._center,
 			l = self._left,
 			r = self._right
 		)
-		self.re           = re.compile(
+		self.re			  = re.compile(
 			# Signed/unsigned integer|floating|scientific
 			r'(^[-+]?[0-9]{1,}([.][0-9]{1,})?([Ee][-+]?[0-9]{1,})?)$'
 		)

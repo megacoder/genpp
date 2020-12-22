@@ -27,7 +27,7 @@ class	PythonPrettyPrint( object ):
 
 	def run( self, spelling, rule = 'p' ):
 		for action in rule:
-			# print '[{0}]'.format( action ),
+			# print( '[{0}]'.format( action ), )
 			if action == 'i':
 				self.level += 1
 			elif action == 'd':
@@ -104,7 +104,7 @@ class	PrettyPrint( MetaPrettyPrinter ):
 			try:
 				name = tokens[0]
 				value = tokens[1]
-				# print '|%s|%s|' % (name,value)
+				# print( '|%s|%s|' % (name,value) )
 				self.pp.validate( value )
 				# print 'Looks good'
 			except Exception as e:

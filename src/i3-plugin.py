@@ -60,7 +60,7 @@ class	PrettyPrint( MetaPrettyPrinter ):
 					e
 				)
 			)
-			raise e
+			raise ValueError
 		return
 
 	def	fmt_info( self, info ):

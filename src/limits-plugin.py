@@ -61,7 +61,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			self.entries.sort( key = self._sort )
 			for domain, kind, item, value in self.entries:
 				print(
-				    fmt.format( domain, kind, item, value )
+					fmt.format( domain, kind, item, value )
 				)
 		self._prepare()
 		return

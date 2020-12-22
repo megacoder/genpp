@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # vim: ai sm noet ts=4 sw=4
 
 import	bunch
@@ -11,7 +11,7 @@ import	traceback
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-	NAME = 'ifcfg-pp'
+	NAME        = 'ifcfg-pp'
 	DESCRIPTION = '''Show ifcfg network files in canonical style.'''
 	UNSPECIFIED = '???'
 
@@ -91,7 +91,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			Called after all lines from current file
 			have been processed by next_line().  Add
 			the new NIC definition to the catalog of
-			NICs.  We'll print it from report() in
+			NICs.  We'll show it from report() in
 			a jiffy.'
 		'''
 		try:

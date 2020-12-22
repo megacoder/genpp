@@ -64,7 +64,7 @@ class GenericPrettyPrinter( object ):
         return
 
     def main( self ):
-        # print 'Generic prettyprinter (gpp) Version {0}'.format( Version )
+        # print( 'Generic prettyprinter (gpp) Version {0}'.format( Version ) )
         sys.path.insert( 0, os.path.dirname( __file__ ) )
         # Who are we?
         prog = os.path.splitext(

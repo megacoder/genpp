@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import  pprint
 import  sys
@@ -83,7 +83,6 @@ class   PrettyPrint( MetaPrettyPrinter ):
                 )
                 s = pp.pformat( self.locals[key] )
                 lines = s.split( '\n' )
-                leadin = ''
                 for line in lines:
                     self.println(
                         '%s%s'.format( leadin, line )
