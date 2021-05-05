@@ -45,15 +45,15 @@ class GenericPrettyPrinter( object ):
             pattern = self.GLOB
         return glob.glob( pattern )
 
-    def _session( self, Handler, names = [[]] ):
+    def _session( self, Handler ):
         handler = Handler()
         # Allow plugin to figure out where its files are
-        if len( names ) == 0:
-            names = handler.own_glob()
+        if len( self.cli.files ) == 0:
+            self.cli.files = handler.own_glob()
         # Here is the session
         handler.start()
-        handler.advise( names )
-        for name in names:
+        handler.advise( self.cli.files )
+        for name in self.cli.files:
             handler.process( name )
         handler.finish()
         return False
@@ -111,9 +111,10 @@ class GenericPrettyPrinter( object ):
         p.add_argument(
             'files',
             metavar = 'FILE',
+            nargs   = '*',
+            help    = 'optional filenames',
 #           action  = 'append',
 #           type    = list,
-            nargs   = '*',
 #           default = [],
 #           dest    = 'files',
 #           default = [],
@@ -140,13 +141,13 @@ class GenericPrettyPrinter( object ):
             help     = 'kind of pretty-printer desired',
             required = True,
         )
-        opts = p.parse_args()
-        if opts.ofile == fake_ofile:
-            opts.ofile = None
+        self.cli = p.parse_args()
+        if self.cli.ofile == fake_ofile:
+            self.cli.ofile = None
         # Here we go...
-        module_name = '{0}-plugin'.format( opts.kind )
+        module_name = '{0}-plugin'.format( self.cli.kind )
         try:
-            if opts.debug_level > 0:
+            if self.cli.debug_level > 0:
                 self.println(
                     'Loading module {0}'.format(
                         module_name
@@ -156,7 +157,7 @@ class GenericPrettyPrinter( object ):
             module = importlib.import_module( module_name )
         except Exception as e:
             self.println(
-                'No prettyprinter for "%s".'.format( opts.kind ),
+                'No prettyprinter for "%s".'.format( self.cli.kind ),
                 out = sys.stderr
             )
             self.println(
@@ -164,16 +165,16 @@ class GenericPrettyPrinter( object ):
                 out = sys.stderr
             )
             return True
-        if opts.ofile:
+        if self.cli.ofile:
             try:
-                sys.stdout = open( opts.ofile, 'wt' )
+                sys.stdout = open( self.cli.ofile, 'wt' )
             except Exception as e:
                 self.println(
-                    'Cannot open "%s" for writing.'.format( opts.ofile ),
+                    'Cannot open "%s" for writing.'.format( self.cli.ofile ),
                     out = sys.stderr,
                 )
                 return True
-        retval = self._session( module.PrettyPrint, opts.files )
+        retval = self._session( module.PrettyPrint )
         return retval
 
 if __name__ == '__main__':
