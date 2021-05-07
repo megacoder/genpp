@@ -49,19 +49,19 @@ class	Align( object ):
 		return
 
 	def	show_alignment( self, out = sys.stdout ):
-		self.println(
+		print(
 			'Column Alignment'
 		)
 		for key in sorted( self.align_column ):
-			self.println(
+			print(
 				'{0}\t{1}'.format( key, self.align_column[key] )
 			)
 		return
 
 	def	show_title_alignment( self, out = sys.stdout ):
-		self.println( 'Title Alignment' )
+		print( 'Title Alignment' )
 		for key in sorted( self.align_title ):
-			self.println(
+			print(
 				'{0}\t{1}'.format( key, self.align_title[key] ),
 				out  = out
 			)
