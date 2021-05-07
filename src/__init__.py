@@ -52,8 +52,9 @@ class GenericPrettyPrinter( object ):
             self.cli.files = handler.own_glob()
         # Here is the session
         handler.start()
-        handler.advise( self.cli.files )
-        for name in self.cli.files:
+        handler.cli = self.cli
+        handler.advise( handler.cli.files )
+        for name in handler.cli.files:
             handler.process( name )
         handler.finish()
         return False
@@ -118,6 +119,15 @@ class GenericPrettyPrinter( object ):
 #           default = [],
 #           dest    = 'files',
 #           default = [],
+        )
+        p.add_argument(
+            '-N',
+            '--number-lines',
+            dest   = 'number_lines',
+            help   = 'number output lines',
+            action = 'store_const',
+            const  = 0,
+            default = None,
         )
         fake_ofile = '{stdout}'
         p.add_argument(
