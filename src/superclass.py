@@ -227,8 +227,13 @@ class   MetaPrettyPrinter( object ):
         return
 
     def println( self, s = '', out = None, end = '\n' ):
+        if self.cli.number_lines:
+            self.cli.number_lines += 1
+            leadin = f'{self.cli.number_lines:6d} '
+        else:
+            leadin = ''
         print(
-            s,
+            f'{leadin}{s}',
             file = out if out else self.state.out,
             end  = end,
         )
