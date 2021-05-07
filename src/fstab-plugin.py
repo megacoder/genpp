@@ -24,7 +24,7 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
         return
 
     def next_line( self, line ):
-        items = line.split( '#', 1 )[0].split()
+        items  = line.split( '#', 1 )[0].split()
         nItems = len( items )
         # Discard all but regular or bind-mount, lines
         try:
