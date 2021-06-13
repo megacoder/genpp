@@ -92,7 +92,7 @@ if __name__ == '__main__':
 	pp.pre_begin_file()
 	pp.begin_file( fn )
 	with open( '/etc/rsyslog.conf' ) as f:
-		for linein f.readlines():
+		for line in f.readlines():
 			pp.next_line( line )
 	pp.end_file( fn )
 	pp.post_end_file()
