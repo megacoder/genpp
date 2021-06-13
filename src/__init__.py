@@ -1,7 +1,11 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim: et sw=4 ts=4
 
+from    __future__      import  print_function
+
 import  argparse
+import  os
+import  sys
 import  traceback
 
 try:
@@ -16,22 +20,55 @@ except:
             except Exception as e:
                 traceback.print_exc()
                 raise ValueError(
-                    'Could not import "{0}"'.format( name )
+                    'Could not import "{0}" using FunkyBob()'.format( name )
                 )
             return module
     importlib = FunkyBob()
-
-import  os
-import  sys
-
-sys.path.append(
-    os.path.dirname( __file__ )
-)
 
 try:
     from  version   import  Version
 except:
     Version = '0.0.0-bis'
+
+class   chatter:
+    def __init__( self, title, enabled = True ):
+        self.title   = title
+        self.enabled = enabled
+        return
+    def enable( self ):
+        self.enabled = True
+        return
+    def disable( self ):
+        self.enabled = False
+        return
+    def __enter__( self ):
+        if self.enabled:
+            print( '- entering {0}'.format( self.title ) )
+        return
+    def __exit__( self, type, value, tb ):
+        if self.enabled:
+            print( '- leaving {0}'.format( self.title ) )
+        return
+
+class   recursionlimit:
+
+    def __init__( self, limit, title = None ):
+        self.limit = limit
+        self.title = title
+        if self.title:
+            print( '- entering {0}'.format( title ) )
+        self.old_limit = sys.getrecursionlimit()
+
+    def __enter__( self ):
+        sys.setrecursionlimit( self.limit )
+        if self.title:
+            print( '- left {0}'.format( title ) )
+        print
+        return
+
+    def __exit__( self, type, value, tb ):
+        sys.setrecursionlimit( self.old_limit)
+        return
 
 class GenericPrettyPrinter( object ):
 
@@ -49,15 +86,17 @@ class GenericPrettyPrinter( object ):
             pattern = self.GLOB
         return glob.glob( pattern )
 
-    def _session( self, Handler, names = [[]] ):
+    def _session( self, Handler ):
         handler = Handler()
+        if self.opts.number:
+            handler.linesout_enable()
         # Allow plugin to figure out where its files are
-        if len( names ) == 0:
-            names = handler.own_glob()
+        if len( self.opts.files ) == 0:
+            self.opts.files = handler.own_glob()
         # Here is the session
         handler.start()
-        handler.advise( names )
-        for name in names:
+        handler.advise( self.opts.files )
+        for name in self.opts.files:
             handler.process( name )
         handler.finish()
         return False
@@ -68,9 +107,7 @@ class GenericPrettyPrinter( object ):
         return
 
     def main( self ):
-        # print( 'Generic prettyprinter (gpp) Version {0}'.format( Version ) )
         sys.path.insert( 0, os.path.dirname( __file__ ) )
-        # Who are we?
         prog = os.path.splitext(
             os.path.basename( sys.argv[ 0 ] )
         )[ 0 ]
@@ -126,9 +163,8 @@ class GenericPrettyPrinter( object ):
         p.add_argument(
             '-o',
             '--out',
-            action  = 'store',
-            type    = str,
             dest    = 'ofile',
+            action  = 'store',
             default =  fake_ofile,
             help    = 'output written to file',
             metavar = 'PATH'
@@ -136,48 +172,56 @@ class GenericPrettyPrinter( object ):
         p.add_argument(
             '-t',
             '--type',
-            metavar  = 'TYPE',
-            action   = 'store',
-            type     = str,
-            default  = 'text',
             dest     = 'kind',
+            action   = 'store',
+            default  = kind,
+            metavar  = 'TYPE',
             help     = 'kind of pretty-printer desired',
-            required = True,
+            required = (prog == 'genpp' ),
         )
-        opts = p.parse_args()
-        if opts.ofile == fake_ofile:
-            opts.ofile = None
+        p.add_argument(
+            '-n',
+            '--number',
+            dest   = 'number',
+            action = 'store_true',
+            help   = 'number output lines',
+        )
+        self.opts = p.parse_args()
+        if self.opts.ofile == fake_ofile:
+            self.opts.ofile = None
         # Here we go...
-        module_name = '{0}-plugin'.format( opts.kind )
+        module_name = '{0}-plugin'.format( self.opts.kind )
         try:
-            if opts.debug_level > 0:
-                self.println(
+            if self.opts.debug_level > 0:
+                print(
                     'Loading module {0}'.format(
                         module_name
                     ),
-                    out = sys.stderr
+                    file = sys.stderr
                 )
-            module = importlib.import_module( module_name )
+            with chatter( 'import_module', False ):
+                module = importlib.import_module( module_name )
         except Exception as e:
-            self.println(
-                'No prettyprinter for "%s".'.format( opts.kind ),
-                out = sys.stderr
+            print(
+                'No prettyprinter for "{0}".'.format( self.opts.kind ),
+                file = sys.stderr
             )
-            self.println(
+            print(
                 e,
-                out = sys.stderr
+                file = sys.stderr
             )
+            traceback.print_exc( file = sys.stdout )
             return True
-        if opts.ofile:
+        if self.opts.ofile:
             try:
-                sys.stdout = open( opts.ofile, 'wt' )
+                sys.stdout = open( self.opts.ofile, 'wt' )
             except Exception as e:
-                self.println(
-                    'Cannot open "%s" for writing.'.format( opts.ofile ),
-                    out = sys.stderr,
+                print(
+                    'Cannot open "%s" for writing.'.format( self.opts.ofile ),
+                    file = sys.stderr,
                 )
                 return True
-        retval = self._session( module.PrettyPrint, opts.files )
+        retval = self._session( module.PrettyPrint )
         return retval
 
 if __name__ == '__main__':
