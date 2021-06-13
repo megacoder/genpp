@@ -6,6 +6,7 @@ from	__future__	import print_function
 import	os
 import	sys
 import	glob
+import	traceback
 
 class	MetaPrettyPrinter( object ):
 
@@ -95,12 +96,14 @@ class	MetaPrettyPrinter( object ):
 				self.do_open_file( sys.stdin )
 			except Exception as e:
 				self.error( 'error handling {stdin}' )
+				traceback.print_exc( file = sys.stderr )
 				raise e
 		elif os.path.isfile( name ):
 			try:
 				self._do_file( name )
 			except Exception as e:
 				self.error( 'processing "{0}"'.format( name ) )
+				traceback.print_exc( file = sys.stderr )
 				raise e
 		elif os.path.isdir( name ):
 			try:
@@ -110,6 +113,7 @@ class	MetaPrettyPrinter( object ):
 					'could not read directory "{0}"'.format( name ),
 					e
 				)
+				traceback.print_exc( file = sys.stderr )
 				raise ValueError
 			self.sc_multi += len( names )
 			for entry in names:
@@ -135,6 +139,7 @@ class	MetaPrettyPrinter( object ):
 				'unknown file type, ignoring "%s".' % name,
 				ValueError
 			)
+			traceback.print_exc( file = sys.stderr )
 			raise ValueError
 		return
 
@@ -177,6 +182,7 @@ class	MetaPrettyPrinter( object ):
 				self.do_open_file( sys.stdin )
 			except Exception as e:
 				self.error( 'could not process "{stdin}"' )
+				traceback.print_exc( file = sys.stderr )
 				raise e
 		else:
 			try:
@@ -185,9 +191,11 @@ class	MetaPrettyPrinter( object ):
 						self.do_open_file( f )
 					except Exception as e:
 						self.error( 'processing "{0}" failed.'.format( fn ) )
+						traceback.print_exc( file = sys.stderr )
 						raise e
 			except Exception as e:
 				self.error( 'could not open "{0}"'.format( fn ) )
+				traceback.print_exc( file = sys.stderr )
 				raise e
 		self.end_file( fn )
 		self.post_end_file()
@@ -242,7 +250,7 @@ class	MetaPrettyPrinter( object ):
 
 	def println( self, s = '', out = None, end = '\n' ):
 		if self.sc_linesout:
-			say = '{0:7d}\t{1}'.format(
+			say = '{0:7d} {1}'.format(
 				self.get_linesout(),
 				s
 			)
@@ -257,6 +265,12 @@ class	MetaPrettyPrinter( object ):
 
 	def report( self, final = False ):
 		# Called between file openings and at finish
+		if not final:
+			# Called at EOF of a file
+			pass
+		else:
+			# Called after last file
+			pass
 		return
 
 	def finish( self ):
@@ -285,6 +299,7 @@ class	MetaPrettyPrinter( object ):
 				e,
 				file = sys.stderr
 			)
+			traceback.print_exc( file = sys.stderr )
 			raise e
 		return
 
