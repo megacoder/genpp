@@ -50,10 +50,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	next_line( self, line ):
 		# Tokenize input line
-		tokens = map(
+		tokens = list(map(
 			str.strip,
 			line.split()
-		)
+		))
 		N = len( tokens )
 		if len( tokens ) != 6: return
 		if tokens[ -1 ].isdigit():
