@@ -279,7 +279,7 @@ class	MetaPrettyPrinter( object ):
 		return
 
 	def error( self, msg, e = None ):
-		self.sc_out.flush()
+		self.get_out().flush()
 		clauses = list()
 		if self.sc_filename is not None:
 			clauses.append(

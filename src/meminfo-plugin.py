@@ -8,8 +8,8 @@ import	math
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-	NAME = 'meminfo'
-	DESCRIPTION="""Display /proc/meminfo in canonical style."""
+	NAME        = 'meminfo'
+	DESCRIPTION = """Display /proc/meminfo in canonical style."""
 
 	def	__init__( self ):
 		super( PrettyPrint, self ).__init__()
@@ -96,9 +96,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	_infer_wasted_memory( self ):
-		hp = self._get_entry( 'HugePages_Total' )
-		hp -= self._get_entry( 'HugePages_Rsvd' )
-		wasted = hp * self._get_entry( 'Hugepagesize' )
+		hp      = self._get_entry( 'HugePages_Total' )
+		hp     -= self._get_entry( 'HugePages_Rsvd' )
+		wasted  = hp * self._get_entry( 'Hugepagesize' )
 		if wasted > 0:
 			self._add_note(
 				'HugePages_Total',
@@ -134,41 +134,42 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	report( self, final = False ):
-		if final: return
-		self._infer_overcommit()
-		self._infer_hugepages()
-		self._infer_wasted_memory()
-		self._infer_avail_memory()
-		self._infer_dom0_memory()
-		#
-		keys = self.entries.keys()
-		key_width = max(
-			list(map(
-				len,
-				keys
-			))
-		)
-		value_width = max(
-			list(map(
-				len,
-				[
-					self.entries[key]['value'] for key in self.entries
-				]
-			))
-		)
-		fmt = '{{0:{0}s}} {{1:>{1}s}} {{2:2s}} {{3}}'.format(
-			key_width + 1,
-			value_width
-		)
-		#
-		self.println()
-		for key in self.ordered_keys:
-			self.println(
-				fmt.format(
-					'{0}:'.format( key ),
-					self.entries[key]['value'],
-					' '.join( self.entries[key]['rest'] ),
-					', '.join( self.entries[key]['notes'] )
-				)
+		if final:
+			pass
+		else:
+			self._infer_overcommit()
+			self._infer_hugepages()
+			self._infer_wasted_memory()
+			self._infer_avail_memory()
+			self._infer_dom0_memory()
+			#
+			keys = self.entries.keys()
+			key_width = max(
+				list(map(
+					len,
+					keys
+				))
 			)
+			value_width = max(
+				list(map(
+					len,
+					[
+						self.entries[key]['value'] for key in self.entries
+					]
+				))
+			)
+			fmt = '{{0:{0}s}} {{1:>{1}s}} {{2:2s}} {{3}}'.format(
+				key_width + 1,
+				value_width
+			)
+			#
+			for key in self.ordered_keys:
+				self.println(
+					fmt.format(
+						'{0}:'.format( key ),
+						self.entries[key]['value'],
+						' '.join( self.entries[key]['rest'] ),
+						', '.join( self.entries[key]['notes'] )
+					)
+				)
 		return
