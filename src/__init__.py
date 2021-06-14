@@ -152,12 +152,22 @@ class GenericPrettyPrinter( object ):
         p.add_argument(
             'files',
             metavar = 'FILE',
+            nargs   = '*',
+            help    = 'optional filenames',
 #           action  = 'append',
 #           type    = list,
-            nargs   = '*',
 #           default = [],
 #           dest    = 'files',
 #           default = [],
+        )
+        p.add_argument(
+            '-N',
+            '--number-lines',
+            dest   = 'number_lines',
+            help   = 'number output lines',
+            action = 'store_const',
+            const  = 0,
+            default = None,
         )
         fake_ofile = '{stdout}'
         p.add_argument(

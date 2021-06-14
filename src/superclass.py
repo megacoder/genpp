@@ -38,7 +38,7 @@ class	MetaPrettyPrinter( object ):
 	def	linesout_enable( self, enabled = True ):
 		self.sc_linesout = enabled
 		if enabled:
-			self.sc_linesoutn = 0
+			self.sc_nlinesout = 0
 		return
 
 	def	showing_linesout( self ):
@@ -46,8 +46,8 @@ class	MetaPrettyPrinter( object ):
 
 	def	get_linesout( self, bump = True ):
 		if bump:
-			self.sc_linesoutn += 1
-		return self.sc_linesoutn
+			self.sc_nlinesout += 1
+		return self.sc_nlinesout
 
 	def get_lineno( self ):
 		return self.sc_lineno
