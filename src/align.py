@@ -102,6 +102,7 @@ class	Align( object ):
 	def	_right( self, key, value ):
 		# FIXME print( f'right key={key}, width={self.widths[key]}' )
 		width = self.widths.get( key, 1 )
+		#
 		fmt   = '{{0:>{0}}}'.format( width )
 		# FIXME print( f'right={fmt}' )
 		return fmt.format( value )
@@ -109,6 +110,7 @@ class	Align( object ):
 	def	_center( self, key, value, pad = ' ' ):
 		# FIXME print( f'center key={key}, width={self.widths[key]}' )
 		width = self.widths.get( key, 1 )
+		#
 		fmt   = '{{0:>{0}}}'.format( width )
 		# FIXME print( f'center={fmt}' )
 		extra = int( (width - len( value )) / 2 )

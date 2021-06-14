@@ -10,23 +10,23 @@ import	align
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-	NAME = 'arp'
-	DESCRIPTION="""Display arp(1) in canonical style."""
+	NAME        = 'arp'
+	DESCRIPTION = """Display arp(1) in canonical style."""
 
 	def __init__( self ):
 		super( PrettyPrint, self ).__init__()
 		self.pre_begin_file()
 		return
 
-	def	pre_begin_file( self ):
+	def	pre_begin_file( self, name = None ):
 		self.items = align.Align( titles = 1 )
 		return
 
 	def	next_line( self, line ):
-		tokens = map(
+		tokens = list(map(
 			str.strip,
 			line.split()
-		)
+		))
 		Ntokens = len( tokens )
 		if Ntokens >= 4:
 			# If no netmask field, insert an empty one
@@ -36,12 +36,15 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	report( self, final = False ):
-		self.items.set_title_alignment( 'laaaaa' )
-		self.items.set_alignment( 'lccccc' )
-		for _,items in self.items.get_items():
-			self.println(
-				' '.join( items )
-			)
+		if final:
+			pass
+		else:
+			self.items.set_title_alignment( 'laaaaa' )
+			self.items.set_alignment( 'lccccc' )
+			for _,items in self.items.get_items():
+				self.println(
+					' '.join( items )
+				)
 		return
 
 if __name__ == '__main__':
