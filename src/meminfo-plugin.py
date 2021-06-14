@@ -22,10 +22,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	next_line( self, line ):
-		tokens = map(
+		tokens = list( map(
 			str.strip,
 			line.rstrip().split( ':' )
-		)
+		))
 		N = len( tokens )
 		if N == 2:
 			field  = tokens[0]
@@ -143,18 +143,18 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		#
 		keys = self.entries.keys()
 		key_width = max(
-			map(
+			list(map(
 				len,
 				keys
-			)
+			))
 		)
 		value_width = max(
-			map(
+			list(map(
 				len,
 				[
 					self.entries[key]['value'] for key in self.entries
 				]
-			)
+			))
 		)
 		fmt = '{{0:{0}s}} {{1:>{1}s}} {{2:2s}} {{3}}'.format(
 			key_width + 1,

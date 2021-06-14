@@ -4,6 +4,7 @@
 import  os
 import  sys
 import  glob
+from    bunch   import  Bunch
 
 class   MetaPrettyPrinter( object ):
 
@@ -22,32 +23,34 @@ class   MetaPrettyPrinter( object ):
         return
 
     def reset( self ):
-        self.sc_out          = sys.stdout
-        self.sc_fileno       = 0
-        self.sc_lineno       = 0
-        self.sc_filename     = '{stdin}'
-        self.sc_multi        = 0
-        self.sc_do_backslash = None
-        self.sc_footnotes    = []
-        return
+        self.state = Bunch(
+            out          = sys.stdout,
+            fileno       = 0,
+            lineno       = 0,
+            filename     = '{stdin}',
+            multi        = 0,
+            do_backslash = None,
+            footnotes    = [],
+        )
+        return  self.state
 
     def get_lineno( self ):
-        return self.sc_lineno
+        return self.state.lineno
 
     def get_out( self ):
-        return self.sc_out
+        return self.state.out
 
     def get_fileno( self ):
-        return self.sc_fileno
+        return self.state.fileno
 
     def get_filename( self ):
-        return self.sc_filename
+        return self.state.filename
 
     def get_multi( self ):
         return self.multi
 
     def get_backslash( self ):
-        return self.sc_do_backlash
+        return self.state.do_backlash
 
     def own_glob( self ):
         try:
@@ -61,11 +64,11 @@ class   MetaPrettyPrinter( object ):
         return retval
 
     def advise( self, names = [ '-' ] ):
-        self.sc_multi = len( names )
+        self.state.multi = len( names )
         return
 
     def allow_continuation( self, value = '\\' ):
-        self.sc_do_backslash = value
+        self.state.do_backslash = value
         return
 
     def start( self ):
@@ -94,7 +97,7 @@ class   MetaPrettyPrinter( object ):
                     e
                 )
                 raise ValueError
-            self.sc_multi += len( names )
+            self.state.multi += len( names )
             for entry in names:
                 if not self.ignore( entry ):
                     try:
@@ -125,20 +128,20 @@ class   MetaPrettyPrinter( object ):
         return
 
     def begin_file( self, fn ):
-        if self.sc_multi > 1:
-            if self.sc_fileno > 1:
+        if self.state.multi > 1:
+            if self.state.fileno > 1:
                 self.println()
             self.println(
-                'File %d of %d: %s' % (self.sc_fileno, self.sc_multi, fn)
+                'File %d of %d: %s' % (self.state.fileno, self.state.multi, fn)
             )
             self.println()
         return
 
     def end_file( self, fn ):
-        if self.sc_fileno < self.sc_multi:
+        if self.state.fileno < self.state.multi:
             self.println()
-        self.sc_filename = None
-        self.sc_lineno = 0
+        self.state.filename = None
+        self.state.lineno = 0
         return
 
     def post_end_file( self, name = None ):
@@ -150,9 +153,9 @@ class   MetaPrettyPrinter( object ):
         return
 
     def _do_file( self, fn ):
-        self.sc_fileno += 1
-        self.sc_filename = fn
-        self.sc_lineno = 0
+        self.state.fileno += 1
+        self.state.filename = fn
+        self.state.lineno = 0
         self.pre_begin_file( fn )
         self.begin_file( fn )
         if fn == '-':
@@ -180,9 +183,9 @@ class   MetaPrettyPrinter( object ):
         try:
             line = ''
             for segment in f:
-                self.sc_lineno += 1
+                self.state.lineno += 1
                 line += segment.rstrip()
-                if self.sc_do_backslash and len( line ) and line[-1] == self.sc_do_backslash:
+                if self.state.do_backslash and len( line ) and line[-1] == self.state.do_backslash:
                     line[-1] = ' '
                     continue
                 self.next_line( line )
@@ -197,7 +200,7 @@ class   MetaPrettyPrinter( object ):
 
     def do_dir( self, dn ):
         for root,dirs,files in sorted( os.walk( dn ) ):
-            self.sc_multi += len( files )
+            self.state.multi += len( files )
             for entry in files:
                 if not self.ignore( entry ):
                     self.do_file(
@@ -224,9 +227,14 @@ class   MetaPrettyPrinter( object ):
         return
 
     def println( self, s = '', out = None, end = '\n' ):
+        if self.cli.number_lines:
+            self.cli.number_lines += 1
+            leadin = f'{self.cli.number_lines:6d} '
+        else:
+            leadin = ''
         print(
-            s,
-            file = out if out else self.sc_out,
+            f'{leadin}{s}',
+            file = out if out else self.state.out,
             end  = end,
         )
         return
@@ -241,15 +249,15 @@ class   MetaPrettyPrinter( object ):
         return
 
     def error( self, msg, e = None ):
-        self.sc_out.flush()
+        self.state.out.flush()
         clauses = list()
-        if self.sc_filename is not None:
+        if self.state.filename is not None:
             clauses.append(
-                'File %s' % self.sc_filename
+                'File %s' % self.state.filename
             )
-        if self.sc_lineno > 0:
+        if self.state.lineno > 0:
             clauses.append(
-                'Line %d' % self.sc_lineno,
+                'Line %d' % self.state.lineno,
             )
         prefix = ', '.join( clauses )
         print(
@@ -286,11 +294,11 @@ class   MetaPrettyPrinter( object ):
         return
 
     def next_footnote_pos( self ):
-        return len(self.sc_footnotes) + 1
+        return len(self.state.footnotes) + 1
 
     def footnote( self, s ):
         N = self.next_footnote_pos()
-        self.sc_footnotes.append( s )
+        self.state.footnotes.append( s )
         return N
 
     def title( self, text = '', bar = '-', spread = False ):
@@ -302,18 +310,18 @@ class   MetaPrettyPrinter( object ):
         return
 
     def show_footnotes( self, title = 'Footnotes' ):
-        if self.sc_footnotes:
+        if self.state.footnotes:
             self.println()
             self.println( title )
             self.println( '-' * len( title ) )
             self.println()
-            N = len( self.sc_footnotes )
+            N = len( self.state.footnotes )
             fmt = '{{0:{0}d}}. {{1}}'.format(
                 len( str(N) )
             )
-            for n,s in enumerate( self.sc_footnotes ):
+            for n,s in enumerate( self.state.footnotes ):
                 self.println(
                     fmt.format( n+1, s )
                 )
-            self.sc_footnotes = None
+            self.state.footnotes = None
         return

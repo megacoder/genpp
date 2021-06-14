@@ -44,14 +44,14 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return n
 
 	def	_do_token( self, token ):
-		if token is ';':
+		if token == ';':
 			self.nodes[ self.focus ]['content'] += [ token ]
-		elif token is '{':
+		elif token == '{':
 			self.nodes[ self.focus ]['content'] += [ token ]
 			self.nodes[ self.focus ]['child'] = self._new_node(
 				parent = self.focus
 			)
-		elif token is '}':
+		elif token == '}':
 			self.focus = self.nodes[ self.focus ]['parent']
 			self.nodes[ self.focus ]['content'] += [ token ]
 		else:
