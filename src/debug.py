@@ -9,18 +9,19 @@ import	traceback
 
 class	debugmode:
 
-	def __init__( self, title ):
-		self.title	 = title
-		if self.title:
-			print( '- entering {0}'.format( self.title ) )
+	def __init__( self, title, cascade = False, file = sys.stderr ):
+		self.title   = title
+		self.cascade = cascade
+		self.file    = file
 
 	def __enter__( self ):
 		return
 
 	def __exit__( self, type, value, tb ):
 		if type:
-			print( '- left {0}'.format( self.title ) )
-			raise type(value)
+			print( self.title, file = self.file )
+			if self.cascade:
+				raise type(value)
 		return
 
 if __name__ == '__main__':
@@ -28,4 +29,7 @@ if __name__ == '__main__':
 		print( 'benevolent' )
 	with debugmode( 'fault' ):
 		print( 'here goes' )
-		raise ValueError('frallup')
+		raise ValueError( '***FAULT***' )
+	with debugmode( 'fault', True ):
+		print( 'bottom of the barrel' )
+		raise ValueError( '***FIRSTFAULT***' )
