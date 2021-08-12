@@ -24,7 +24,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			'DOM',
 			'MON',
 			'DOW',
-			'COMMAND ___'
+			'COMMAND_____'
 		])
 		alignment = 'aaaccl'
 		self.items.set_title_alignment( alignment )

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vi: noet sw=4 ts=4
 
 import	os
@@ -32,9 +32,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		]
 		self.nTitles = len( self.titles )
 		self.widths = map(len,self.titles)
-		# print 'self.titles={0}'.format(self.titles)
-		# print 'self.nTitles={0}'.format(self.nTitles)
-		# print 'self.widths={0}'.format(self.widths)
+		# self.println( 'self.titles={0}'.format(self.titles) )
+		# self.println(  'self.nTitles={0}'.format(self.nTitles) )
+		# self.println(  'self.widths={0}'.format(self.widths)
 		return
 
 	def	next_line( self, line ):
@@ -45,7 +45,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			if len(tokens) == self.nTitles:
 				widths = map(len,tokens)
 				self.widths = map( max, self.widths, widths )
-				# print 'appending={0}'.format(tokens)
+				# self.println( 'appending={0}'.format(tokens) )
 				self.entries.append( tokens )
 		return
 

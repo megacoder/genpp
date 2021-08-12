@@ -45,9 +45,11 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	report( self, final = False ):
-		self.lines.sort( key = lambda (ip,addr,name,aliases): ip )
+		self.lines.sort( key = lambda iana: iana[0] )
 		fmt = '%%-15s %%-%ds %%s' % self.max_canonical_name
 		for ip, addr, name, aliases in self.lines:
-			print fmt % (addr, name, ' '.join(aliases) )
+			self.println(
+				fmt.format(addr, name, ' '.join(aliases) )
+			)
 		self._prepare()
 		return

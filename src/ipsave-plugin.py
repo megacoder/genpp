@@ -102,6 +102,6 @@ if __name__ == '__main__':
 		pp = PrettyPrint()
 		try:
 			pp.process( arg )
-		except Exception, e:
+		except Exception as e:
 			raise e
 	exit( 0 )

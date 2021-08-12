@@ -283,7 +283,7 @@ class SourceGenerator(NodeVisitor):
     def visit_Print(self, node):
         # XXX: python 2.6 only
         self.newline(node)
-        self.write('print ')
+        self.write('print? ')
         want_comma = False
         if node.dest is not None:
             self.write(' >> ')

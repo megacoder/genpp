@@ -35,18 +35,21 @@ class   PrettyPrint( superclass.MetaPrettyPrinter ):
                     params.sort()
                     ordered = ','.join( params )
                     roster.append( (host, ordered) )
-            roster.sort( key = lambda (h,l): h.lower() )
+            roster.sort( key = lambda hl: hl[0].lower() )
             self.content.append( (share, roster) )
         return
 
     def finish( self ):
         self.content.sort()
-        share_fmt = '%%-%d.%ds' % (self.max_share, self.max_share)
-        spec_fmt  = ' %%-%d.%ds' % (self.max_spec, self.max_spec)
+        share_fmt = '%%-%d.%ds'.format(self.max_share, self.max_share)
+        spec_fmt  = ' %%-%d.%ds'.format(self.max_spec, self.max_spec)
         for share,roster in self.content:
-            print share_fmt % share,
+            self.println(
+                share_fmt.format( share )
+            )
             for host,attrs in roster:
                 howto = '%s(%s)' % (host,attrs)
-                print spec_fmt % howto,
-            print
+                # Darn, this goes down, not across
+                self.println( spec_fmt.format( howto ) )
+            self.println()
         return

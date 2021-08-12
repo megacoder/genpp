@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim: ai sm noet ts=4 sw=4
 
 import	bunch
@@ -11,7 +11,7 @@ import	traceback
 
 class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
-	NAME = 'ifcfg-pp'
+	NAME        = 'ifcfg-pp'
 	DESCRIPTION = '''Show ifcfg network files in canonical style.'''
 	UNSPECIFIED = '???'
 
@@ -46,7 +46,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		'''
 		try:
 			self.ifcfg = self.new_ifcfg( 'TBD' )
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		return
@@ -81,7 +81,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				if len(value) and value[0] in [ '"', "'"] and value[0] == value[-1]:
 					value = value[1:-1]
 				self.ifcfg[ name ] = value
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		return
@@ -91,12 +91,12 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			Called after all lines from current file
 			have been processed by next_line().  Add
 			the new NIC definition to the catalog of
-			NICs.  We'll print it from report() in
+			NICs.  We'll show it from report() in
 			a jiffy.'
 		'''
 		try:
 			self.ifcfgs[ self.ifcfg.DEVICE ] = self.ifcfg
-		except Exception, e:
+		except Exception as e:
 			traceback.print_exc()
 			raise e
 		self.report()

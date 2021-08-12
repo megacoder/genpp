@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # vim: noet sw=4 ts=4
 
 import	os
@@ -25,15 +25,17 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 	def	do_dir( self, dn ):
 		try:
 			names = os.listdir( dn )
-		except Exception, e:
+		except Exception as e:
 			return
 		if self.others:
-			print
+			self.println()
 		self.others = True
 		title = 'Settings for %s' % dn
-		print title
-		print '-' * len(title)
-		print
+		self.println( title )
+		self.println(
+			'-' * len(title)
+		)
+		self.println()
 		names.sort()
 		max_name = 0
 		for name in names:
@@ -46,8 +48,10 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 					f = open( fn, 'rt' )
 					value = f.readline().strip()
 					f.close()
-					print fmt % (name, value)
-				except Exception, e:
+					self.println(
+						fmt.format( name, value )
+					)
+				except Exception as e:
 					pass
 		for name in names:
 			fn = os.path.join( dn, name )

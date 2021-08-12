@@ -21,13 +21,13 @@ class	PythonPrettyPrint( object ):
 	def validate( self, s ):
 		try:
 			compiler.compile( s, s, 'exec' )
-		except Exception, e:
+		except Exception as e:
 			raise e
 		return
 
 	def run( self, spelling, rule = 'p' ):
 		for action in rule:
-			# print '[{0}]'.format( action ),
+			# print( '[{0}]'.format( action ), )
 			if action == 'i':
 				self.level += 1
 			elif action == 'd':
@@ -39,7 +39,10 @@ class	PythonPrettyPrint( object ):
 			elif action == 'p':
 				yield '{0}'.format( spelling )
 			else:
-				print >>self.stdout, 'Internal error: action %s' % action
+				print(
+				'Internal error: action %s' % action,
+					file = self.stdout
+				)
 		return
 
 	def parse( self, s ):
@@ -101,10 +104,10 @@ class	PrettyPrint( MetaPrettyPrinter ):
 			try:
 				name = tokens[0]
 				value = tokens[1]
-				# print '|%s|%s|' % (name,value)
+				# print( '|%s|%s|' % (name,value) )
 				self.pp.validate( value )
 				# print 'Looks good'
-			except Exception, e:
+			except Exception as e:
 				self.error( 'syntax error: %s' % line )
 				return
 			self.width = max( self.width, len( name ) )

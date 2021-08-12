@@ -52,10 +52,12 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	end_file( self, name ):
 		self.content.sort(
-			key = lambda (t,i,m,v): t
+			key = lambda timv: timv[0]
 		)
-		fmt = '%%-15s  %%-%ds  %%s' % (self.maxvia)
+		fmt = '%%-15s  %%-%ds  %%s'.format(self.maxvia)
 		for (key,ip,mac,via) in self.content:
-			print fmt % (ip, via, mac)
+			self.println(
+				fmt.format(ip, via, mac)
+			)
 		super( PrettyPrint, self ).end_file( name )
 		return

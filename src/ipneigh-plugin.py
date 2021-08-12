@@ -40,14 +40,18 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			for _,tokens in self.items.get_items(
 				sort = lambda t : map( int, t[0].split('.') )
 			):
-				print ' '.join( tokens )
+				println(
+					' '.join( tokens )
+				)
 		return
 
 if __name__ == '__main__':
 	pp = PrettyPrint()
 	pp.pre_begin_file()
-	pp.next_line( '192.168.1.166 dev br0 lladdr cc:6d:a0:2b:6d:d1 REACHABLE'
-			  );
+	pp.next_line(
+		'192.168.1.166 dev br0 lladdr cc:6d:a0:2b:6d:d1 REACHABLE'
+
+	)
 	pp.next_line( '192.168.1.254 dev br0  FAILED' )
 	pp.next_line( ' 192.168.1.155 dev br0 lladdr b8:5a:f7:83:30:f0 STALE' )
 	pp.report()

@@ -1,0 +1,10 @@
+attribute before first node
+<foo>
+	1 2 3 # Afterword comment
+	# Standal0ng comment
+</foo>
+<bar none>
+abc def
+</bar>
+xyz 123
+def xyZ cbs zsh

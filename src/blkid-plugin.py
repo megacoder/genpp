@@ -50,7 +50,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 				)
 			self.lines.append( [ name, attrs ] )
 			self.max_name = max( self.max_name, len(name) )
-		except Exception, e:
+		except Exception as e:
 			return
 		return
 
@@ -67,7 +67,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			)
 		for name, attrs in sorted(
 			self.lines,
-			key = lambda (n,a) : n.lower()
+			key = lambda na : na[0].lower()
 		):
 			line = nfmt.format( ( name + ':' ) )
 			attrkeys = attrs.keys()

@@ -1,4 +1,4 @@
-#/usr/bin/python
+#/usr/bin/env python
 # vim: et sw=4 ts=4
 
 ########################################################################
@@ -15,5 +15,7 @@ class PrettyPrint( superclass.MetaPrettyPrinter ):
         super( PrettyPrint, self ).__init__()
         return
     def next_line( self, line ):
-        print line
+        self.println(
+            line
+        )
         return

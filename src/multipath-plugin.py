@@ -169,7 +169,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		stack.append( root )
 		for (fn,lno,line,tokens) in self.lines:
 			node = stack[ -1 ]
-			# print 'tokens={0}'.format( tokens )
+			# self.println( 'tokens={0}'.format( tokens ) )
 			if tokens[ -1 ] == '{':
 				child = self.new_node( tokens[ 0 ] )
 				child.tokens = tokens
@@ -185,7 +185,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return s if s.isalnum() else '"{0}"'.format( s )
 
 	def	print_node( self, node, indent = 0 ):
-		# print 'node={0}'.format( node )
+		# self.println( 'node={0}'.format( node ) )
 		gutter = '  '
 		if node.name:
 			self.println(

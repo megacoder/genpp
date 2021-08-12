@@ -73,7 +73,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 					'\tMemory pressure is {0}%.'.format( pressure )
 				)
 				self.footnote( '\tMemory pressure = (free+buffers_cache)/total' )
-			except Exception, e:
+			except Exception as e:
 				self.println(
 					'Memory pressure calculation failed.'
 				)

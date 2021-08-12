@@ -1,5 +1,5 @@
-#!/usr/bin/env python2
-# vim: noet sw=4 ts=4
+#!/usr/bin/python
+# vim: noet sw=4 ts=4 norelativenumber nu
 
 import	os
 import	sys
@@ -51,8 +51,13 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		try:
 			for line in subprocess.check_output( cmd ).split( '\n' ):
 				self.lines.append( l.strip() )
-		except Exception, e:
-			print >>sys.stderr, 'Cannot invoke "%s".' % cmd
+		except Exception as e:
+			self.println(
+				'Cannot invoke "%s".'.format(
+					cmd,
+					file = sys.stderr
+				)
+			)
 			raise e
 		return
 
@@ -60,14 +65,18 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		if not final:
 			if self.lines == []:
 				self.do_it_myself()
-			fmt = '%%s  %%-%ds  %%s' % self.max_name
+				fmt = '{0}  {1:<%d}  {2}' % self.max_name
 			for (when, name, rest) in sorted(
 				self.lines,
-				key = lambda (when,name,rest): when
+				key = lambda wns : wns[ 1 ] # when
 			):
 				# stim = time.gmtime( int(when) )
 				s = datetime.datetime.fromtimestamp( int(when) )
 				self.println(
-					fmt % ( s, name, ' '.join(rest) )
+					fmt.format(
+						s,
+						name,
+						' '.join( rest )
+					)
 				)
 		return

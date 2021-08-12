@@ -44,14 +44,14 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return n
 
 	def	_do_token( self, token ):
-		if token is ';':
+		if token == ';':
 			self.nodes[ self.focus ]['content'] += [ token ]
-		elif token is '{':
+		elif token == '{':
 			self.nodes[ self.focus ]['content'] += [ token ]
 			self.nodes[ self.focus ]['child'] = self._new_node(
 				parent = self.focus
 			)
-		elif token is '}':
+		elif token == '}':
 			self.focus = self.nodes[ self.focus ]['parent']
 			self.nodes[ self.focus ]['content'] += [ token ]
 		else:
@@ -75,11 +75,15 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 			focus = self.focus
 		for node in self.nodes[ focus ]:
 			for key in sorted( node ):
-				print key
+				self.println(
+					key
+				)
 		return
-		print '%s%s' % (
-			' ' * indent,
-			'X'.join( self.nodes[ focus ]['content'] )
+		self.println(
+			'%s%s'.format(
+				' ' * indent,
+				'X'.join( self.nodes[ focus ]['content'] )
+			)
 		)
 		if self.nodes[ focus ]['child']:
 			self._report( self.nodes[ focus ]['child'], indent = indent + 8 )

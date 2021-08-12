@@ -66,7 +66,7 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 		return
 
 	def	_show_node( self, focus = 0, indent = 0 ):
-		# print 'show node %d\n%s' % ( focus, self.nodes[focus] )
+		# self.printLn( 'show node %d\n%s' % ( focus, self.nodes[focus] ) )
 		width = PrettyPrint.WIDTH - 1
 		for obj in self.nodes[focus]['content']:
 			if type(obj) == list:
@@ -82,7 +82,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 					obj[0],
 					' '.join( obj[1:] )
 				)
-				print '%s%s' % ( leadin, line )
+				self.println(
+				'%s%s'.format( leadin, line )
+				)
 		# The second pass gets any children
 		for obj in sorted_content:
 			if type(obj) == int:
@@ -94,13 +96,20 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 						header[0],
 						' '.join( header[1:] )
 					)
-					print '%s%s' % ( leadin, line )
+					self.println(
+						'%s%s'.format( leadin, line )
+					)
 				self._show_node(
 					focus = obj,
 					indent = indent + PrettyPrint.INDENT
 				)
 				if self.nodes[obj]['footer']:
-					print '%s%s' % ( leadin, ' '.join( self.nodes[ obj ]['footer']) )
+					self.println(
+						'%s%s'.format(
+							leadin,
+							' '.join( self.nodes[ obj ]['footer'])
+						)
+					)
 		return
 
 	def	begin_file( self, name ):

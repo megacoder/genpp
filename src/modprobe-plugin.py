@@ -45,7 +45,9 @@ class	PrettyPrint( superclass.MetaPrettyPrinter ):
 
 	def	report( self, final = False ):
 		fmt = '%%-9s %%-%ds %%s' % self.max_name
-		self.tokens.sort( key = lambda (v,n,o) : (v.lower(),n.lower()) )
+		self.tokens.sort(
+			key = lambda vno : (vno[0].lower(),vno[1].lower())
+		)
 		for verb,name,rest in self.tokens:
 			self.println( fmt % (verb, name, rest) )
 		self.println()
