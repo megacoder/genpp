@@ -1,8 +1,158 @@
+* Wed Aug 11 2021 Tommy Reynolds
+- (d3dffdf) Merge branch 'master' of github.com:megacoder/genpp (HEAD -> master, origin/master, origin/HEAD)
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (ec97b18) Added cascading.
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (e29c18f) List of test samples we need
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (c7653e9) Tree class; not used yet
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (19abfe6) Changed appliation name
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (1a88b28) Simpler implementation of node dumping
+
+* Wed Jun 16 2021 Tommy Reynolds
+- (d31ec6f) Context manager for errors
+
+* Mon Jun 14 2021 Tommy Reynolds
+- (fe18763) Added ARP table.  Force map() output as list().
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (f103b58) Eliminate spurious blank lines.
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (c08e722) Explicity convert map() to list(map())
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (c45b9de) Bump rev (tag: v1.1.16)
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (2c15788) Merge branch 'master' of github.com:megacoder/genpp
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (888c97b) Merge branch 'devel'
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (5b37821) Numeric printing works now.
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (4ddbf5b) Drops common comment patterns
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (ffcabb5) Bumped version
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (8256061) Fix syntax error
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (8045607) Typo replicated; bad, bad, cut'n paste
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (ac3446d) Added "-n" to add output line numbers
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (dabff13) Add file's directory to sys.path for in-place test
+
+* Sun Jun 13 2021 Tommy Reynolds
+- (8227729) Use python3(1) if it exists, else plain python(1)
+
+* Thu May 6 2021 Tommy Reynolds
+- (f5fb4b1) Moved command switches into own bunch
+
+* Thu May 6 2021 Tommy Reynolds
+- (0c30603) Output line numbering
+
+* Thu May 6 2021 Tommy Reynolds
+- (3543c20) Spacing
+
+* Thu May 6 2021 Tommy Reynolds
+- (7952390) Removed debug printing
+
+* Thu May 6 2021 Tommy Reynolds
+- (ef1505a) Use vanilla print() to display metainformation
+
+* Thu May 6 2021 Tommy Reynolds
+- (6d35012) Simplify
+
+* Wed May 5 2021 Tommy Reynolds
+- (cf16736) Replace "is <str>" with "== <src>"
+
+* Tue May 4 2021 Tommy Reynolds
+- (e88c525) Moved command line parsing into its own self.cli dict.
+
+* Tue May 4 2021 Tommy Reynolds
+- (017a6a9) Python3 needs map() output to a list().
+
+* Tue May 4 2021 Tommy Reynolds
+- (a71d2b0) Move per-session setup into its own Bunch()
+
+* Tue May 4 2021 Tommy Reynolds
+- (732d77e) Run-on syntax
+
+* Mon Dec 21 2020 Tommy Reynolds
+- (dbe6009) Merge branch 'master' of github.com:megacoder/genpp
+
+* Mon Dec 21 2020 Tommy Reynolds
+- (8e55367) Output $verb lines first, then actions.
+
+* Sun Dec 20 2020 Tommy Reynolds
+- (0c1248a) Merge branch 'master' of github.com:megacoder/genpp
+
+* Sun Dec 20 2020 Tommy Reynolds
+- (559e631) Checkpoint from self.println() conversion.
+
+* Sat Dec 19 2020 Tommy Reynolds
+- (6624d17) Conform with python3 syntax.
+
+* Sat Dec 19 2020 Tommy Reynolds
+- (aa6405c) Use python3 idiom for printing.
+
+* Sat Dec 19 2020 Tommy Reynolds
+- (61743fb) Use the '#!/usr/bin/env python' cant.
+
+* Fri Dec 18 2020 Tommy Reynolds
+- (7111f21) Merge branch 'devel'
+
+* Fri Dec 18 2020 Tommy Reynolds
+- (e6cc257) Make python3 compatible
+
+* Fri Dec 18 2020 Tommy Reynolds
+- (248fb24) Checkpoint
+
+* Sun Sep 20 2020 Tommy Reynolds
+- (07c54a9) A clean compile, no more (origin/devel)
+
+* Fri Feb 14 2020 Tommy Reynolds
+- (0f81e69) Use the older, python2.
+
+* Thu Feb 13 2020 Tommy Reynolds
+- (ccb4127) Handle I3 config files.
+
+* Thu Feb 13 2020 Tommy Reynolds
+- (277b980) Relocated
+
+* Thu Feb 13 2020 Tommy Reynolds
+- (40750ab) An I3 setup file.
+
+* Thu Jan 30 2020 Tommy Reynolds
+- (5084a69) Explicit python2
+
 * Sat Jun 8 2019 Tommy Reynolds
-- (49b7861) 1) Allow continuation.  2) Discard self.lines after making the report. (HEAD, v1.1.13)
+- (b307df6) Don't be confused by a zero-length line when checking for continuation.
+
+* Sat Jun 8 2019 Tommy Reynolds
+- (4090536) v1.1.13 (tag: v1.1.13)
+
+* Sat Jun 8 2019 Tommy Reynolds
+- (49b7861) 1) Allow continuation.  2) Discard self.lines after making the report.
 
 * Fri May 31 2019 Tommy Reynolds
-- (b53eb69) Added network teaming support. (tag: v1.1.12, tag: v1.1.11, origin/master, origin/HEAD, master)
+- (b53eb69) Added network teaming support. (tag: v1.1.12, tag: v1.1.11)
 
 * Wed May 1 2019 Tommy Reynolds
 - (40e19f2) Make indivitual scripts executable, so they can be standalone-tested.
